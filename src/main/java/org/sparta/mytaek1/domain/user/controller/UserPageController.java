@@ -1,22 +1,23 @@
 package org.sparta.mytaek1.domain.user.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
+@RequiredArgsConstructor
 public class UserPageController {
 
-    @GetMapping("/mypage")
-    public String home(Model model) {
+    @GetMapping("/my-page")
+    public String myPage(Model model) {
         model.addAttribute("userName", "userName");
         model.addAttribute("userEmail", "userEmail");
-        return "mypage";
+        return "my_page";
     }
 
-    @GetMapping("/sign")
-    public String signupPage() {
+    @GetMapping("/api/user/login-page")
+    public String signPage() {
         return "sign";
     }
 }
