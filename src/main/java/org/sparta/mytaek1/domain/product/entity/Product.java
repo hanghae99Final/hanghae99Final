@@ -1,17 +1,20 @@
 package org.sparta.mytaek1.domain.product.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sparta.mytaek1.domain.broadcast.entity.BroadCast;
+import org.sparta.mytaek1.domain.order.entity.Order;
+import org.sparta.mytaek1.domain.user.entity.User;
+import org.sparta.mytaek1.global.audit.Auditable;
+
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product {
+public class Product extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
