@@ -1,44 +1,51 @@
 package org.sparta.mytaek1.domain.user.service;
 
-import org.sparta.mytaek1.domain.user.dto.JoinRequestDto;
+import lombok.RequiredArgsConstructor;
+import org.sparta.mytaek1.domain.user.dto.UserRequestDto;
+import org.sparta.mytaek1.domain.user.dto.UserResponseDto;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
+import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    public void join(JoinRequestDto requestDto) {
+    @Transactional
+    public void createUser(UserRequestDto requestDto) {
         String userName = requestDto.getUserName();
-        String password = passwordEncoder.encode(requestDto.getPassword());
-
-        User checkUsername = userRepository.findByUserName(userName).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 사용자입니다."));
-
-        if (checkUsername != null) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
-        }
+        checkDuplicatedUserName(userName);
 
         String userEmail = requestDto.getUserEmail();
-        User checkEmail = userRepository.findByUserEmail(userEmail).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 이메일입니다."));
+        checkDuplicatedUserEmail(userEmail);
 
-        if (checkEmail != null) {
-            throw new IllegalArgumentException("중복된 Email 입니다.");
+        String password = passwordEncoder.encode(requestDto.getPassword());
+        User user =  userRepository.save(new User(userName, userEmail, password));
+        new UserResponseDto(user);
+    }
+
+    private void checkDuplicatedUserName(String userName) {
+        Optional<User> checkUsername = userRepository.findByUserName(userName);
+
+        if (checkUsername.isPresent()) {
+            throw new IllegalArgumentException(ErrorMessage.DUPLICATED_USER__ERROR_MESSAGE.getErrorMessage());
         }
+    }
 
-        User user = new User(userName, password, userEmail);
-        userRepository.save(user);
+    private void checkDuplicatedUserEmail(String userEmail) {
+        Optional<User> checkEmail = userRepository.findByUserEmail(userEmail);
+
+        if (checkEmail.isPresent()) {
+            throw new IllegalArgumentException(ErrorMessage.DUPLICATED_EMAIL_ERROR_MESSAGE.getErrorMessage());
+        }
     }
 }
+

@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.domain.user.entity;
+package org.sparta.mytaek1.global.security;
 
 public enum UserRoleEnum {
     USER(Authority.USER);
