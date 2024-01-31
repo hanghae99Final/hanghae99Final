@@ -4,12 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.sparta.mytaek1.domain.broadcast.entity.BroadCast;
-import org.sparta.mytaek1.domain.order.entity.Order;
-import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.audit.Auditable;
-
-import java.util.List;
 
 @Entity
 @Getter
