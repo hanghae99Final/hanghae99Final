@@ -2,6 +2,7 @@ package org.sparta.mytaek1.domain.broadcast.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.mytaek1.domain.product.entity.Product;
@@ -33,4 +34,13 @@ public class BroadCast extends Auditable {
 
     //생성자 빌더는 나중에 다 풀받고
 
+    @Builder
+    public BroadCast(Long broadCastId, String broadCastTitle, String broadCastDescription, boolean onAir, User user, Product product) {
+        this.broadCastId = broadCastId;
+        this.broadCastTitle = broadCastTitle;
+        this.broadCastDescription = broadCastDescription;
+        this.onAir = onAir;
+        this.user = user;
+        this.product = product;
+    }
 }
