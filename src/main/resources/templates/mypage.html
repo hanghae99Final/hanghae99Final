@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/mypage_style.css}" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arbutus+Slab" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <title>MyTaek1</title>
+</head>
+<body>
+  <div class="board_container">
+    <h1 style="margin: 20px;">
+      Welcome, <span th:text="${userName}"></span>!
+    </h1>
+    <div id="deleteUserErrorMessage" style="font-weight: 100; color: red; margin-bottom: 10px;"></div>
+    <p>Your Email: <span th:text="${userEmail}"></span></p>
+
+<!--    <h2 style="margin: 40px 0 20px 0;">Your Boards</h2>-->
+<!--    <ul>-->
+<!--      <li class="board_list" th:each="board : ${userBoards}">-->
+<!--        <div class="board_list_box">-->
+<!--          <a th:href="@{'/users/boards/' + ${board.id}}" th:attr="data-boardId=${board.id}">-->
+<!--            <h3 th:text="${board.boardName}"></h3>-->
+<!--            <p th:text="${board.boardDescription}"></p>-->
+<!--          </a>-->
+<!--          <button id="DeleteBoardButton" th:attr="data-board-id=${board.id}" onclick="deleteBoard(this)">-->
+<!--                  <span style="color: white;" class="material-symbols-outlined">-->
+<!--                    delete_forever-->
+<!--                  </span>-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </li>-->
+<!--      <li class="board_list">-->
+<!--        <div class="board_list_box">-->
+<!--          <button class="add-board-button" onclick="openBoardAddForm()">+</button>-->
+<!--        </div>-->
+<!--      </li>-->
+<!--    </ul>-->
+
+<!--    <script type="text/javascript" th:src="@{/js/mypage_js.js}"></script>-->
+  </div>
+</body>
+</html>
