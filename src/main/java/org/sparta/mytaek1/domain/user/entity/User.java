@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.sparta.mytaek1.domain.broadcast.entity.BroadCast;
+import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.order.entity.Order;
 import org.sparta.mytaek1.global.audit.Auditable;
 
@@ -29,7 +29,7 @@ public class User extends Auditable {
     private String userEmail;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<BroadCast> broadCastList;
+    private List<Broadcast> broadcastList;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Order> orderList;

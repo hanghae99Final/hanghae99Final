@@ -12,15 +12,15 @@ import org.sparta.mytaek1.global.audit.Auditable;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BroadCast extends Auditable {
+public class Broadcast extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long broadCastId;
+    private Long broadcastId;
 
-    private String broadCastTitle;
+    private String broadcastTitle;
 
-    private String broadCastDescription;
+    private String broadcastDescription;
 
     private boolean onAir;
 
@@ -28,19 +28,21 @@ public class BroadCast extends Auditable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    //생성자 빌더는 나중에 다 풀받고
-
     @Builder
-    public BroadCast(Long broadCastId, String broadCastTitle, String broadCastDescription, boolean onAir, User user, Product product) {
-        this.broadCastId = broadCastId;
-        this.broadCastTitle = broadCastTitle;
-        this.broadCastDescription = broadCastDescription;
+    public Broadcast(Long broadcastId, String broadcastTitle, String broadcastDescription, boolean onAir, User user, Product product) {
+        this.broadcastId = broadcastId;
+        this.broadcastTitle = broadcastTitle;
+        this.broadcastDescription = broadcastDescription;
         this.onAir = onAir;
         this.user = user;
         this.product = product;
+    }
+
+    public void endBroadcast() {
+        this.onAir = false;
     }
 }

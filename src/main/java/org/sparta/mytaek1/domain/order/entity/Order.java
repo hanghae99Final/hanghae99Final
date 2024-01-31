@@ -8,7 +8,7 @@ import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.audit.Auditable;
 
-@Entity
+@Entity(name = "orders")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends Auditable {
