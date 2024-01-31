@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.mytaek1.domain.broadcast.entity.BroadCast;
-import org.sparta.mytaek1.domain.order.entity.Order;
+import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.global.audit.Auditable;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class User extends Auditable {
     private List<BroadCast> broadCastList;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Order> orderList;
+    private List<Orders> orderList;
 
     public User(String userName, String userEmail, String password) {
         this.userName = userName;

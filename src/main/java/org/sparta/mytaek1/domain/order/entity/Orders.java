@@ -11,7 +11,7 @@ import org.sparta.mytaek1.global.audit.Auditable;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Order extends Auditable {
+public class Orders extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
