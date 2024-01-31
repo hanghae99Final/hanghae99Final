@@ -1,1 +1,1 @@
-# hanghae99Final
+# MyTaek1 - 라이브 커머스 서비스
