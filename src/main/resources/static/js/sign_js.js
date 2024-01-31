@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const email = $('#signupEmail').val();
         const password = $('#signupPassword').val();
 
-        if (!name || !email || !phone || !password) {
+        if (!name || !email || !password) {
             showSignupWarningMessage();
             return;
         }
@@ -59,8 +59,8 @@ document.addEventListener("DOMContentLoaded", function() {
             url: '/api/join',
             contentType: "application/json",
             data: JSON.stringify({
-                name: name,
-                email: email,
+                userName: name,
+                userEmail: email,
                 password: password,
                 auth: 'USER'
             }),
