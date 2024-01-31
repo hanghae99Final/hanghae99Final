@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.domain.broadcast.entity;
+package org.sparta.mytaek1.domain.order.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,17 +11,15 @@ import org.sparta.mytaek1.global.audit.Auditable;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BroadCast extends Auditable {
+public class Orders extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long broadCastId;
+    private Long orderId;
 
-    private String broadCastTitle;
+    private Long quantity;
 
-    private String broadCastDescription;
-
-    private boolean onAir;
+    private Long totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -30,7 +28,4 @@ public class BroadCast extends Auditable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
-
-    //생성자 빌더는 나중에 다 풀받고
-
 }
