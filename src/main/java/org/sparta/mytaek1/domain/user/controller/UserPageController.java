@@ -24,12 +24,18 @@ public class UserPageController {
         String userName = userDetails.getUser().getUserName();
         String userEmail = userDetails.getUser().getUserEmail();
         String streamKey = userDetails.getUser().getStreamKey();
+        String userPhone = userDetails.getUser().getUserPhone();
+        String userAddress = userDetails.getUser().getUserAddress();
+        String postcode = userDetails.getUser().getPostcode();
         List<Broadcast> broadcastList = userService.getBroadcasts(userId);
         List<Orders> orderList = userService.getOrders(userId);
 
         model.addAttribute("userName", userName);
         model.addAttribute("userEmail", userEmail);
         model.addAttribute("streamKey", streamKey);
+        model.addAttribute("userPhone", userPhone);
+        model.addAttribute("userAddress", userAddress);
+        model.addAttribute("postcode", postcode);
         model.addAttribute("broadcastList", broadcastList);
         model.addAttribute("orderList", orderList);
         return "my_page";
