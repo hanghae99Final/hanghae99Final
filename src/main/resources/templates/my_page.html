@@ -23,7 +23,7 @@
         <ul>
           <li class="broadcast_list" th:each="broadcast : ${broadcastList}">
             <div class="broadcast_list_box">
-              <a th:href="@{'/users/broadcast/' + ${broadcast.broadcastId}}" th:attr="data-boardId=${broadcast.broadcastId}">
+              <a th:href="@{'/broadcasts/' + ${broadcast.broadcastId}}" th:attr="data-boardId=${broadcast.broadcastId}">
                 <h3>방송 제목: <span th:text="${broadcast.broadcastTitle}"></span></h3>
                 <p>방송 설명: <span th:text="${broadcast.broadcastDescription}"></span></p>
                 <p>판매 상품: <span th:text="${broadcast.getProduct().getProductName()}"></span></p>
