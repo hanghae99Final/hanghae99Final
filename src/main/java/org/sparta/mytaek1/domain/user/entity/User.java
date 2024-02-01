@@ -33,16 +33,20 @@ public class User extends Auditable {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    @Column
+    private String streamKey;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Broadcast> broadcastList;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Orders> orderList;
 
-    public User(String userName, String userEmail, String password) {
+    public User(String userName, String userEmail, String password, String streamKey) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.password = password;
         this.role = UserRoleEnum.valueOf("USER");
+        this.streamKey = streamKey;
     }
 }
