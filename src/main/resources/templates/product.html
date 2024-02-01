@@ -22,8 +22,8 @@
         </thead>
         <tbody>
         <tr>
-            <td th:text="${productFind.getProductName()}"></td>
-            <td th:text="${productFind.getProductPrice()}"></td>
+            <td id="productName" th:text="${productFind.getProductName()}"></td>
+            <td id="productPrice" th:text="${productFind.getProductPrice()}"></td>
             <td th:text="${productFind.getProductStock()}"></td>
 <!--            <td>-->
 <!--                <div th:each="url : ${menu.pictureUrls}">-->
@@ -33,13 +33,28 @@
         </tr>
         </tbody>
     </table>
+
+    <input type="hidden" id="buyerEmail" th:value="${user.getUserEmail()}" />
+    <input type="hidden" id="buyerName" th:value="${user.getUserName()}" />
+<!--    <input type="hidden" id="buyerTel" th:value="${user.getUserPhone()}" />-->
+<!--    <input type="hidden" id="buyerAddr" th:value="${user.getUserAddress()}" />-->
+<!--    <input type="hidden" id="buyerPostcode" th:value="${user.getPostcode()}" />-->
+
 </div>
 <div th:if="${#lists.isEmpty(productFind)}">
     <p>No products available.</p>
 </div>
 <button onclick="requestPay()">결제하기</button>
 <script>
-    var IMP = window.IMP;
+    const productName = document.getElementById("productName").textContent;
+    const productPrice = document.getElementById("productPrice").textContent;
+    const buyerEmail = document.getElementById("buyerEmail").value;
+    const buyerName = document.getElementById("buyerName").value;
+    const buyerTel = document.getElementById("buyerTel").value;
+    const buyerAddr = document.getElementById("buyerAddr").value;
+    const buyerPostcode = document.getElementById("buyerPostcode").value;
+
+    const IMP = window.IMP;
     IMP.init("imp66770306");
 
     function requestPay() {
@@ -47,11 +62,11 @@
             pg: "kakaopay",
             tid: "8559342fd00616b5ff4b2faaea74ca65",
             pay_method: "card",
-            merchant_uid: "ORD20180131-0000011",   // 주문번호
-            name: "노르웨이 회전 의자",
-            amount: 64900,                         // 숫자 타입
-            buyer_email: "gildong@gmail.com",
-            buyer_name: "홍길동",
+            merchant_uid: "ORD20180131-0000011",
+            name: productName,
+            amount: parseInt(productPrice),
+            buyer_email: buyerEmail,
+            buyer_name: buyerName,
             buyer_tel: "010-4242-4242",
             buyer_addr: "서울특별시 강남구 신사동",
             buyer_postcode: "01181"
