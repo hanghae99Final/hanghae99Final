@@ -17,8 +17,8 @@ public class PaymentController {
     private final IamportClient iamportClient;
 
     public PaymentController() {
-        this.iamportClient = new IamportClient("REST_API_KEY",
-                "REST_API_SECRET");
+        this.iamportClient = new IamportClient("8474815404642414",
+                "iKb4UTArrJKpuSXzivlsLheOgW4NwzVk2pfgxWqKkS4W428lwpwdTp5Xo7cozxjnaw5vJAmIHuvkN6Do");
     }
 
     @ResponseBody
