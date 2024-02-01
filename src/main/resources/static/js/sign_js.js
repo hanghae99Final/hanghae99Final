@@ -48,6 +48,9 @@ document.addEventListener("DOMContentLoaded", function() {
         const name = $('#name').val();
         const email = $('#signupEmail').val();
         const password = $('#signupPassword').val();
+        const userPhone = $('#userPhone').val();
+        const userAddress = $('#userAddress').val();
+        const postcode = $('#postcode').val();
 
         if (!name || !email || !password) {
             showSignupWarningMessage();
@@ -62,6 +65,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 userName: name,
                 userEmail: email,
                 password: password,
+                userPhone: userPhone,
+                userAddress: userAddress,
+                postcode: postcode,
                 auth: 'USER'
             }),
         })

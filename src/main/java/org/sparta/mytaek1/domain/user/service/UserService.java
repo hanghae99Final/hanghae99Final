@@ -34,7 +34,12 @@ public class UserService {
 
         String password = passwordEncoder.encode(requestDto.getPassword());
         String streamKey = UUID.randomUUID().toString();
-        User user =  userRepository.save(new User(userName, userEmail, password, streamKey));
+
+        String userPhone = requestDto.getUserPhone();
+        String userAddress = requestDto.getUserAddress();
+        String postcode = requestDto.getPostcode();
+
+        User user =  userRepository.save(new User(userName, userEmail, password, streamKey, userPhone, userAddress, postcode));
         new UserResponseDto(user);
     }
 
