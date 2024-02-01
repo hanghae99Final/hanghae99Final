@@ -11,15 +11,15 @@ import org.sparta.mytaek1.global.audit.Auditable;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BroadCast extends Auditable {
+public class Broadcast extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long broadCastId;
+    private Long broadcastId;
 
-    private String broadCastTitle;
+    private String broadcastTitle;
 
-    private String broadCastDescription;
+    private String broadcastDescription;
 
     private boolean onAir;
 

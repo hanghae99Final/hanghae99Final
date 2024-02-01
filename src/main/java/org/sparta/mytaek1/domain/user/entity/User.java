@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.sparta.mytaek1.domain.broadcast.entity.BroadCast;
+import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.global.audit.Auditable;
+import org.sparta.mytaek1.global.security.UserRoleEnum;
 
 import java.util.List;
 
@@ -28,15 +29,24 @@ public class User extends Auditable {
     @Column(nullable = false, unique = true)
     private String userEmail;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
+    @Column
+    private String streamKey;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<BroadCast> broadCastList;
+    private List<Broadcast> broadcastList;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Orders> orderList;
 
-    public User(String userName, String userEmail, String password) {
+    public User(String userName, String userEmail, String password, String streamKey) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.password = password;
+        this.role = UserRoleEnum.valueOf("USER");
+        this.streamKey = streamKey;
     }
 }
