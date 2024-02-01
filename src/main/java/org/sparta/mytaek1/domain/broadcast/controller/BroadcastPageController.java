@@ -17,7 +17,7 @@ public class BroadcastPageController {
     public String showBroadcast(@PathVariable Long broadcastId, Model model) {
         Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
         model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
-        model.addAttribute("productId", broadcast.getProduct().getProductId());
+        model.addAttribute("product", broadcast.getProduct());
         return "broadcast";
     }
 }
