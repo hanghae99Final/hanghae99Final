@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
-public class PageController {
+public class BroadcastPageController {
     private final BroadcastService broadcastService;
 
-    @GetMapping("/broadcast/{broadcastId}")
+    @GetMapping("/broadcasts/{broadcastId}")
     public String showBroadcast(@PathVariable Long broadcastId, Model model) {
         Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
         model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
