@@ -1,6 +1,8 @@
 package org.sparta.mytaek1.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
+import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.domain.user.dto.UserRequestDto;
 import org.sparta.mytaek1.domain.user.dto.UserResponseDto;
 import org.sparta.mytaek1.domain.user.entity.User;
@@ -10,7 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +33,23 @@ public class UserService {
         checkDuplicatedUserEmail(userEmail);
 
         String password = passwordEncoder.encode(requestDto.getPassword());
-        User user =  userRepository.save(new User(userName, userEmail, password));
+        String streamKey = UUID.randomUUID().toString();
+        User user =  userRepository.save(new User(userName, userEmail, password, streamKey));
         new UserResponseDto(user);
+    }
+
+    public List<Broadcast> getBroadcasts(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
+
+        return new ArrayList<>(user.getBroadcastList());
+    }
+
+    public List<Orders> getOrders(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
+
+        return new ArrayList<>(user.getOrderList());
     }
 
     private void checkDuplicatedUserName(String userName) {

@@ -1,32 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hls Practice</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- External Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
-    <title>Hls Practice</title>
+
+    <!-- Styles -->
     <style>
+        #main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 56px);
+            padding: 1rem;
+        }
+
+        #video-container {
+            flex: 0 0 70%;
+            max-width: 70%;
+        }
+
         video {
-            max-width: 500px;
             width: 100%;
-            max-height: 500px;
-            height: 100%;
-            object-fit: fill;
+            height: 70vh;
+            object-fit: cover;
+        }
+
+        #button {
+            flex: 0 0 70%;
+            max-width: 70%;
+            height: 60px;
+            margin-left: 1rem;
         }
     </style>
 </head>
-
 <body>
-<!--
-    controls : 사용자가 비디오 컨트롤이 가능하게 할 수 있다
-    playsinline : 전체 화면 방지이다
-    autoplay : 자동재생이며 , 정책상 음소거 상태에서 가능하다.
--->
-<video id="video" controls playsinline autoplay></video>
+<!-- Header -->
+<nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand mb-0 h1">Header (Navigation)</span>
+</nav>
 
+<!-- Main Content -->
+<div id="main-content">
+    <!-- Video Element -->
+    <div id="video-container">
+        <video id="video" controls playsinline autoplay></video>
+    </div>
 
+    <div id="product-button-container" style="flex: 0 0 30%; max-width: 30%; flex-direction: column; display: flex; justify-content: center; align-items: center;">
+        <!-- Product Info -->
+        <div id="product-info" class="p-3">
+            <h3 id="product-name">상품 이름</h3>
+            <p id="product-quantity">상품 수량: 1</p>
+            <p id="product-description">상품 설명: 이 상품은 매우 훌륭합니다.</p>
+            <p id="product-price">상품 가격: 10,000원</p>
+        </div>
+
+        <!-- Button -->
+        <button id="button" class="btn btn-primary btn-block" style="margin-top: 1rem;" disabled>상품 구매하기</button>
+    </div>
+</div>
+##
+# CORS
+##
+add_header 'Access-Control-Allow-Origin' '*';
 <script>
     /* video Element */
     let video = null;
@@ -68,5 +112,4 @@
 
 </script>
 </body>
-
 </html>
