@@ -17,10 +17,8 @@ public class BroadcastService {
     private final BroadcastRepository broadcastRepository;
     private final UserRepository userRepository;
 
-    public String getStreamKeyByBroadcastId(Long broadcastId) {
-        Broadcast broadcast = broadcastRepository.findByBroadcastId(broadcastId)
+    public Broadcast getBroadcastByBroadcastId(Long broadcastId) {
+        return broadcastRepository.findByBroadcastId(broadcastId)
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_BROADCAST_ERROR_MESSAGE.getErrorMessage()));
-
-        return broadcast.getUser().getStreamKey();
     }
 }

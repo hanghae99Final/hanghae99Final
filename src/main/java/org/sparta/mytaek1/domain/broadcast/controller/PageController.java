@@ -1,8 +1,8 @@
 package org.sparta.mytaek1.domain.broadcast.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
-import org.sparta.mytaek1.domain.user.entity.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +15,9 @@ public class PageController {
 
     @GetMapping("/broadcast/{broadcastId}")
     public String showBroadcast(@PathVariable Long broadcastId, Model model) {
-        String streamKey = broadcastService.getStreamKeyByBroadcastId(broadcastId);
-        model.addAttribute("streamKey", streamKey);
+        Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
+        model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
+        model.addAttribute("productId", broadcast.getProduct().getProductId());
         return "broadcast";
     }
 }
