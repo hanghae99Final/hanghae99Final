@@ -52,6 +52,10 @@ public class BroadcastService {
         User user = optionalUser.orElseThrow();
 
         Product product = productService.testProduct(requestDto);
+
+        Broadcast broadcast = requestDto.broadcastTest(user, product);
+        broadcastRepository.save(broadcast);
+        return BroadcastResponseDto.endBroadcast(broadcast);
     }
 
     public BroadcastResponseDto endBroadcast(long broadcastId) {

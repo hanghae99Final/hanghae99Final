@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
     private final ProductService productService;
 
-    @PostMapping("/api/products")
-    public CreateProductResponseDto createProduct(@RequestBody CreateProductRequestDto requestDto){
-        return productService.createProduct(requestDto);
-    }
+//    @PostMapping("/api/products")
+//    public CreateProductResponseDto createProduct(@RequestBody CreateProductRequestDto requestDto){
+//        return productService.createProduct(requestDto);
+//    }
 
     @PutMapping("/api/products/{productId}/stock")
     public UpdateProductStockResponseDto updateProductStock(@RequestBody UpdateProductStockRequestDto requestDto){

@@ -16,11 +16,11 @@ public class ProductService {
         return new ProductFindResponseDto(productRepository.findById(productId).orElseThrow(()-> new IllegalArgumentException("상품 정보가 없습니다.")));
     }
 
-    public CreateProductResponseDto createProduct(CreateProductRequestDto requestDto) {
-        Product product = new Product(requestDto);
-        productRepository.save(product);
-        return new CreateProductResponseDto(product);
-    }
+//    public CreateProductResponseDto createProduct(CreateProductRequestDto requestDto) {
+//        Product product = new Product(requestDto);
+//        productRepository.save(product);
+//        return new CreateProductResponseDto(product);
+//    }
 
     //TODO:: 레디스 기반 업데이트 추가 필요
     public UpdateProductStockResponseDto updateProductStock(UpdateProductStockRequestDto requestDto) {
@@ -28,7 +28,14 @@ public class ProductService {
     }
 
     public Product testProduct(testRequestDto requestDto) {
+        Product product = Product.builder()
+                .productName(requestDto.getProductName())
+                .productDescription(requestDto.getBroadcastDescription())
+                .productPrice(requestDto.getProductPrice())
+                .productStock(requestDto.getProductStock())
+                .build();
+        productRepository.save(product);
 
-
+        return product;
     }
 }
