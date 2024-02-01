@@ -20,10 +20,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="product : ${productFind}">
-            <td th:text="${product.productName}"></td>
-            <td th:text="${product.productPrice}"></td>
-            <td th:text="${product.productStock}"></td>
+        <tr>
+            <td th:text="${productFind.getProductName()}"></td>
+            <td th:text="${productFind.getProductPrice()}"></td>
+            <td th:text="${productFind.getProductStock()}"></td>
 <!--            <td>-->
 <!--                <div th:each="url : ${menu.pictureUrls}">-->
 <!--                    <img th:src="${url}" alt="Menu Image" style="max-width: 100px; max-height: 100px;"/>-->
