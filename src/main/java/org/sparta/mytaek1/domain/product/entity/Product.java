@@ -1,13 +1,10 @@
 package org.sparta.mytaek1.domain.product.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.sparta.mytaek1.domain.product.dto.CreateProductRequestDto;
 import org.sparta.mytaek1.global.audit.Auditable;
 
 @Entity
@@ -18,14 +15,24 @@ public class Product extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
     private String productName;
+
     private String productDescription;
     private int productPrice;
     private int productStock;
 
-    public Product(CreateProductRequestDto requestDto) {
-        this.productName = requestDto.getProductName();
-        this.productDescription = requestDto.getProductDescription();
-        this.productPrice = requestDto.getProductPrice();
-        this.productStock = requestDto.getProductStock();
+    @Builder
+    public Product(Long productId, String productName,String productDescription, int productPrice, int productStock) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.productPrice = productPrice;
+        this.productStock = productStock;
+    }
+
+    public Product(String productName, String productDescription, int productPrice, int productStock) {
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.productPrice = productPrice;
+        this.productStock = productStock;
     }
 }

@@ -2,6 +2,7 @@ package org.sparta.mytaek1.domain.broadcast.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.mytaek1.domain.product.entity.Product;
@@ -27,10 +28,18 @@ public class Broadcast extends Auditable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    //생성자 빌더는 나중에 다 풀받고
-
+    public Broadcast(String broadcastTitle, String broadcastDescription,User user, Product product) {
+        this.broadcastTitle = broadcastTitle;
+        this.broadcastDescription = broadcastDescription;
+        this.onAir = true;
+        this.user = user;
+        this.product = product;
+    }
+    public void endBroadcast() {
+        this.onAir = false;
+    }
 }
