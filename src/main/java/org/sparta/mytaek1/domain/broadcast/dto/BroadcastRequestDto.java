@@ -15,8 +15,9 @@ public class BroadcastRequestDto {
     @NonNull
     private final String productName;
     @NonNull
+    private final String productDescription;
+    @NonNull
     private final int productPrice;
     @NonNull
     private final int productStock;
-
 }

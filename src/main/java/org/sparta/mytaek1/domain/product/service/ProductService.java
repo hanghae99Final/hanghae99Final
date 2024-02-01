@@ -28,7 +28,7 @@ public class ProductService {
     }
 
     public Product createProduct(BroadcastRequestDto requestDto) {
-        Product product = new Product(requestDto.getProductName(), requestDto.getBroadcastDescription(), requestDto.getProductPrice(), requestDto.getProductStock());
+        Product product = new Product(requestDto.getProductName(), requestDto.getProductDescription(), requestDto.getProductPrice(), requestDto.getProductStock());
 
         productRepository.save(product);
 

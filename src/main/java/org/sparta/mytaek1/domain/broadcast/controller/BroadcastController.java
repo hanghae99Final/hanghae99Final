@@ -29,7 +29,7 @@ public class BroadcastController {
     }
 
     @PostMapping("/{broadcastId}/end")
-    public ResponseEntity endBroadcast(@PathVariable long broadcastId) {
+    public ResponseEntity<String> endBroadcast(@PathVariable long broadcastId) {
         BroadcastResponseDto responseDto = broadcastService.endBroadcast(broadcastId);
         return new ResponseEntity<>(SuccessMessage.BROADCAST_END_MESSAGE.getSuccessMessage(), HttpStatus.OK);
     }

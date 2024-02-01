@@ -38,7 +38,7 @@ public class UserPageController {
         model.addAttribute("postcode", postcode);
         model.addAttribute("broadcastList", broadcastList);
         model.addAttribute("orderList", orderList);
-        return "my_page";
+        return "myPage";
     }
 
     @GetMapping("/api/user/login-page")
