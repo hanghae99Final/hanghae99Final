@@ -40,6 +40,8 @@
     <input type="hidden" id="buyerTel" th:value="${user.getUserPhone()}" />
     <input type="hidden" id="buyerAddr" th:value="${user.getUserAddress()}" />
     <input type="hidden" id="buyerPostcode" th:value="${user.getPostcode()}" />
+    <input type="hidden" id="buyerProductId" th:value="${productFind.getProductId()}" />
+    <input type="hidden" id="buyerUserId" th:value="${user.getUserId()}" />
 
 </div>
 <div th:if="${#lists.isEmpty(productFind)}">
