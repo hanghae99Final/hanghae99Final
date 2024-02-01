@@ -5,90 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hls Practice</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/broadcast_style.css}"/>
 
-    <!-- External Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
-
-    <!-- Styles -->
-    <style>
-        #main-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: calc(100vh - 56px);
-            padding: 1rem;
-        }
-
-        #video-container {
-            flex: 0 0 70%;
-            max-width: 70%;
-        }
-
-        video {
-            width: 100%;
-            height: 70vh;
-            object-fit: cover;
-        }
-
-        #button {
-            flex: 0 0 70%;
-            max-width: 70%;
-            height: 60px;
-            margin-left: 1rem;
-        }
-    </style>
 </head>
+
 <body>
-<!-- Header -->
 <nav class="navbar navbar-dark bg-dark">
     <span class="navbar-brand mb-0 h1">Header (Navigation)</span>
 </nav>
-
-<!-- Main Content -->
 <div id="main-content">
-    <!-- Video Element -->
     <div id="video-container">
         <video id="video" controls playsinline autoplay></video>
     </div>
-
-    <div id="product-button-container" style="flex: 0 0 30%; max-width: 30%; flex-direction: column; display: flex; justify-content: center; align-items: center;">
-        <!-- Product Info -->
+    <div id="product-button-container"
+         style="flex: 0 0 30%; max-width: 30%; flex-direction: column; display: flex; justify-content: center; align-items: center;">
         <div id="product-info" class="p-3">
             <h3 id="product-name">상품 이름</h3>
             <p id="product-quantity">상품 수량: 1</p>
             <p id="product-description">상품 설명: 이 상품은 매우 훌륭합니다.</p>
             <p id="product-price">상품 가격: 10,000원</p>
         </div>
-
-        <!-- Button -->
-        <button id="button" class="btn btn-primary btn-block" style="margin-top: 1rem;" disabled>상품 구매하기</button>
+        <button id="button" class="btn btn-primary btn-block" style="margin-top: 1rem;">상품 구매하기</button>
     </div>
 </div>
-##
-# CORS
-##
-add_header 'Access-Control-Allow-Origin' '*';
 <script>
-    /* video Element */
     let video = null;
-    /* 샘플 m3u8 url */
-    let videoSrc = 'http://13.125.50.133:8088/dabomi.m3u8';
+    let videoSrc = 'http://13.125.50.133:8088/' + '[[${streamKey}]]' + '.m3u8';
 
-    /* initVideo */
     const initVideo = () => {
         video = document.querySelector('#video')
     }
 
-    /* DOMContentLoaded 로드를 통해 video Element 담기*/
     window.addEventListener("DOMContentLoaded", () => {
         initVideo();
     })
 
-
-    /* initHls : hls를 초기화 하는 함수 */
     const initHls = () => {
         if (Hls.isSupported()) {
             hls = new Hls({
@@ -97,19 +51,20 @@ add_header 'Access-Control-Allow-Origin' '*';
             hls.loadSource(videoSrc);
             hls.attachMedia(video);
             hls.startLoad();
-        }
-        /* ios/safari 같은 경우에 hls가 built-in 되어있다.*/
-        else {
+        } else {
             video.src = videoSrc;
         }
     }
 
-    /* DOMContentLoaded 로드를 통해 video Element 담기*/
     window.addEventListener("DOMContentLoaded", () => {
         initVideo();
         initHls();
     })
 
+    document.getElementById('button').addEventListener('click', function () {
+        let productId = '[[${productId}]]';
+        location.href = '/products/' + productId;
+    });
 </script>
 </body>
 </html>
