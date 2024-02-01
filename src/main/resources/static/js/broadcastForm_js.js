@@ -12,6 +12,7 @@ function submitForm() {
         broadcastTitle: $("#broadcastTitle").val(),
         broadcastDescription: $("#broadcastDescription").val(),
         productName: $("#productName").val(),
+        productDescription: $("#productDescription").val(),
         productPrice: $("#productPrice").val(),
         productStock: $("#productStock").val()
     };
