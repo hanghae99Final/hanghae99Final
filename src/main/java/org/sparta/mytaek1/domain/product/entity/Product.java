@@ -15,13 +15,16 @@ public class Product extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
     private String productName;
+
+    private String productDescription;
     private int productPrice;
     private int productStock;
 
     @Builder
-    public Product(Long productId, String productName, int productPrice, int productStock) {
+    public Product(Long productId, String productName,String productDescription, int productPrice, int productStock) {
         this.productId = productId;
         this.productName = productName;
+        this.productDescription = productDescription;
         this.productPrice = productPrice;
         this.productStock = productStock;
     }

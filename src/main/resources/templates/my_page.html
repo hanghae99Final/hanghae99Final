@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/mypage_style.css}" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arbutus+Slab" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <title>MyTaek1</title>
+</head>
+<body>
+  <div class="mypage_container">
+    <h1 style="margin: 20px;">
+      Welcome, <span th:text="${userName}"></span>!
+    </h1>
+    <p>Your Email: <span th:text="${userEmail}"></span></p>
+    <p>Your Stream Key: <span th:text="${streamKey}"></span></p>
+
+    <div class="flex-box">
+      <div class="broadcast_container">
+        <h2 style="margin: 40px 0 20px 0;">Your Broadcasts</h2>
+        <ul>
+          <li class="broadcast_list" th:each="broadcast : ${broadcastList}">
+            <div class="broadcast_list_box">
+              <a th:href="@{'/users/broadcast/' + ${broadcast.broadcastId}}" th:attr="data-boardId=${broadcast.broadcastId}">
+                <h3>방송 제목: <span th:text="${broadcast.broadcastTitle}"></span></h3>
+                <p>방송 설명: <span th:text="${broadcast.broadcastDescription}"></span></p>
+                <p>판매 상품: <span th:text="${broadcast.getProduct().getProductName()}"></span></p>
+                <p>상품 가격: <span th:text="${broadcast.getProduct().getProductPrice()}"></span></p>
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+     <div class="order_container">
+       <h2 style="margin: 40px 0 20px 0;">Your Orders</h2>
+       <ul>
+         <li class="order_list" th:each="order : ${orderList}">
+           <div class="order_list_box">
+               <p>구매 상품: <span th:text="${order.getProduct().getProductName()}"></span></p>
+               <p>구매 수량: <span th:text="${order.getQuantity()}"></span></p>
+               <p>총 가격: <span th:text="${order.getTotalPrice()}"></span></p>
+           </div>
+         </li>
+       </ul>
+     </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.domain.product.dto.product;
+package org.sparta.mytaek1.domain.product.dto;
 
 import lombok.Getter;
 import lombok.Setter;

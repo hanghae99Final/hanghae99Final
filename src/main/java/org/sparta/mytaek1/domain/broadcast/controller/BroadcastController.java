@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastRequestDto;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
+import org.sparta.mytaek1.domain.broadcast.dto.testRequestDto;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
+import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +36,13 @@ public class BroadcastController {
                                           @RequestParam long productId,
                                           @RequestBody BroadcastRequestDto requestDto) {
         BroadcastResponseDto responseDto = broadcastService.createBroadcast(userId, productId, requestDto);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @PostMapping
+    public ResponseEntity createTest(@AuthenticationPrincipal UserDetailsImpl auth,
+                                     @RequestBody testRequestDto requestDto) {
+        BroadcastResponseDto responseDto = broadcastService.createTest(auth, requestDto);
         return ResponseEntity.ok(responseDto);
     }
 

@@ -2,23 +2,31 @@
     margin:0;
     padding:0;
 }
-.board_container {
+.mypage_container {
     width: 80%;
     margin: auto;
     text-align: center;
 }
 
-.board_container > p {
+.mypage_container > p {
     line-height: 2em;
 }
 
-.board_list {
+.flex-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.broadcast_container, .order_container {
+    width: 49%;
+}
+
+.broadcast_list, .order_list {
     list-style: none;
     width: 100%;
 }
 
-.board_list_box {
-    background-color: gray;
+.broadcast_list_box, .order_list_box {
     text-align: center;
     width: 100%;
     padding: 20px;
@@ -26,15 +34,7 @@
     border-radius: 10px;
     margin-bottom: 20px;
     position: relative;
-}
-
-.add-board-button {
-    background-color: gray;
-    color: white;
-    font-size: 22px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    border: 1px solid #aaa;
 }
 
 .popup-form {
@@ -75,16 +75,9 @@
     color: #666;
 }
 
-#DeleteBoardButton {
-    background: gray;
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-}
-
 a {
     text-decoration: none;
-    color: white;
+    color: black;
 }
 
 ul {
