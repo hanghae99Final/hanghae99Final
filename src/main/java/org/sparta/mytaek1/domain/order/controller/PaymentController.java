@@ -6,7 +6,7 @@ import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class PaymentController {
     }
 
     @ResponseBody
-    @RequestMapping("/verify/{imp_uid}")
+    @PostMapping("/verify/{imp_uid}")
     public IamportResponse<Payment> paymentByImpUid(@PathVariable("imp_uid") String imp_uid)
             throws IamportResponseException, IOException {
         return iamportClient.paymentByImpUid(imp_uid);
