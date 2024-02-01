@@ -1,7 +1,7 @@
 package org.sparta.mytaek1.domain.product.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sparta.mytaek1.domain.broadcast.dto.testRequestDto;
+import org.sparta.mytaek1.domain.broadcast.dto.BroadcastRequestDto;
 import org.sparta.mytaek1.domain.product.dto.*;
 import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.product.repository.ProductRepository;
@@ -27,13 +27,9 @@ public class ProductService {
         return null;
     }
 
-    public Product testProduct(testRequestDto requestDto) {
-        Product product = Product.builder()
-                .productName(requestDto.getProductName())
-                .productDescription(requestDto.getBroadcastDescription())
-                .productPrice(requestDto.getProductPrice())
-                .productStock(requestDto.getProductStock())
-                .build();
+    public Product createProduct(BroadcastRequestDto requestDto) {
+        Product product = new Product(requestDto.getProductName(), requestDto.getBroadcastDescription(), requestDto.getProductPrice(), requestDto.getProductStock());
+
         productRepository.save(product);
 
         return product;

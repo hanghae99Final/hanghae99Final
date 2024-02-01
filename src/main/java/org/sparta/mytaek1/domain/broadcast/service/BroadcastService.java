@@ -2,9 +2,8 @@ package org.sparta.mytaek1.domain.broadcast.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sparta.mytaek1.domain.broadcast.dto.BroadcastRequestDto;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
-import org.sparta.mytaek1.domain.broadcast.dto.testRequestDto;
+import org.sparta.mytaek1.domain.broadcast.dto.BroadcastRequestDto;
 import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.repository.BroadcastRepository;
 import org.sparta.mytaek1.domain.product.entity.Product;
@@ -33,29 +32,19 @@ public class BroadcastService {
     @Transactional(readOnly = true)
     public List<BroadcastResponseDto> getAllBroadCast() {
         List<Broadcast> broadcastList = broadcastRepository.findAllByOnAirTrue();
-        return BroadcastResponseDto.EntityList(broadcastList);
+        return BroadcastResponseDto.fromBroadcastList(broadcastList);
     }
 
-    public BroadcastResponseDto createBroadcast(long userId, long productId, BroadcastRequestDto requestDto) {
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        Product product = optionalProduct.orElseThrow();
-
-        Optional<User> optionalUser = userRepository.findById(userId);
-        User user = optionalUser.orElseThrow();
-        Broadcast broadCast = requestDto.toEntity(user, product);
-        broadcastRepository.save(broadCast);
-        return BroadcastResponseDto.createdEntity(broadCast, user, product);
-    }
-
-    public BroadcastResponseDto createTest(UserDetailsImpl auth, testRequestDto requestDto) {
+    public BroadcastResponseDto createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto) {
         Optional<User> optionalUser = userRepository.findByUserEmail(auth.getUsername());
         User user = optionalUser.orElseThrow();
 
-        Product product = productService.testProduct(requestDto);
+        Product product = productService.createProduct(requestDto);
 
-        Broadcast broadcast = requestDto.broadcastTest(user, product);
+        Broadcast broadcast = new Broadcast(requestDto.getBroadcastTitle(), requestDto.getBroadcastDescription(), user, product);
         broadcastRepository.save(broadcast);
-        return BroadcastResponseDto.endBroadcast(broadcast);
+        BroadcastResponseDto responseDto = new BroadcastResponseDto(broadcast);
+        return responseDto;
     }
 
     public BroadcastResponseDto endBroadcast(long broadcastId) {
@@ -63,6 +52,7 @@ public class BroadcastService {
         Broadcast broadCast = optionalBroadcast.orElseThrow();
 
         broadCast.endBroadcast();
-        return BroadcastResponseDto.endBroadcast(broadCast);
+        BroadcastResponseDto responseDto = new BroadcastResponseDto(broadCast);
+        return responseDto;
     }
 }

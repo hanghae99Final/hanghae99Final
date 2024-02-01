@@ -28,4 +28,11 @@ public class Product extends Auditable {
         this.productPrice = productPrice;
         this.productStock = productStock;
     }
+
+    public Product(String productName, String productDescription, int productPrice, int productStock) {
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.productPrice = productPrice;
+        this.productStock = productStock;
+    }
 }

@@ -1,25 +1,22 @@
 package org.sparta.mytaek1.domain.broadcast.dto;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
-import org.sparta.mytaek1.domain.product.entity.Product;
-import org.sparta.mytaek1.domain.user.entity.User;
 
 @Getter
 @RequiredArgsConstructor
 public class BroadcastRequestDto {
 
+    @NonNull
     private final String broadcastTitle;
+    @NonNull
     private final String broadcastDescription;
+    @NonNull
+    private final String productName;
+    @NonNull
+    private final int productPrice;
+    @NonNull
+    private final int productStock;
 
-    public Broadcast toEntity(User user, Product product) {
-        return Broadcast.builder()
-                .broadcastTitle(this.broadcastTitle)
-                .broadcastDescription(this.broadcastDescription)
-                .onAir(true)
-                .user(user)
-                .product(product)
-                .build();
-    }
 }

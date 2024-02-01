@@ -32,16 +32,13 @@ public class Broadcast extends Auditable {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Builder
-    public Broadcast(Long broadcastId, String broadcastTitle, String broadcastDescription, boolean onAir, User user, Product product) {
-        this.broadcastId = broadcastId;
+    public Broadcast(String broadcastTitle, String broadcastDescription,User user, Product product) {
         this.broadcastTitle = broadcastTitle;
         this.broadcastDescription = broadcastDescription;
-        this.onAir = onAir;
+        this.onAir = true;
         this.user = user;
         this.product = product;
     }
-
     public void endBroadcast() {
         this.onAir = false;
     }
