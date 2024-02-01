@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show product</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+</head>
+<body>
+
+<h1>Show product</h1>
+
+<div th:if="${not #lists.isEmpty(productFind)}">
+    <table>
+        <thead>
+        <tr>
+            <th>productName</th>
+            <th>productPrice</th>
+<!--            <th>productImage</th>-->
+            <th>productStock</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td id="productName" th:text="${productFind.getProductName()}"></td>
+            <td id="productPrice" th:text="${productFind.getProductPrice()}"></td>
+            <td th:text="${productFind.getProductStock()}"></td>
+<!--            <td>-->
+<!--                <div th:each="url : ${menu.pictureUrls}">-->
+<!--                    <img th:src="${url}" alt="Menu Image" style="max-width: 100px; max-height: 100px;"/>-->
+<!--                </div>-->
+<!--            </td>-->
+        </tr>
+        </tbody>
+    </table>
+
+    <input type="hidden" id="buyerEmail" th:value="${user.getUserEmail()}" />
+    <input type="hidden" id="buyerName" th:value="${user.getUserName()}" />
+    <input type="hidden" id="buyerTel" th:value="${user.getUserPhone()}" />
+    <input type="hidden" id="buyerAddr" th:value="${user.getUserAddress()}" />
+    <input type="hidden" id="buyerPostcode" th:value="${user.getPostcode()}" />
+
+</div>
+<div th:if="${#lists.isEmpty(productFind)}">
+    <p>No products available.</p>
+</div>
+<button onclick="requestPay()">결제하기</button>
+<script type="text/javascript" th:src="@{/js/product_js.js}"></script>
+</body>
+</html>

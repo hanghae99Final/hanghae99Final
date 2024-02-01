@@ -16,6 +16,9 @@
     </h1>
     <p>Your Email: <span th:text="${userEmail}"></span></p>
     <p>Your Stream Key: <span th:text="${streamKey}"></span></p>
+    <p>Your Phone: <span th:text="${userPhone}"></span></p>
+    <p>Your Address: <span th:text="${userAddress}"></span></p>
+    <p>Your Postcode: <span th:text="${postcode}"></span></p>
 
     <div class="flex-box">
       <div class="broadcast_container">
@@ -23,7 +26,7 @@
         <ul>
           <li class="broadcast_list" th:each="broadcast : ${broadcastList}">
             <div class="broadcast_list_box">
-              <a th:href="@{'/users/broadcast/' + ${broadcast.broadcastId}}" th:attr="data-boardId=${broadcast.broadcastId}">
+              <a th:href="@{'/broadcasts/' + ${broadcast.broadcastId}}" th:attr="data-boardId=${broadcast.broadcastId}">
                 <h3>방송 제목: <span th:text="${broadcast.broadcastTitle}"></span></h3>
                 <p>방송 설명: <span th:text="${broadcast.broadcastDescription}"></span></p>
                 <p>판매 상품: <span th:text="${broadcast.getProduct().getProductName()}"></span></p>

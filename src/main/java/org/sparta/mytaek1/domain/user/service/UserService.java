@@ -34,22 +34,27 @@ public class UserService {
 
         String password = passwordEncoder.encode(requestDto.getPassword());
         String streamKey = UUID.randomUUID().toString();
-        User user =  userRepository.save(new User(userName, userEmail, password, streamKey));
+
+        String userPhone = requestDto.getUserPhone();
+        String userAddress = requestDto.getUserAddress();
+        String postcode = requestDto.getPostcode();
+
+        User user =  userRepository.save(new User(userName, userEmail, password, streamKey, userPhone, userAddress, postcode));
         new UserResponseDto(user);
     }
 
     public List<Broadcast> getBroadcasts(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
-
+        User user = findUser(userId);
         return new ArrayList<>(user.getBroadcastList());
     }
 
     public List<Orders> getOrders(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
-
+        User user = findUser(userId);
         return new ArrayList<>(user.getOrderList());
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
     }
 
     private void checkDuplicatedUserName(String userName) {
