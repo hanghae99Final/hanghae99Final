@@ -31,6 +31,7 @@ dependencies {
     //thymeleaf
     implementation'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     // JWT
@@ -38,7 +39,11 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 }
-
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
 tasks.named('test') {
     useJUnitPlatform()
 }

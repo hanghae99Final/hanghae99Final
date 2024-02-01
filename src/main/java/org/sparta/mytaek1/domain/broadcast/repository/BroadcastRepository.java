@@ -6,8 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import java.util.Optional;
+
 @Repository
 public interface BroadcastRepository extends JpaRepository<Broadcast, Long> {
+    Optional<Broadcast> findByBroadcastId(Long broadcastId);
 
     List<Broadcast> findAllByOnAirTrue();
 }

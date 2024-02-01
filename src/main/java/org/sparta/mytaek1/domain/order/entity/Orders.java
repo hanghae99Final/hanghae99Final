@@ -17,9 +17,9 @@ public class Orders extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    private Long quantity;
+    private Integer quantity;
 
-    private Long totalPrice;
+    private Integer totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -28,4 +28,8 @@ public class Orders extends Auditable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public Orders(Integer quantity) {
+        this.quantity = quantity;
+    }
 }

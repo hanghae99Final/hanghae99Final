@@ -12,6 +12,7 @@ import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
+import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 public class BroadcastService {
+
 
     private final BroadcastRepository broadcastRepository;
     private final ProductRepository productRepository;
@@ -54,5 +56,11 @@ public class BroadcastService {
         broadCast.endBroadcast();
         BroadcastResponseDto responseDto = new BroadcastResponseDto(broadCast);
         return responseDto;
+    }
+
+    @Transactional(readOnly = true)
+    public Broadcast getBroadcastByBroadcastId(Long broadcastId) {
+        return broadcastRepository.findByBroadcastId(broadcastId)
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_BROADCAST_ERROR_MESSAGE.getErrorMessage()));
     }
 }
