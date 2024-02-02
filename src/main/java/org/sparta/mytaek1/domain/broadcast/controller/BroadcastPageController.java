@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
 import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,14 +17,12 @@ public class BroadcastPageController {
     private final BroadcastService broadcastService;
 
     @GetMapping("/broadcasts")
-    public String showBroadcast(Model model) {
-        addUserInfoToModel(model);
+    public String showBroadcast() {
         return "broadcast";
     }
 
     @GetMapping("/broadcasts/start")
-    public String getBroadCastForm(Model model) {
-        addUserInfoToModel(model);
+    public String getBroadCastForm() {
         return "broadcastForm";
     }
 
@@ -34,7 +30,6 @@ public class BroadcastPageController {
     public String getBroadcastsOnAir(Model model) {
         List<BroadcastResponseDto> broadcastResponseDtoList = broadcastService.getAllBroadCast();
         model.addAttribute("broadcastResponseDtoList", broadcastResponseDtoList);
-        addUserInfoToModel(model);
         return "broadcastList";
     }
 
@@ -43,13 +38,6 @@ public class BroadcastPageController {
         Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
         model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
         model.addAttribute("product", broadcast.getProduct());
-        addUserInfoToModel(model);
         return "broadcast";
-    }
-
-    private void addUserInfoToModel(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isAuthenticated = authentication != null && authentication.isAuthenticated();
-        model.addAttribute("isAuthenticated", isAuthenticated);
     }
 }

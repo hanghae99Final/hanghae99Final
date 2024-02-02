@@ -24,7 +24,7 @@
             <tr>
                 <td id="productName" th:text="${productFind.getProductName()}"></td>
                 <td id="productPrice" th:text="${productFind.getProductPrice()}"></td>
-                <td th:text="${productFind.getProductStock()}"></td>
+                <td id="productStock" th:text="${productFind.getProductStock()}"></td>
     <!--            <td>-->
     <!--                <div th:each="url : ${menu.pictureUrls}">-->
     <!--                    <img th:src="${url}" alt="Menu Image" style="max-width: 100px; max-height: 100px;"/>-->
@@ -34,13 +34,13 @@
             </tbody>
         </table>
         <input type="number" id="quantity" />
-        <input type="hidden" id="buyerEmail" th:value="${user.getUserEmail()}" />
-        <input type="hidden" id="buyerName" th:value="${user.getUserName()}" />
-        <input type="hidden" id="buyerTel" th:value="${user.getUserPhone()}" />
-        <input type="hidden" id="buyerAddr" th:value="${user.getUserAddress()}" />
-        <input type="hidden" id="buyerPostcode" th:value="${user.getPostcode()}" />
+        <input type="hidden" id="buyerEmail" th:if="${user != null}" th:value="${user.getUserEmail()}" />
+        <input type="hidden" id="buyerName" th:if="${user != null}" th:value="${user.getUserName()}" />
+        <input type="hidden" id="buyerTel" th:if="${user != null}" th:value="${user.getUserPhone()}" />
+        <input type="hidden" id="buyerAddr" th:if="${user != null}" th:value="${user.getUserAddress()}" />
+        <input type="hidden" id="buyerPostcode" th:if="${user != null}" th:value="${user.getPostcode()}" />
         <input type="hidden" id="buyerProductId" th:value="${productFind.getProductId()}" />
-        <input type="hidden" id="buyerUserId" th:value="${user.getUserId()}" />
+        <input type="hidden" id="buyerUserId" th:value="${user != null ? user.getUserId() : ''}" />
     </div>
     <div th:if="${#lists.isEmpty(productFind)}">
         <p>No products available.</p>
