@@ -18,9 +18,11 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
+    @Transactional
     public void createOrder(Long productId, OrderRequestDto orderRequestDto, User user) {
         Product product = productRepository.findById(productId).orElseThrow();
         Orders order = new Orders(orderRequestDto,product, user);
+        product.updateStock(orderRequestDto.getQuantity());
         orderRepository.save(order);
     }
 
