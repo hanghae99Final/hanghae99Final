@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 @Getter
 public class BroadcastResponseDto {
 
+    private final long broadcastId;
     private final String broadCastTitle;
 
     private final String broadCastDescription;
@@ -18,6 +19,7 @@ public class BroadcastResponseDto {
     private final String productName;
 
     public BroadcastResponseDto(Broadcast broadcast) {
+        this.broadcastId = broadcast.getBroadcastId();
         this.broadCastTitle = broadcast.getBroadcastTitle();
         this.broadCastDescription = broadcast.getBroadcastDescription();
         this.userName = broadcast.getUser().getUserName();

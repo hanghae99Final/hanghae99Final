@@ -1,5 +1,6 @@
 const productName = document.getElementById("productName").textContent;
 const productPrice = document.getElementById("productPrice").textContent;
+const productStock = document.getElementById("productStock").textContent;
 const buyerEmail = document.getElementById("buyerEmail").value;
 const buyerName = document.getElementById("buyerName").value;
 const buyerTel = document.getElementById("buyerTel").value;
@@ -20,6 +21,10 @@ function generateMerchantUid() {
 function requestPay() {
     const quantity = parseInt(document.getElementById("quantity").value);
     const amount = parseInt(productPrice) * quantity;
+    if (quantity > productStock) {
+        alert("주문 수량이 재고 수량을 초과합니다.");
+        return;
+    }
     const merchant_uid = generateMerchantUid();
     IMP.request_pay({
         pg: "kakaopay",
