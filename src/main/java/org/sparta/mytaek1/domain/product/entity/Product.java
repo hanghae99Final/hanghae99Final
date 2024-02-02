@@ -35,4 +35,7 @@ public class Product extends Auditable {
         this.productPrice = productPrice;
         this.productStock = productStock;
     }
+    public void updateStock(int productStock){
+        this.productStock = this.productStock - productStock;
+    }
 }
