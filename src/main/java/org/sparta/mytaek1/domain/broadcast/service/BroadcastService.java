@@ -27,7 +27,6 @@ public class BroadcastService {
 
 
     private final BroadcastRepository broadcastRepository;
-    private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final ProductService productService;
 
@@ -39,7 +38,7 @@ public class BroadcastService {
 
     public BroadcastResponseDto createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto) {
         Optional<User> optionalUser = userRepository.findByUserEmail(auth.getUsername());
-        User user = optionalUser.orElseThrow();
+        User user = optionalUser.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
 
         Product product = productService.createProduct(requestDto);
 
@@ -50,8 +49,7 @@ public class BroadcastService {
     }
 
     public BroadcastResponseDto endBroadcast(long broadcastId) {
-        Optional<Broadcast> optionalBroadcast = broadcastRepository.findById(broadcastId);
-        Broadcast broadCast = optionalBroadcast.orElseThrow();
+        Broadcast broadCast = getBroadcastByBroadcastId(broadcastId);
 
         broadCast.endBroadcast();
         BroadcastResponseDto responseDto = new BroadcastResponseDto(broadCast);

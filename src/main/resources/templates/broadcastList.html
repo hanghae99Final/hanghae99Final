@@ -24,9 +24,15 @@
         <td th:text="${broadcastResponseDto.broadCastDescription}"></td>
         <td th:text="${broadcastResponseDto.userName}"></td>
         <td th:text="${broadcastResponseDto.productName}"></td>
+        <td>
+            <button class="view-details-button" th:attr="data-broadcast-id=${broadcastResponseDto.broadcastId}"
+                    style="cursor: pointer;">View Details
+            </button>
+        </td>
     </tr>
     </tbody>
 </table>
 <button onclick="window.location.href='/broadcasts/start'">방송 시작하기</button>
+<script type="text/javascript" th:src="@{/js/broadcastList_js.js}"></script>
 </body>
 </html>
