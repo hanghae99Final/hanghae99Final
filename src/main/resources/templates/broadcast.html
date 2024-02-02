@@ -9,60 +9,58 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
 </head>
-
 <body>
-<nav class="navbar navbar-dark bg-dark">
-    <span class="navbar-brand mb-0 h1">Header (Navigation)</span>
-</nav>
-<div id="main-content">
-    <div id="video-container">
-        <video id="video" controls playsinline autoplay></video>
-    </div>
-    <div id="product-button-container"
-         style="flex: 0 0 30%; max-width: 30%; flex-direction: column; display: flex; justify-content: center; align-items: center;">
-        <div id="product-info" class="p-3">
-            <h3 th:text="'상품 명: ' + ${product.getProductName()}"></h3>
-            <p th:text="'상품 가격: ' + ${product.getProductPrice()}"></p>
-            <p th:text="'상품 설명: ' + ${product.getProductDescription()}"></p>
-            <p th:text="'상품 수량: ' + ${product.getProductStock()}"></p>
+    <nav class="navbar"></nav>
+    <div id="main-content">
+        <div id="video-container">
+            <video id="video" controls playsinline autoplay></video>
         </div>
-        <button id="button" class="btn btn-primary btn-block" style="margin-top: 1rem;">상품 구매하기</button>
+        <div id="product-button-container"
+             style="flex: 0 0 30%; max-width: 30%; flex-direction: column; display: flex; justify-content: center; align-items: center;">
+            <div id="product-info" class="p-3">
+                <h3 th:text="'상품 명: ' + ${product.getProductName()}"></h3>
+                <p th:text="'상품 가격: ' + ${product.getProductPrice()}"></p>
+                <p th:text="'상품 설명: ' + ${product.getProductDescription()}"></p>
+                <p th:text="'상품 수량: ' + ${product.getProductStock()}"></p>
+            </div>
+            <button id="button" class="btn btn-primary btn-block" style="margin-top: 1rem;">상품 보러가기</button>
+        </div>
     </div>
-</div>
-<script>
-    let video = null;
-    let videoSrc = 'http://13.125.50.133:8088/' + '[[${streamKey}]]' + '.m3u8';
+    <script>
+        let video = null;
+        let videoSrc = 'http://13.125.50.133:8088/' + '[[${streamKey}]]' + '.m3u8';
 
-    const initVideo = () => {
-        video = document.querySelector('#video')
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-        initVideo();
-    })
-
-    const initHls = () => {
-        if (Hls.isSupported()) {
-            hls = new Hls({
-                autoStartLoad: false,
-            });
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-            hls.startLoad();
-        } else {
-            video.src = videoSrc;
+        const initVideo = () => {
+            video = document.querySelector('#video')
         }
-    }
 
-    window.addEventListener("DOMContentLoaded", () => {
-        initVideo();
-        initHls();
-    })
+        window.addEventListener("DOMContentLoaded", () => {
+            initVideo();
+        })
 
-    document.getElementById('button').addEventListener('click', function () {
-        let productId = '[[${product.getProductId()}]]';
-        location.href = '/products/' + productId;
-    });
-</script>
+        const initHls = () => {
+            if (Hls.isSupported()) {
+                hls = new Hls({
+                    autoStartLoad: false,
+                });
+                hls.loadSource(videoSrc);
+                hls.attachMedia(video);
+                hls.startLoad();
+            } else {
+                video.src = videoSrc;
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            initVideo();
+            initHls();
+        })
+
+        document.getElementById('button').addEventListener('click', function () {
+            let productId = '[[${product.getProductId()}]]';
+            location.href = '/products/' + productId;
+        });
+    </script>
+    <script type="text/javascript" th:src="@{/js/nav_js.js}"></script>
 </body>
 </html>

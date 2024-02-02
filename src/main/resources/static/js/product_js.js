@@ -14,7 +14,7 @@ IMP.init("imp66770306");
 
 function generateMerchantUid() {
     const now = new Date();
-    var timestamp = now.getTime();
+    const timestamp = now.getTime();
     return "ORD" + timestamp + "-" + buyerProductId.toString().padStart(4, '0') + buyerUserId.toString().padStart(4, '0');
 }
 
@@ -53,8 +53,9 @@ function requestPay() {
         });
     });
 }
+
 function createOrder(quantity, amount) {
-    var orderRequest = {
+    const orderRequest = {
         quantity: quantity,
         totalPrice: amount
     };
@@ -66,7 +67,6 @@ function createOrder(quantity, amount) {
         data: JSON.stringify(orderRequest),
         success: function (response) {
             alert('주문이 완료되었습니다.');
-            console.log(orderId)
         },
         error: function (error) {
             console.error(error);

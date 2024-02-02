@@ -9,32 +9,30 @@
 </script>
 </head>
 <body>
+    <nav class="navbar"></nav>
+    <form method="post" action="/api/broadcasts">
+        <h2>방송 정보</h2>
+        <label for="broadcastTitle">Broadcast Title:</label>
+        <input type="text" id="broadcastTitle" name="broadcastTitle" required><br>
 
+        <label for="broadcastDescription">Broadcast Description:</label>
+        <textarea id="broadcastDescription" name="broadcastDescription" required></textarea><br>
 
+        <h2>상품 정보</h2>
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="productName" required><br>
 
-<form method="post" action="/api/broadcasts">
-    <h2>방송 정보</h2>
-    <label for="broadcastTitle">Broadcast Title:</label>
-    <input type="text" id="broadcastTitle" name="broadcastTitle" required><br>
+        <label for="productDescription">Product Description:</label>
+        <input type="text" id="productDescription" name="productDescription" required><br>
 
-    <label for="broadcastDescription">Broadcast Description:</label>
-    <textarea id="broadcastDescription" name="broadcastDescription" required></textarea><br>
+        <label for="productPrice">Product Price:</label>
+        <input type="text" id="productPrice" name="productPrice" required><br>
 
-    <h2>상품 정보</h2>
-    <label for="productName">Product Name:</label>
-    <input type="text" id="productName" name="productName" required><br>
+        <label for="productStock">Product Stock:</label>
+        <input type="text" id="productStock" name="productStock" required><br>
 
-    <label for="productDescription">Product Description:</label>
-    <input type="text" id="productDescription" name="productDescription" required><br>
-
-    <label for="productPrice">Product Price:</label>
-    <input type="text" id="productPrice" name="productPrice" required><br>
-
-    <label for="productStock">Product Stock:</label>
-    <input type="text" id="productStock" name="productStock" required><br>
-
-    <button type="submit">Submit</button>
-</form>
-
+        <button type="submit">Submit</button>
+    </form>
+    <script type="text/javascript" th:src="@{/js/nav_js.js}"></script>
 </body>
 </html>
