@@ -13,10 +13,7 @@ IMP.init("imp66770306");
 
 function generateMerchantUid() {
     const now = new Date();
-    const year = now.getFullYear().toString().substr(2, 2);
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const day = now.getDate().toString().padStart(2, '0');
-    const timestamp = year + month + day;
+    var timestamp = now.getTime();
     return "ORD" + timestamp + "-" + buyerProductId.toString().padStart(4, '0') + buyerUserId.toString().padStart(4, '0');
 }
 
@@ -44,6 +41,7 @@ function requestPay() {
             if(rsp.paid_amount === data.response.amount){
                 alert("결제 성공");
                 createOrder(quantity, amount)
+                window.location.href="/my-page"
             } else {
                 alert("결제 실패");
             }
