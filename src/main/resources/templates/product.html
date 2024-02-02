@@ -34,7 +34,7 @@
         </tr>
         </tbody>
     </table>
-
+    <input type="number" id="quantity" />
     <input type="hidden" id="buyerEmail" th:value="${user.getUserEmail()}" />
     <input type="hidden" id="buyerName" th:value="${user.getUserName()}" />
     <input type="hidden" id="buyerTel" th:value="${user.getUserPhone()}" />
@@ -47,6 +47,7 @@
 <div th:if="${#lists.isEmpty(productFind)}">
     <p>No products available.</p>
 </div>
+
 <button onclick="requestPay()">결제하기</button>
 <script type="text/javascript" th:src="@{/js/product_js.js}"></script>
 </body>
