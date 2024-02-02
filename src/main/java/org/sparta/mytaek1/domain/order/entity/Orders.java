@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sparta.mytaek1.domain.order.dto.OrderRequestDto;
 import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.audit.Auditable;
@@ -29,7 +30,10 @@ public class Orders extends Auditable {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Orders(Integer quantity) {
-        this.quantity = quantity;
+    public Orders(OrderRequestDto orderRequestDto,Product product,User user) {
+        this.quantity = orderRequestDto.getQuantity();
+        this.totalPrice = orderRequestDto.getTotalPrice();
+        this.user = user;
+        this.product = product;
     }
 }

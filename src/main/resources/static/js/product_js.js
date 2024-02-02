@@ -43,9 +43,30 @@ function requestPay() {
         }).done(function(data) {
             if(rsp.paid_amount === data.response.amount){
                 alert("결제 성공");
+                createOrder(quantity, amount)
             } else {
                 alert("결제 실패");
             }
         });
+    });
+}
+function createOrder(quantity, amount) {
+    var orderRequest = {
+        quantity: quantity,
+        totalPrice: amount
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/api/products/' + buyerProductId +'/orders',
+        contentType: 'application/json',
+        data: JSON.stringify(orderRequest),
+        success: function (response) {
+            alert('주문이 완료되었습니다.');
+            console.log(orderId)
+        },
+        error: function (error) {
+            console.error(error);
+        }
     });
 }
