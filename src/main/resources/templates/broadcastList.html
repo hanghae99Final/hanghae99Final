@@ -5,28 +5,27 @@
     <title>Broadcast List</title>
 </head>
 <body>
-
-<h2>Broadcast List</h2>
-
-<table border="1">
-    <thead>
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>User Name</th>
-        <th>Product Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Thymeleaf iteration over the broadcastResponseDtoList -->
-    <tr th:each="broadcastResponseDto : ${broadcastResponseDtoList}">
-        <td th:text="${broadcastResponseDto.broadCastTitle}"></td>
-        <td th:text="${broadcastResponseDto.broadCastDescription}"></td>
-        <td th:text="${broadcastResponseDto.userName}"></td>
-        <td th:text="${broadcastResponseDto.productName}"></td>
-    </tr>
-    </tbody>
-</table>
-<button onclick="window.location.href='/broadcasts/start'">방송 시작하기</button>
+    <nav class="navbar"></nav>
+    <h2>Broadcast List</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>User Name</th>
+            <th>Product Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="broadcastResponseDto : ${broadcastResponseDtoList}">
+            <td th:text="${broadcastResponseDto.broadCastTitle}"></td>
+            <td th:text="${broadcastResponseDto.broadCastDescription}"></td>
+            <td th:text="${broadcastResponseDto.userName}"></td>
+            <td th:text="${broadcastResponseDto.productName}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <button onclick="window.location.href='/broadcasts/start'">방송 시작하기</button>
+    <script type="text/javascript" th:src="@{/js/nav_js.js}"></script>
 </body>
 </html>
