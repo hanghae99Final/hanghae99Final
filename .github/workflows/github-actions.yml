@@ -18,15 +18,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # - name: Gradle Caching
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       ~/.gradle/caches
-      #       ~/.gradle/wrapper
-      #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gradle-
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: make application.properties
         if: |
@@ -38,7 +38,7 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: gradlew build -x test
 
       - name: Docker build & push to dev
         if: contains(github.ref, 'dev')
