@@ -42,7 +42,7 @@ jobs:
         shell: bash
       
       - name: Build with Gradle
-        run: gradlew build -x test
+        run: ./gradlew build -x test
 
       - name: Docker build & push to dev
         if: contains(github.ref, 'dev')
