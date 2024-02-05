@@ -13,6 +13,8 @@ public enum ErrorMessage {
     AUTH_EXCEPTION_MESSAGE("로그인 해야 가능한 기능입니다."),
     DUPLICATED_USER__ERROR_MESSAGE("중복된 사용자가 존재합니다."),
     DUPLICATED_EMAIL_ERROR_MESSAGE("중복된 Email이 존재합니다."),
+    EMAIL_FORMAT_ERROR_MESSAGE("올바른 이메일 형식이 아닙니다."),
+    PASSWORD_VALIDATION_ERROR_MESSAGE("비밀번호는 최소 8자 이상, 15자 이하이며 알파벳 대소문자, 숫자, 특수문자로 구성되어야 합니다."),
     UPDATE_BOARD_AUTH_ERROR_MESSAGE("자신이 만든 보드만 수정할 수 있습니다."),
     DELETE_BOARD_AUTH_ERROR_MESSAGE("자신이 만든 보드만 삭제할 수 있습니다."),
     UPDATE_USER_AUTH_ERROR_MESSAGE("본인만 수정할 수 있습니다."),

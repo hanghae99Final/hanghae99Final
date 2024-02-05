@@ -20,7 +20,7 @@ public class User extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String userName;
 
     @Column(nullable = false)
@@ -42,7 +42,7 @@ public class User extends Auditable {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @Column
+    @Column(unique = true)
     private String streamKey;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
