@@ -16,25 +16,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
+    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final String PASSWORD_PATTERN = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$";
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void createUser(UserRequestDto requestDto) {
         String userName = requestDto.getUserName();
-        checkDuplicatedUserName(userName);
 
         String userEmail = requestDto.getUserEmail();
+        checkEmailPattern(userEmail);
         checkDuplicatedUserEmail(userEmail);
 
         String password = passwordEncoder.encode(requestDto.getPassword());
-        String streamKey = UUID.randomUUID().toString();
+        checkPasswordPattern(password);
 
+        String streamKey = UUID.randomUUID() + userEmail.split("@")[0];
         String userPhone = requestDto.getUserPhone();
         String userAddress = requestDto.getUserAddress();
         String postcode = requestDto.getPostcode();
@@ -57,19 +62,27 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
     }
 
-    private void checkDuplicatedUserName(String userName) {
-        Optional<User> checkUsername = userRepository.findByUserName(userName);
-
-        if (checkUsername.isPresent()) {
-            throw new IllegalArgumentException(ErrorMessage.DUPLICATED_USER__ERROR_MESSAGE.getErrorMessage());
-        }
-    }
-
     private void checkDuplicatedUserEmail(String userEmail) {
         Optional<User> checkEmail = userRepository.findByUserEmail(userEmail);
 
         if (checkEmail.isPresent()) {
             throw new IllegalArgumentException(ErrorMessage.DUPLICATED_EMAIL_ERROR_MESSAGE.getErrorMessage());
+        }
+    }
+
+    private void checkEmailPattern(String email) {
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(ErrorMessage.EMAIL_FORMAT_ERROR_MESSAGE.getErrorMessage());
+        }
+    }
+
+    private void checkPasswordPattern(String password) {
+        Pattern passwordPattern = Pattern.compile(PASSWORD_PATTERN);
+        Matcher passwordMatcher = passwordPattern.matcher(password);
+        if (!passwordMatcher.matches()) {
+            throw new IllegalArgumentException(ErrorMessage.PASSWORD_VALIDATION_ERROR_MESSAGE.getErrorMessage());
         }
     }
 }
