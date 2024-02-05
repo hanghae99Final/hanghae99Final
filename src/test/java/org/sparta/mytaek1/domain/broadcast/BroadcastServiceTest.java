@@ -3,10 +3,9 @@ package org.sparta.mytaek1.domain.broadcast;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastRequestDto;
-import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
+import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.repository.BroadcastRepository;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
-import org.sparta.mytaek1.domain.product.dto.ProductFindResponseDto;
 import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
@@ -44,27 +43,19 @@ public class BroadcastServiceTest {
     @Transactional
     @DisplayName("Product, Broadcast 생성")
     public void createBroadcastTest() {
-        // 가짜 유저 객체 생성
         User user = new User("Test User2", "test2@example.com", "password1234@", "streamKey", "123-456-7890", "Test Address", "12345");
         userRepository.save(user);
-        // 가짜 유저 정보 생성
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
-        // 가짜 BroadcastRequestDto 생성
         BroadcastRequestDto requestDto = new BroadcastRequestDto("Test Title", "Test Description", "Test Product", "Product Description", 100, 10);
+        broadcastService.createBroadcast(userDetails, requestDto);
+        Broadcast broadcast = broadcastRepository.findByBroadcastTitle("Test Title");
 
-        // 테스트 대상 메서드 호출
-        BroadcastResponseDto responseDto = broadcastService.createBroadcast(userDetails, requestDto);
-
-        ProductFindResponseDto product = productService.findProduct(1L);
-        // 검증: 반환된 responseDto가 예상한 값과 일치하는지 확인
-        assertEquals("Test Title", responseDto.getBroadCastTitle());
-        assertEquals("Test Description", responseDto.getBroadCastDescription());
-        assertEquals("Test User2", responseDto.getUserName());
-        assertEquals("Test Product", responseDto.getProductName());
-
-        assertEquals("Test Product", product.getProductName());
-        assertEquals(100, product.getProductPrice());
-        assertEquals(10, product.getProductStock());
+        assertEquals("Test Title", broadcast.getBroadcastTitle());
+        assertEquals("Test Description", broadcast.getBroadcastDescription());
+        assertEquals("Test User2", broadcast.getUser().getUserName());
+        assertEquals("Test Product", broadcast.getProduct().getProductName());
+        assertEquals(100, broadcast.getProduct().getProductPrice());
+        assertEquals(10, broadcast.getProduct().getProductStock());
     }
 
     @Test

@@ -2,7 +2,6 @@ package org.sparta.mytaek1.domain.broadcast.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.mytaek1.domain.product.entity.Product;
@@ -39,6 +38,7 @@ public class Broadcast extends Auditable {
         this.user = user;
         this.product = product;
     }
+
     public void endBroadcast() {
         this.onAir = false;
     }
