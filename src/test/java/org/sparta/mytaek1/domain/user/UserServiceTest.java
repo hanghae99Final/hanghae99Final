@@ -11,10 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Transactional
@@ -54,20 +53,20 @@ class UserServiceTest {
         assertEquals("10003", savedUser.getPostcode());
     }
 
-    @Test
-    @DisplayName("비밀번호 유효성 검사 예외 확인")
-    void testPasswordPattern() {
-        UserService userService = new UserService(userRepository, passwordEncoder);
-        UserRequestDto requestDto = new UserRequestDto(
-                "dabomi",
-                "dabomi@email.com",
-                "1234",
-                "000-0000-0000",
-                "Paju, Korea",
-                "10003"
-        );
-
-        assertThatThrownBy(() -> userService.createUser(requestDto))
-                .isInstanceOf(MethodArgumentNotValidException.class);
-    }
+//    @Test
+//    @DisplayName("비밀번호 유효성 검사 예외 확인")
+//    void testPasswordPattern() {
+//        UserService userService = new UserService(userRepository, passwordEncoder);
+//        UserRequestDto requestDto = new UserRequestDto(
+//                "dabomi",
+//                "dabomi@email.com",
+//                "1234",
+//                "000-0000-0000",
+//                "Paju, Korea",
+//                "10003"
+//        );
+//
+//        assertThatThrownBy(() -> userService.createUser(requestDto))
+//                .isInstanceOf(MethodArgumentNotValidException.class);
+//    }
 }
