@@ -1,5 +1,6 @@
 package org.sparta.mytaek1.domain.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sparta.mytaek1.domain.user.dto.UserRequestDto;
 import org.sparta.mytaek1.domain.user.service.UserService;
@@ -19,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<String> createUser(@RequestBody UserRequestDto requestDto) {
+    public ResponseEntity<String> createUser(@Valid @RequestBody UserRequestDto requestDto) {
         return handleRequest(() -> {
             userService.createUser(requestDto);
             return new ResponseEntity<>(SuccessMessage.JOIN_SUCCESS_MESSAGE.getSuccessMessage(), HttpStatus.CREATED);
