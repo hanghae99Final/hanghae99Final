@@ -1,5 +1,6 @@
 package org.sparta.mytaek1.domain.broadcast.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
@@ -23,7 +24,7 @@ public class BroadcastController {
 
     @PostMapping
     public ResponseEntity<String> createBroadcast(@AuthenticationPrincipal UserDetailsImpl auth,
-                                                  @RequestBody BroadcastRequestDto requestDto) {
+                                                  @RequestBody @Valid BroadcastRequestDto requestDto) {
         BroadcastResponseDto responseDto = broadcastService.createBroadcast(auth, requestDto);
         return new ResponseEntity<>(SuccessMessage.BROADCAST_START_MESSAGE.getSuccessMessage(), HttpStatus.CREATED);
     }
