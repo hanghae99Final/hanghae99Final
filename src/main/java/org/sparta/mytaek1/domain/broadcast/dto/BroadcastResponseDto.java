@@ -18,6 +18,14 @@ public class BroadcastResponseDto {
 
     private final String productName;
 
+    public BroadcastResponseDto(long broadcastId, String broadCastTitle, String broadCastDescription, String userName, String productName) {
+        this.broadcastId = broadcastId;
+        this.broadCastTitle = broadCastTitle;
+        this.broadCastDescription = broadCastDescription;
+        this.userName = userName;
+        this.productName = productName;
+    }
+
     public BroadcastResponseDto(Broadcast broadcast) {
         this.broadcastId = broadcast.getBroadcastId();
         this.broadCastTitle = broadcast.getBroadcastTitle();
