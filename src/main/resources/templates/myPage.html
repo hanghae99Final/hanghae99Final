@@ -8,6 +8,15 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arbutus+Slab" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <title>MyTaek1 - MyPage</title>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    /* Reload the page only once */
+    if (!sessionStorage.getItem('reloaded')) {
+      location.reload();
+      sessionStorage.setItem('reloaded', 'true');
+    }
+    /*]]>*/
+  </script>
 </head>
 <body>
   <nav class="navbar"></nav>
