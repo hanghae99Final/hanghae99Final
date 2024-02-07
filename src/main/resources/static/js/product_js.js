@@ -49,7 +49,6 @@ function requestPay() {
                 if(rsp.paid_amount === data.response.amount){
                     alert("결제 성공");
                     createOrder(quantity, amount);
-                    window.location.href="/my-page";
                 } else {
                     alert("결제 실패");
                 }
@@ -79,6 +78,7 @@ function createOrder(quantity, amount) {
         data: JSON.stringify(orderRequest),
         success: function (response) {
             alert('주문이 완료되었습니다.');
+            window.location.href="/my-page";
         },
         error: function (error) {
             console.error(error);
