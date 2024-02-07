@@ -21,6 +21,11 @@ public class OrderService {
     @Transactional
     public OrderResponseDto createOrder(Long productId, OrderRequestDto orderRequestDto, User user) {
         Product product = productRepository.findById(productId).orElseThrow();
+
+        if (product.getProductStock() < orderRequestDto.getQuantity()) {
+            throw new IllegalArgumentException("상품의 수량이 부족합니다.");
+        }
+
         Orders order = new Orders(orderRequestDto, product, user, false);
         product.updateStock(orderRequestDto.getQuantity());
         return new OrderResponseDto(orderRepository.save(order));
