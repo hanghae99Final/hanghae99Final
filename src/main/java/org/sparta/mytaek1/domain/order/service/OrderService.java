@@ -2,6 +2,7 @@ package org.sparta.mytaek1.domain.order.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sparta.mytaek1.domain.order.dto.OrderRequestDto;
+import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.domain.order.repository.OrderRepository;
 import org.sparta.mytaek1.domain.product.entity.Product;
@@ -18,10 +19,16 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public void createOrder(Long productId, OrderRequestDto orderRequestDto, User user) {
+    public OrderResponseDto createOrder(Long productId, OrderRequestDto orderRequestDto, User user) {
         Product product = productRepository.findById(productId).orElseThrow();
-        Orders order = new Orders(orderRequestDto,product, user);
+        Orders order = new Orders(orderRequestDto, product, user, false);
         product.updateStock(orderRequestDto.getQuantity());
-        orderRepository.save(order);
+        return new OrderResponseDto(orderRepository.save(order));
+    }
+
+    @Transactional
+    public OrderResponseDto getOrder(Long orderId) {
+        Orders order = orderRepository.findById(orderId).orElseThrow();
+        return new OrderResponseDto(order);
     }
 }
