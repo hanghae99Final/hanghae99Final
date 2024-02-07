@@ -1,12 +1,16 @@
-package org.sparta.mytaek1.domain.order.controller;
+package org.sparta.mytaek1.domain.payment.controller;
 
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
+import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
+import org.sparta.mytaek1.domain.payment.service.PaymentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
@@ -15,8 +19,10 @@ import java.io.IOException;
 public class PaymentController {
 
     private final IamportClient iamportClient;
+    private final PaymentService paymentService;
 
-    public PaymentController() {
+    public PaymentController(PaymentService paymentService) {
+        this.paymentService = paymentService;
         this.iamportClient = new IamportClient("8474815404642414",
                 "iKb4UTArrJKpuSXzivlsLheOgW4NwzVk2pfgxWqKkS4W428lwpwdTp5Xo7cozxjnaw5vJAmIHuvkN6Do");
     }
@@ -28,4 +34,9 @@ public class PaymentController {
         return iamportClient.paymentByImpUid(imp_uid);
     }
 
+    @PutMapping("/api/orders/{orderId}/paymentStatus")
+    public ResponseEntity<OrderResponseDto> updatePayment(@PathVariable Long orderId) {
+        OrderResponseDto orderResponseDto = paymentService.updatePaymentStatus(orderId);
+        return ResponseEntity.ok(orderResponseDto);
+    }
 }

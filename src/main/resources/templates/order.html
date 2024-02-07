@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MyTaek1 - Product</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <style>
+        .order_container p span {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar"></nav>
+<div class="order_container" th:data-order-id="${orderId}">
+    <h2>주문 정보 확인</h2>
+    <p>상품명: <span id="orderProductName" th:text="${product.getProductName()}"></span></p>
+    <p>상품 가격: <span id="orderProductPrice" th:text="${product.getProductPrice()}"></span></p>
+    <p>Email: <span id="orderEmail" th:if="${user != null}" th:text="${user.getUserEmail()}"></span></p>
+    <p>Name: <span id="orderName" th:if="${user != null}" th:text="${user.getUserName()}"></span></p>
+    <p>Phone: <span id="orderPhone" th:if="${user != null}" th:text="${user.getUserPhone()}"></span></p>
+    <p>Address: <span id="orderAddress" th:if="${user != null}" th:text="${user.getUserAddress()}"></span></p>
+    <p>Postcode: <span id="orderPostcode" th:if="${user != null}" th:text="${user.getPostcode()}"></span></p>
+    <p>수량: <span id="orderQuantity" th:text="${order.getQuantity()}"></span></p>
+    <p>총 가격: <span id="orderTotalPrice" th:text="${order.getTotalPrice()}"></span></p>
+    <button type="button" onclick="requestPay()">결제하기</button>
+
+    <input type="hidden" id="buyerProductId" th:value="${product.getProductId()}" />
+    <input type="hidden" id="buyerUserId" th:value="${user != null ? user.getUserId() : ''}" />
+</div>
+<script type="text/javascript" th:src="@{/js/order_js.js}"></script>
+<script type="text/javascript" th:src="@{/js/nav_js.js}"></script>
+</body>
+</html>

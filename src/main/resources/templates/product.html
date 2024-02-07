@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <style>
+        #orderForm {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar"></nav>
@@ -45,7 +50,7 @@
     <div th:if="${#lists.isEmpty(productFind)}">
         <p>No products available.</p>
     </div>
-    <button onclick="requestPay()">결제하기</button>
+    <button id="orderButton" onclick="createOrder()">주문하기</button>
     <script type="text/javascript" th:src="@{/js/product_js.js}"></script>
     <script type="text/javascript" th:src="@{/js/nav_js.js}"></script>
 </body>

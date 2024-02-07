@@ -30,10 +30,17 @@ public class Orders extends Auditable {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Orders(OrderRequestDto orderRequestDto,Product product,User user) {
+    private boolean paymentStatus;
+
+    public Orders(OrderRequestDto orderRequestDto, Product product, User user, boolean paymentStatus) {
         this.quantity = orderRequestDto.getQuantity();
         this.totalPrice = orderRequestDto.getTotalPrice();
         this.user = user;
         this.product = product;
+        this.paymentStatus = paymentStatus;
+    }
+
+    public void update() {
+        this.paymentStatus = true;
     }
 }
