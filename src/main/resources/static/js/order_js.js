@@ -25,7 +25,7 @@ function requestPay() {
 
     if (isAuthenticated) {
         const quantity = parseInt(document.getElementById("orderQuantity").textContent);
-        const amount = parseInt(productPrice) * quantity;
+        const totalPrice = parseInt(productPrice) * quantity;
         const merchant_uid = generateMerchantUid();
 
         IMP.request_pay({
@@ -34,7 +34,7 @@ function requestPay() {
             pay_method: "card",
             merchant_uid: merchant_uid,
             name: productName,
-            amount: amount,
+            amount: totalPrice,
             buyer_email: buyerEmail,
             buyer_name: buyerName,
             buyer_tel: buyerTel,

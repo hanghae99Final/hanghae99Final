@@ -4,7 +4,8 @@ const buyerProductId = document.getElementById("buyerProductId").value;
 
 function createOrder() {
     const quantity = parseInt(document.getElementById("quantity").value);
-    const amount = parseInt(productPrice) * quantity;
+    const totalPrice = parseInt(productPrice) * quantity;
+
     if (quantity > productStock) {
         alert("주문 수량이 재고 수량을 초과합니다.");
         return;
@@ -12,7 +13,7 @@ function createOrder() {
 
     const orderRequest = {
         quantity: quantity,
-        totalPrice: amount
+        totalPrice: totalPrice
     };
 
     $.ajax({
