@@ -29,8 +29,7 @@ function requestPay() {
         const merchant_uid = generateMerchantUid();
 
         IMP.request_pay({
-            pg: "kakaopay",
-            tid: "8559342fd00616b5ff4b2faaea74ca65",
+            pg : 'html5_inicis.INIBillTst',
             pay_method: "card",
             merchant_uid: merchant_uid,
             name: productName,
