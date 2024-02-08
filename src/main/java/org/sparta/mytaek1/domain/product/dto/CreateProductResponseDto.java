@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.sparta.mytaek1.domain.product.entity.Product;
+import org.sparta.mytaek1.domain.stock.entity.Stock;
 
 @Getter
 @Setter
@@ -14,10 +15,10 @@ public class CreateProductResponseDto {
     private int productPrice;
     private int productStock;
 
-    public CreateProductResponseDto(Product product) {
+    public CreateProductResponseDto(Product product, Stock stock) {
         this.productName = product.getProductName();
         this.productDescription = product.getProductDescription();
         this.productPrice = product.getProductPrice();
-        this.productStock = product.getProductStock();
+        this.productStock = stock.getProductStock();
     }
 }
