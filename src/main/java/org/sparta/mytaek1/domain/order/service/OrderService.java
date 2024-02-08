@@ -9,6 +9,8 @@ import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.domain.order.repository.OrderRepository;
 import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.product.repository.ProductRepository;
+import org.sparta.mytaek1.domain.stock.entity.Stock;
+import org.sparta.mytaek1.domain.stock.repository.StockRepository;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.config.RedisConfig;
 import org.springframework.stereotype.Service;
@@ -22,17 +24,19 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final StockRepository stockRepository;
     private final RedissonClient redissonClient = RedisConfig.getRedissonClient();
 
     public OrderResponseDto createOrder(Long productId, OrderRequestDto orderRequestDto, User user) {
         RLock fairLock = redissonClient.getFairLock("pro:" + productId);
         Product product = productRepository.findById(productId).orElseThrow();
+        Stock stock = stockRepository.findByProductProductId(productId).orElseThrow();
         Orders order = new Orders(orderRequestDto, product, user, false);
         System.out.println("하이요");
         try{
             if(fairLock.tryLock(1000000, TimeUnit.SECONDS)){
                 System.out.println("겟락");
-                product.updateStock(orderRequestDto.getQuantity());
+                stock.updateStock(orderRequestDto.getQuantity());
                 orderRepository.save(order);
                 Thread.sleep(100);
             }
