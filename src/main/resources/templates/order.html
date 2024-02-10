@@ -26,6 +26,7 @@
     <p>수량: <span id="orderQuantity" th:text="${order.getQuantity()}"></span></p>
     <p>총 가격: <span id="orderTotalPrice" th:text="${order.getTotalPrice()}"></span></p>
     <button type="button" onclick="requestPay()">결제하기</button>
+    <button type="button" onclick="requestKakaoPay()">카카오페이로 결제하기</button>
 
     <input type="hidden" id="buyerProductId" th:value="${product.getProductId()}" />
     <input type="hidden" id="buyerUserId" th:value="${user != null ? user.getUserId() : ''}" />
