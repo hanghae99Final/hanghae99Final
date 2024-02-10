@@ -2,17 +2,16 @@ package org.sparta.mytaek1.domain.broadcast.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastRequestDto;
+import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
 import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.repository.BroadcastRepository;
 import org.sparta.mytaek1.domain.product.entity.Product;
-import org.sparta.mytaek1.domain.product.repository.ProductRepository;
 import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
-import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.sparta.mytaek1.global.message.ErrorMessage;
+import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +43,7 @@ public class BroadcastService {
 
         Broadcast broadcast = new Broadcast(requestDto.getBroadcastTitle(), requestDto.getBroadcastDescription(), user, product);
         broadcastRepository.save(broadcast);
-        BroadcastResponseDto responseDto = new BroadcastResponseDto(broadcast);
-        return responseDto;
+        return new BroadcastResponseDto(broadcast);
     }
 
     public BroadcastResponseDto endBroadcast(long broadcastId) {

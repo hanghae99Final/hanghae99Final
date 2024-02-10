@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
 import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
+import org.sparta.mytaek1.domain.stock.entity.Stock;
+import org.sparta.mytaek1.domain.stock.service.StockService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BroadcastPageController {
     private final BroadcastService broadcastService;
+    private final StockService stockService;
 
     @GetMapping("/broadcasts")
     public String showBroadcast() {
@@ -36,8 +39,11 @@ public class BroadcastPageController {
     @GetMapping("/broadcasts/{broadcastId}")
     public String showBroadcast(@PathVariable Long broadcastId, Model model) {
         Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
+        Long productId = broadcast.getProduct().getProductId();
+        Stock stock = stockService.findStockByProduct(productId);
         model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
         model.addAttribute("product", broadcast.getProduct());
+        model.addAttribute("stock", stock);
         return "broadcast";
     }
 }
