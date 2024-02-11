@@ -18,14 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class OrderController {
+
     private final OrderService orderService;
 
     @PostMapping("/products/{productId}/orders")
     public ResponseEntity<OrderResponseDto> createOrder(@PathVariable Long productId,
                                               @RequestBody OrderRequestDto orderRequestDto,
-                                              @AuthenticationPrincipal UserDetailsImpl userDetails){
+                                              @AuthenticationPrincipal UserDetailsImpl userDetails, String lockName){
         User user = userDetails.getUser();
-        OrderResponseDto orderResponseDto = orderService.createOrder(productId,orderRequestDto,user);
+        OrderResponseDto orderResponseDto = orderService.createOrder(lockName, productId, orderRequestDto, user);
         return ResponseEntity.ok(orderResponseDto);
     }
 }

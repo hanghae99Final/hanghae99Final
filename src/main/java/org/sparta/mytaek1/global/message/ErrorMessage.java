@@ -5,6 +5,8 @@ public enum ErrorMessage {
     NOT_EXIST_USER_ERROR_MESSAGE("존재하지 않는 사용자입니다."),
     NOT_EXIST_EMAIL_ERROR_MESSAGE("존재하지 않는 이메일입니다."),
     NOT_EXIST_BROADCAST_ERROR_MESSAGE("존재하지 않는 방송입니다."),
+    NOT_EXIST_PRODUCT_ERROR_MESSAGE("존재하지 않는 상품입니다."),
+    NOT_EXIST_STOCK_ERROR_MESSAGE("재고가 없습니다."),
     INVALID_JWT_ERROR_MESSAGE("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다."),
     EXPIRED_JWT_ERROR_MESSAGE("Expired JWT token, 만료된 JWT token 입니다."),
     UNSUPPORTED_JWT_ERROR_MESSAGE("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다."),
