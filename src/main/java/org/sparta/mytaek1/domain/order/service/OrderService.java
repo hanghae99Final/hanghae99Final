@@ -1,6 +1,7 @@
 package org.sparta.mytaek1.domain.order.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
 import org.sparta.mytaek1.domain.order.dto.OrderRequestDto;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
@@ -17,8 +18,11 @@ import org.sparta.mytaek1.global.redis.DistributedLock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -52,10 +56,24 @@ public class OrderService {
 //        return new OrderResponseDto(order);
 //    }
 
+//    @DistributedLock(key = "#lockName")
+//    public OrderResponseDto createOrder(String lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
+//        Product product = findProduct(productId);
+//        Stock stock = findStock(productId);
+//        Orders order = new Orders(orderRequestDto, product, user, false);
+//        stock.updateStock(orderRequestDto.getQuantity());
+//        orderRepository.save(order);
+//        return new OrderResponseDto(order);
+//    }
+
     @DistributedLock(key = "#lockName")
     public OrderResponseDto createOrder(String lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
+        log.info(lockName + "가 락 획득 성공"+ LocalDateTime.now());
         Product product = findProduct(productId);
         Stock stock = findStock(productId);
+        if (stock.getProductStock() < orderRequestDto.getQuantity()) {
+            throw new IllegalArgumentException("잔여 수량이 부족합니다.");
+        }
         Orders order = new Orders(orderRequestDto, product, user, false);
         stock.updateStock(orderRequestDto.getQuantity());
         orderRepository.save(order);
@@ -63,15 +81,30 @@ public class OrderService {
     }
 
     @Transactional
+    public OrderResponseDto createOrderBeforeLock(Long productId, OrderRequestDto orderRequestDto, User user) {
+        Product product = findProduct(productId);
+        Stock stock = findStock(productId);
+        if (stock.getProductStock() < orderRequestDto.getQuantity()) {
+            throw new IllegalArgumentException("잔여 수량이 부족합니다.");
+        }
+        Orders order = new Orders(orderRequestDto, product, user, false);
+        stock.updateStock(orderRequestDto.getQuantity());
+        orderRepository.save(order);
+        return new OrderResponseDto(order);
+    }
+
+    @Transactional(readOnly = true)
     public OrderResponseDto getOrder(Long orderId) {
         Orders order = orderRepository.findById(orderId).orElseThrow();
         return new OrderResponseDto(order);
     }
 
+    @Transactional(readOnly = true)
     private Product findProduct(Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_PRODUCT_ERROR_MESSAGE.getErrorMessage()));
     }
 
+    @Transactional(readOnly = true)
     private Stock findStock(Long productId) {
         return stockRepository.findByProductProductId(productId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_STOCK_ERROR_MESSAGE.getErrorMessage()));
     }
