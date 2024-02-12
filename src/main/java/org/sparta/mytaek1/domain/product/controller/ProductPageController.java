@@ -17,7 +17,7 @@ public class ProductPageController {
 
     @GetMapping("/products/{productId}")
     public String findProduct(@PathVariable Long productId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        model.addAttribute("productFind", productService.findProduct(productId));
+        model.addAttribute("productFind", productService.getProduct(productId));
 
         if (userDetails != null) {
             model.addAttribute("user", userDetails.getUser());

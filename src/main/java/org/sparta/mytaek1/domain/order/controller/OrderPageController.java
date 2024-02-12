@@ -20,7 +20,7 @@ public class OrderPageController {
 
     @GetMapping("/products/{productId}/orders/{orderId}")
     public String orderPage(@PathVariable Long productId, @PathVariable Long orderId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        model.addAttribute("product", productService.findProduct(productId));
+        model.addAttribute("product", productService.getProduct(productId));
         model.addAttribute("order", orderService.getOrder(orderId));
 
         if (userDetails != null) {

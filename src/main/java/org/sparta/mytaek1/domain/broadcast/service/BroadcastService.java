@@ -10,6 +10,7 @@ import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
+import org.sparta.mytaek1.domain.user.service.UserService;
 import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class BroadcastService {
 
 
     private final BroadcastRepository broadcastRepository;
+    private final UserService userService;
     private final UserRepository userRepository;
     private final ProductService productService;
 
@@ -36,8 +38,7 @@ public class BroadcastService {
     }
 
     public BroadcastResponseDto createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto) {
-        Optional<User> optionalUser = userRepository.findByUserEmail(auth.getUsername());
-        User user = optionalUser.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
+        User user = userService.findUserByEmail(auth.getUsername());
 
         Product product = productService.createProduct(requestDto);
 
