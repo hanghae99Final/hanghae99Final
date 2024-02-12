@@ -2,20 +2,19 @@ package org.sparta.mytaek1.domain.payment.controller;
 
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.BillingCustomerData;
+import com.siot.IamportRestClient.response.BillingCustomer;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
+import org.sparta.mytaek1.domain.payment.dto.PaymentRequestDto;
 import org.sparta.mytaek1.domain.payment.service.PaymentService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-@Controller
+@RestController
 public class PaymentController {
 
     private final IamportClient iamportClient;
@@ -38,5 +37,13 @@ public class PaymentController {
     public ResponseEntity<OrderResponseDto> updatePayment(@PathVariable Long orderId) {
         OrderResponseDto orderResponseDto = paymentService.updatePaymentStatus(orderId);
         return ResponseEntity.ok(orderResponseDto);
+    }
+
+    @PostMapping("/subscriptions/issue-billing")
+    public IamportResponse<BillingCustomer> paymentByImpUid(@RequestBody PaymentRequestDto requestDto)
+            throws IamportResponseException, IOException {
+        BillingCustomerData data = paymentService.getPaymentData(requestDto);
+        String customerUid = requestDto.getCard_number() + requestDto.getExpiry();
+        return iamportClient.postBillingCustomer(customerUid, data);
     }
 }
