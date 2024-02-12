@@ -1,6 +1,5 @@
 package org.sparta.mytaek1.domain.order;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sparta.mytaek1.domain.order.dto.OrderRequestDto;
@@ -14,22 +13,21 @@ import org.sparta.mytaek1.domain.stock.repository.StockRepository;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 @SpringBootTest
 @ActiveProfiles("test")
-public class StockLockTest {
+public class BeforeLockTest {
+
 
     private final UserRepository userRepository;
     private final OrderService orderService;
@@ -41,7 +39,7 @@ public class StockLockTest {
     private User user;
 
     @Autowired
-    public StockLockTest(UserRepository userRepository, OrderService orderService, ProductRepository productRepository, OrderRepository orderRepository, StockRepository stockRepository) {
+    public BeforeLockTest(UserRepository userRepository, OrderService orderService, ProductRepository productRepository, OrderRepository orderRepository, StockRepository stockRepository) {
         this.userRepository = userRepository;
         this.orderService = orderService;
         this.productRepository = productRepository;
@@ -57,17 +55,6 @@ public class StockLockTest {
         stockRepository.save(stock);
     }
 
-    /**
-     * Feature: 쿠폰 차감 동시성 테스트
-     * Background
-     *     Given KURLY_001 라는 이름의 쿠폰 100장이 등록되어 있음
-     * <p>
-     * Scenario: 100장의 쿠폰을 100명의 사용자가 동시에 접근해 발급 요청함
-     *           Lock의 이름은 쿠폰명으로 설정함
-     * <p>
-     * Then 사용자들의 요청만큼 정확히 쿠폰의 개수가 차감되어야 함
-     */
-
     @Test
 //    @Transactional
     void 재고차감_분산락_적용_동시성100명_테스트() throws InterruptedException {
@@ -76,13 +63,15 @@ public class StockLockTest {
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         user = new User("다보미","da123@email.com","asdf1234!","123477756","01012345678","경기도 파주시","12345");
         userRepository.save(user);
+        String userName = "da123@email.com";
 
         for (int i = 0; i < numberOfThreads; i++) {
+            final int index = i; // final로 선언된 변수에 할당
             executorService.submit(() -> {
                 try {
                     Long productId = product.getProductId();
                     OrderRequestDto orderRequestDto = new OrderRequestDto(1,1);
-                    orderService.createOrder(user.getUserName(), productId, orderRequestDto, user);
+                    orderService.createOrderBeforeLock(productId, orderRequestDto, user);
                 } finally {
                     latch.countDown();
                 }
@@ -92,7 +81,7 @@ public class StockLockTest {
         List<Orders> orders = orderRepository.findAllByProductProductId(product.getProductId());
         int numberOfOrders = orders.size();
         Stock persistStock = stockRepository.findById(stock.getStockId())
-                  .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(IllegalArgumentException::new);
 
         assertThat(numberOfOrders).isEqualTo(100);
         assertThat(persistStock.getProductStock()).isZero();

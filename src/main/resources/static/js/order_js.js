@@ -76,6 +76,7 @@ function requestCardPay() {
         const pwd_2digit = document.getElementById("cardPassword").value;
         const birth = document.getElementById("userBirth").value;
 
+
         $.ajax({
             type: 'POST',
             url: '/subscriptions/issue-billing',
