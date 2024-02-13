@@ -62,56 +62,121 @@ function requestNicePay() {
     }
 }
 
+// function requestCardPay() {
+//     const isAuthenticated = checkCookieExistence('Authorization');
+//     const orderContainer = document.querySelector('.order_container');
+//     const orderId = orderContainer.getAttribute('data-order-id');
+//
+//     if (isAuthenticated) {
+//         const quantity = parseInt(document.getElementById("orderQuantity").textContent);
+//         const totalPrice = parseInt(productPrice) * quantity;
+//         const merchant_uid = generateMerchantUid();
+//
+//         IMP.request_pay({
+//             pg : 'html5_inicis.INIBillTst',
+//             pay_method: "card",
+//             merchant_uid: merchant_uid,
+//             name: productName,
+//             amount: totalPrice,
+//             buyer_email: buyerEmail,
+//             buyer_name: buyerName,
+//             buyer_tel: buyerTel,
+//             buyer_addr: buyerAddr,
+//             buyer_postcode: buyerPostcode
+//         }, function (rsp) {
+//             console.log(rsp);
+//             $.ajax({
+//                 type: 'POST',
+//                 url: '/verify/' + rsp.imp_uid
+//             }).done(function(data) {
+//                 if(rsp.paid_amount === data.response.amount){
+//                     $.ajax({
+//                         type: 'PUT',
+//                         url: `/api/orders/${orderId}/paymentStatus`
+//                     })
+//                     alert("결제 성공");
+//                     window.location.href="/my-page";
+//                 } else {
+//                     alert("결제 실패");
+//                 }
+//             });
+//         });
+//     } else {
+//         alert('로그인 후에 결제할 수 있습니다.');
+//         window.location.href = '/api/user/login-page';
+//     }
+// }
+
+function checkCookieExistence(cookieName) {
+    return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
+}
+
 function requestCardPay() {
     const isAuthenticated = checkCookieExistence('Authorization');
+    const orderContainer = document.querySelector('.order_container');
+    const orderId = orderContainer.getAttribute('data-order-id');
 
     if (isAuthenticated) {
         const quantity = parseInt(document.getElementById("orderQuantity").textContent);
         const totalPrice = parseInt(productPrice) * quantity;
         const merchant_uid = generateMerchantUid();
-        const card_number = document.getElementById("cardNumber").value;
-        const expiry = document.getElementById("cardExpiry").value;
-        const pwd_2digit = document.getElementById("cardPassword").value;
-        const birth = document.getElementById("userBirth").value;
 
-        $.ajax({
-            type: 'POST',
-            url: '/subscriptions/issue-billing',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                pg: 'nice_v2',
-                merchant_uid: merchant_uid,
-                amount: totalPrice,
-                card_number: card_number,
-                expiry: expiry,
-                birth: birth,
-                pwd_2digit: pwd_2digit,
-                buyer_email: buyerEmail,
-                buyer_name: buyerName,
-                buyer_tel: buyerTel,
-                buyer_addr: buyerAddr,
-                buyer_postcode: buyerPostcode
-            }),
-            success: function (response) {
-                if (response.status === "success") {
-                    alert("결제 성공");
-                    window.location.href = "/my-page";
-                } else {
-                    alert("결제 실패: " + response.message);
-                }
-            },
-            error: function (error) {
-                console.error('Error:', error);
-                alert("결제 실패: 서버 오류");
+        console.log('비동기 처리 시작: IMP.request_pay 호출');
+        IMP.request_pay({
+            pg: 'html5_inicis.INIBillTst',
+            pay_method: "card",
+            merchant_uid: merchant_uid,
+            name: productName,
+            amount: totalPrice,
+            buyer_email: buyerEmail,
+            buyer_name: buyerName,
+            buyer_tel: buyerTel,
+            buyer_addr: buyerAddr,
+            buyer_postcode: buyerPostcode
+        }, async function (rsp) {
+            console.log('비동기 처리 완료: IMP.request_pay 응답', rsp);
+
+            try {
+                console.log('비동기 처리 시작: verifyPayment 호출');
+                await verifyPayment(rsp);
+                console.log('비동기 처리 완료: verifyPayment 완료');
+
+                console.log('비동기 처리 시작: AJAX 요청(PUT) 호출');
+                await $.ajax({
+                    type: 'PUT',
+                    url: `/api/orders/${orderId}/paymentStatus`
+                });
+                console.log('비동기 처리 완료: AJAX 요청(PUT) 완료');
+                console.log("결제 성공");
+                alert("결제 성공");
+                window.location.href = "/my-page";
+            } catch (error) {
+                alert("결제 실패");
             }
         });
     } else {
         alert('로그인 후에 결제할 수 있습니다.');
         window.location.href = '/api/user/login-page';
     }
-}
 
-function checkCookieExistence(cookieName) {
-    return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
-}
+    async function verifyPayment(rsp) {
+        return new Promise((resolve, reject) => {
+            console.log('비동기 처리 시작: AJAX 요청(POST) 호출');
+            $.ajax({
+                type: 'POST',
+                url: '/verify/' + rsp.imp_uid
+            }).done((data) => {
+                console.log('비동기 처리 완료: AJAX 요청(POST) 응답', data);
 
+                if (rsp.paid_amount === data.response.amount) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            }).fail(() => {
+                console.log('비동기 처리 실패: AJAX 요청(POST) 실패');
+                reject();
+            });
+        });
+    }
+}
