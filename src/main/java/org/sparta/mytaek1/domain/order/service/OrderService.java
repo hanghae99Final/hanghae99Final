@@ -68,7 +68,7 @@ public class OrderService {
 //    }
 
     @DistributedLock(key = "#lockName")
-    public OrderResponseDto createOrder(String lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
+    public OrderResponseDto createOrder(long lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
         log.info(lockName + "가 락 획득 성공"+ LocalDateTime.now());
         Product product = productService.findProduct(productId);
         Stock stock = stockService.findStockById(productId);

@@ -11,6 +11,7 @@ import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.product.repository.ProductRepository;
 import org.sparta.mytaek1.domain.stock.entity.Stock;
 import org.sparta.mytaek1.domain.stock.repository.StockRepository;
+import org.sparta.mytaek1.domain.stock.service.StockService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +37,19 @@ public class StockLockTest {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final StockRepository stockRepository;
+    private final StockService stockService;
     private Product product;
     private Stock stock;
     private User user;
 
     @Autowired
-    public StockLockTest(UserRepository userRepository, OrderService orderService, ProductRepository productRepository, OrderRepository orderRepository, StockRepository stockRepository) {
+    public StockLockTest(UserRepository userRepository, OrderService orderService, ProductRepository productRepository, OrderRepository orderRepository, StockRepository stockRepository, StockService stockService) {
         this.userRepository = userRepository;
         this.orderService = orderService;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
         this.stockRepository = stockRepository;
+        this.stockService = stockService;
     }
 
     @BeforeEach
@@ -82,7 +85,8 @@ public class StockLockTest {
                 try {
                     Long productId = product.getProductId();
                     OrderRequestDto orderRequestDto = new OrderRequestDto(1,1);
-                    orderService.createOrder(product.getProductName(), productId, orderRequestDto, user);
+                    Stock stock1 = stockService.findStockById(product.getProductId());
+                    orderService.createOrder(stock1.getStockId(), productId, orderRequestDto, user);
                 } finally {
                     latch.countDown();
                 }
