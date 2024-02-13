@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class OrderRequestDto {
+
     private Integer quantity;
     private Integer totalPrice;
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Getter
 public class UserResponseDto {
+
     private final Long userId;
     private final String userName;
     private final String userEmail;
@@ -16,7 +17,6 @@ public class UserResponseDto {
     private final String streamKey;
     private final List<Broadcast> broadcastList;
     private final List<Orders> orderList;
-
 
     public UserResponseDto(User user) {
         this.userId = user.getUserId();

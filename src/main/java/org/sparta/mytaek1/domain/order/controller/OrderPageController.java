@@ -17,7 +17,6 @@ public class OrderPageController {
     private final OrderService orderService;
     private final ProductService productService;
 
-
     @GetMapping("/products/{productId}/orders/{orderId}")
     public String orderPage(@PathVariable Long productId, @PathVariable Long orderId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         model.addAttribute("product", productService.getProduct(productId));

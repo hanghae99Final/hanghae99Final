@@ -6,11 +6,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-    <style>
-        #orderForm {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <nav class="navbar"></nav>
@@ -21,7 +16,6 @@
             <tr>
                 <th>productName</th>
                 <th>productPrice</th>
-    <!--            <th>productImage</th>-->
                 <th>productStock</th>
             </tr>
             </thead>
@@ -30,11 +24,6 @@
                 <td id="productName" th:text="${productFind.getProductName()}"></td>
                 <td id="productPrice" th:text="${productFind.getProductPrice()}"></td>
                 <td id="productStock" th:text="${productFind.getProductStock()}"></td>
-    <!--            <td>-->
-    <!--                <div th:each="url : ${menu.pictureUrls}">-->
-    <!--                    <img th:src="${url}" alt="Menu Image" style="max-width: 100px; max-height: 100px;"/>-->
-    <!--                </div>-->
-    <!--            </td>-->
             </tr>
             </tbody>
         </table>

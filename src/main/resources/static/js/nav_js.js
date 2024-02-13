@@ -1,11 +1,13 @@
 function checkCookie(name) {
     const cookies = document.cookie.split(';');
+
     for (const cookie of cookies) {
         const [cookieName, cookieValue] = cookie.trim().split('=');
         if (cookieName === name) {
             return true;
         }
     }
+
     return false;
 }
 
@@ -31,6 +33,7 @@ window.addEventListener("DOMContentLoaded", () => {
         logoutLink.addEventListener('click', function () {
             deleteCookie('Authorization');
         });
+
         logoutLink.href = '/';
         navbar.appendChild(logoutLink);
     } else {

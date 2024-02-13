@@ -54,8 +54,7 @@ public class UserService {
 
     public User findUserByEmail(String email) {
         Optional<User> optionalUser = userRepository.findByUserEmail(email);
-        User user = optionalUser.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
-        return user;
+        return optionalUser.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
     }
 }
 
