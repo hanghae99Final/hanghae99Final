@@ -9,7 +9,6 @@ import org.sparta.mytaek1.domain.broadcast.repository.BroadcastRepository;
 import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.user.entity.User;
-import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.sparta.mytaek1.domain.user.service.UserService;
 import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +23,8 @@ import java.util.Optional;
 @Transactional
 public class BroadcastService {
 
-
     private final BroadcastRepository broadcastRepository;
     private final UserService userService;
-    private final UserRepository userRepository;
     private final ProductService productService;
 
     @Transactional(readOnly = true)

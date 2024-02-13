@@ -6,6 +6,7 @@ const host = 'http://' + window.location.host;
 
 const href = location.href;
 const queryString = href.substring(href.indexOf("?")+1)
+
 if (queryString === 'error') {
     const errorDiv = document.getElementById('login-failed');
     errorDiv.style.display = 'block';

@@ -11,11 +11,8 @@ public class BroadcastResponseDto {
 
     private final long broadcastId;
     private final String broadCastTitle;
-
     private final String broadCastDescription;
-
     private final String userName;
-
     private final String productName;
 
     public BroadcastResponseDto(long broadcastId, String broadCastTitle, String broadCastDescription, String userName, String productName) {

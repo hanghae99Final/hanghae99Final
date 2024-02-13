@@ -10,6 +10,7 @@ import org.sparta.mytaek1.domain.stock.entity.Stock;
 @Setter
 @NoArgsConstructor
 public class CreateProductResponseDto {
+
     private String productName;
     private String productDescription;
     private int productPrice;

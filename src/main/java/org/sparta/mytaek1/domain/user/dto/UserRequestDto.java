@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class UserRequestDto {
+
     private String userName;
     @Email(message = "올바른 이메일 형식이 아닙니다.")
     private String userEmail;

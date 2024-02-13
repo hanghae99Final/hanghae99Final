@@ -37,16 +37,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BroadcastServiceTest {
 
     private final BroadcastService broadcastService;
-
     private final UserRepository userRepository;
-
     private final BroadcastRepository broadcastRepository;
-
     private final StockService stockService;
-
     private final ProductRepository productRepository;
-
     private final StockRepository stockRepository;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -83,10 +79,8 @@ public class BroadcastServiceTest {
     @Test
     @DisplayName("Null 체크")
     public void testNonNullFields() {
-        // 유효한 데이터로 DTO 생성
         BroadcastRequestDto dto = new BroadcastRequestDto("Title", "Description", "Product", "Product Description", 100, 10);
 
-        // 생성된 DTO의 필드가 null이 아닌지 확인
         assertNotNull(dto.getBroadcastTitle());
         assertNotNull(dto.getBroadcastDescription());
         assertNotNull(dto.getProductName());
@@ -96,7 +90,6 @@ public class BroadcastServiceTest {
     @Test
     @DisplayName("NullPointerException 예외 체크")
     public void testNullFields() {
-        // null 값을 포함하는 데이터로 DTO 생성 (예외 발생을 기대)
         assertThrows(NullPointerException.class, () -> {
             BroadcastRequestDto dto = new BroadcastRequestDto(null, null, null, null, 100, 100);
         });
@@ -107,7 +100,6 @@ public class BroadcastServiceTest {
     @DisplayName("방송 화면 조회 테스트")
     @Rollback
     public void showBroadcastTest() throws Exception {
-
         User user = new User("TestUser", "test@user.com", "Password123!", "TestStreamKey", "010-1234-1234", "ASDF", "12345");
         Product product = new Product("TestProduct", "TestProductDescription", 10000);
 

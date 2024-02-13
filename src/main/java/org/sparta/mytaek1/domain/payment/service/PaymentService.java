@@ -1,15 +1,11 @@
 package org.sparta.mytaek1.domain.payment.service;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.request.BillingCustomerData;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.entity.Orders;
-import org.sparta.mytaek1.domain.order.repository.OrderRepository;
 import org.sparta.mytaek1.domain.order.service.OrderService;
 import org.sparta.mytaek1.domain.payment.dto.PaymentRequestDto;
-import org.sparta.mytaek1.domain.product.entity.Product;
-import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +15,10 @@ import java.io.IOException;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PaymentService {
 
-    private final IamportClient iamportClient;
     private final OrderService orderService;
+
     public PaymentService(OrderService orderService) {
         this.orderService = orderService;
-        this.iamportClient = new IamportClient("8474815404642414",
-                "iKb4UTArrJKpuSXzivlsLheOgW4NwzVk2pfgxWqKkS4W428lwpwdTp5Xo7cozxjnaw5vJAmIHuvkN6Do");
     }
 
     @Transactional
@@ -47,6 +41,4 @@ public class PaymentService {
         data.setCustomerPostcode(requestDto.getBuyer_postcode());
         return data;
     }
-
-
 }

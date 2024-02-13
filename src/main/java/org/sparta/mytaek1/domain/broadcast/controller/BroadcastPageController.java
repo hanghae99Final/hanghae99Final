@@ -16,6 +16,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class BroadcastPageController {
+
     private final BroadcastService broadcastService;
     private final StockService stockService;
 

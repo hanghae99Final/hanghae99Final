@@ -40,13 +40,11 @@ function requestNicePay() {
             buyer_addr: buyerAddr,
             buyer_postcode: buyerPostcode
         }, function (rsp) {
-            console.log("rsp", rsp);
             $.ajax({
                 type: 'POST',
                 url: '/verify/' + rsp.imp_uid
             }).done(function(data) {
-                console.log("response", data);
-                if(rsp.merchant_uid === data.response.merchantUid){
+                if(data.response.status === "paid"){
                     $.ajax({
                         type: 'PUT',
                         url: `/api/orders/${orderId}/paymentStatus`
@@ -76,7 +74,6 @@ function requestCardPay() {
         const pwd_2digit = document.getElementById("cardPassword").value;
         const birth = document.getElementById("userBirth").value;
 
-
         $.ajax({
             type: 'POST',
             url: '/subscriptions/issue-billing',
@@ -96,7 +93,6 @@ function requestCardPay() {
                 buyer_postcode: buyerPostcode
             }),
             success: function (response) {
-                console.log(response);
                 if (response.status === "success") {
                     alert("결제 성공");
                     window.location.href = "/my-page";

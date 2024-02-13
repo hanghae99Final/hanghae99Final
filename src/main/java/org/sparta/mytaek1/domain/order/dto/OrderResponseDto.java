@@ -5,6 +5,7 @@ import org.sparta.mytaek1.domain.order.entity.Orders;
 
 @Getter
 public class OrderResponseDto {
+
     private final Long orderId;
     private final Integer quantity;
     private final Integer totalPrice;

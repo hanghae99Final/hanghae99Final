@@ -15,10 +15,9 @@ public class StockService {
     private final StockRepository stockRepository;
 
     @Transactional
-    public Stock createStock(Product product, int productStock) {
+    public void createStock(Product product, int productStock) {
         Stock stock = new Stock(product, productStock);
         stockRepository.save(stock);
-        return stock;
     }
 
     @Transactional(readOnly = true)

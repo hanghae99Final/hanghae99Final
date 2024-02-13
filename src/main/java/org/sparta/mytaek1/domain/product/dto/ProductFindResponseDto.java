@@ -8,6 +8,7 @@ import org.sparta.mytaek1.domain.stock.entity.Stock;
 @Getter
 @Setter
 public class ProductFindResponseDto {
+
     private Long productId;
     private String productName;
     private int productPrice;
