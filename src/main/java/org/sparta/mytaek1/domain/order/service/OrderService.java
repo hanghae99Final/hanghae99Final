@@ -9,8 +9,10 @@ import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.domain.order.repository.OrderRepository;
 import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.product.repository.ProductRepository;
+import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.stock.entity.Stock;
 import org.sparta.mytaek1.domain.stock.repository.StockRepository;
+import org.sparta.mytaek1.domain.stock.service.StockService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.config.RedisConfig;
 import org.sparta.mytaek1.global.message.ErrorMessage;
@@ -26,9 +28,8 @@ import java.time.LocalDateTime;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
-    private final StockRepository stockRepository;
-    private final RedissonClient redissonClient = RedisConfig.getRedissonClient();
+    private final ProductService productService;
+    private final StockService stockService;
 
 //    public OrderResponseDto createOrder(Long productId, OrderRequestDto orderRequestDto, User user) {
 //        RLock fairLock = redissonClient.getFairLock("pro:" + productId);
@@ -67,10 +68,10 @@ public class OrderService {
 //    }
 
     @DistributedLock(key = "#lockName")
-    public OrderResponseDto createOrder(String lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
+    public OrderResponseDto createOrder(long lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
         log.info(lockName + "가 락 획득 성공"+ LocalDateTime.now());
-        Product product = findProduct(productId);
-        Stock stock = findStock(productId);
+        Product product = productService.findProduct(productId);
+        Stock stock = stockService.findStockById(productId);
         if (stock.getProductStock() < orderRequestDto.getQuantity()) {
             throw new IllegalArgumentException("잔여 수량이 부족합니다.");
         }
@@ -82,8 +83,8 @@ public class OrderService {
 
     @Transactional
     public OrderResponseDto createOrderBeforeLock(Long productId, OrderRequestDto orderRequestDto, User user) {
-        Product product = findProduct(productId);
-        Stock stock = findStock(productId);
+        Product product = productService.findProduct(productId);
+        Stock stock = stockService.findStockById(productId);
         if (stock.getProductStock() < orderRequestDto.getQuantity()) {
             throw new IllegalArgumentException("잔여 수량이 부족합니다.");
         }
@@ -95,17 +96,14 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderResponseDto getOrder(Long orderId) {
-        Orders order = orderRepository.findById(orderId).orElseThrow();
+        Orders order = orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
         return new OrderResponseDto(order);
     }
 
-    @Transactional(readOnly = true)
-    private Product findProduct(Long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_PRODUCT_ERROR_MESSAGE.getErrorMessage()));
+    public Orders findOrderById(Long orderId) {
+        Orders order = orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
+        return order;
     }
 
-    @Transactional(readOnly = true)
-    private Stock findStock(Long productId) {
-        return stockRepository.findByProductProductId(productId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_STOCK_ERROR_MESSAGE.getErrorMessage()));
-    }
+
 }
