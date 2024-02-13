@@ -39,6 +39,7 @@ public class DistributedLockAop {
         // 분산 락 키를 생성
         String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), distributedLock.key());
         RLock rLock = redissonClient.getLock(key);
+        log.info("rLock : "+ rLock + " //락키 생성 체크 : "+ key + " //시간 : " + LocalDateTime.now());
 
         try {
             // 락을 획득하기 위해 시도

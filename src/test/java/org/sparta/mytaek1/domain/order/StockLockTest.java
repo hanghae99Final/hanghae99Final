@@ -71,7 +71,7 @@ public class StockLockTest {
     @Test
 //    @Transactional
     void 재고차감_분산락_적용_동시성100명_테스트() throws InterruptedException {
-        int numberOfThreads = 200;
+        int numberOfThreads = 5000;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         user = new User("다보미","da123@email.com","asdf1234!","123477756","01012345678","경기도 파주시","12345");
@@ -82,7 +82,7 @@ public class StockLockTest {
                 try {
                     Long productId = product.getProductId();
                     OrderRequestDto orderRequestDto = new OrderRequestDto(1,1);
-                    orderService.createOrder(user.getUserName(), productId, orderRequestDto, user);
+                    orderService.createOrder(product.getProductName(), productId, orderRequestDto, user);
                 } finally {
                     latch.countDown();
                 }
