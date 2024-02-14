@@ -2,15 +2,12 @@ package org.sparta.mytaek1.domain.payment.controller;
 
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
-import com.siot.IamportRestClient.request.BillingCustomerData;
 import com.siot.IamportRestClient.request.OnetimePaymentData;
-import com.siot.IamportRestClient.response.BillingCustomer;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import jakarta.annotation.PostConstruct;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.payment.dto.PaymentOnetimeDto;
-import org.sparta.mytaek1.domain.payment.dto.PaymentRequestDto;
 import org.sparta.mytaek1.domain.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -49,15 +46,6 @@ public class PaymentController {
     public ResponseEntity<OrderResponseDto> updatePayment(@PathVariable Long orderId) {
         OrderResponseDto orderResponseDto = paymentService.updatePaymentStatus(orderId);
         return ResponseEntity.ok(orderResponseDto);
-    }
-
-    @PostMapping("/subscriptions/issue-billing")
-    public ResponseEntity<IamportResponse<BillingCustomer>> paymentByImpUid(@RequestBody PaymentRequestDto requestDto)
-            throws IamportResponseException, IOException {
-        BillingCustomerData data = paymentService.getPaymentData(requestDto);
-        String customerUid = requestDto.getCustomer_uid();
-        IamportResponse<BillingCustomer> response = iamportClient.postBillingCustomer(customerUid, data);
-        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/subscribe/payments/onetime")

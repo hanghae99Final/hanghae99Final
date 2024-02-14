@@ -91,72 +91,28 @@ async function requestCardPay() {
             buyer_postcode: buyerPostcode
         });
 
-    const response = await fetch("/subscribe/payments/onetime", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: requestBody
-    });
+        const response = await fetch("/subscribe/payments/onetime", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: requestBody
+        });
 
-    // const response = await fetch("/subscriptions/issue-billing", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    //     body: requestBody
-    // });
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Failed to issue billing key: ${errorMessage}`);
+        }
 
-    if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Failed to issue billing key: ${errorMessage}`);
-    }
+        const responseData = await response.json();
+        alert("빌링키 발급 성공");
 
-    const responseData = await response.json();
-    alert("빌링키 발급 성공");
-
-    if (responseData.code === 0) {
-        alert("결제 성공");
-        window.location.href = "/my-page";
-    } else {
-        alert("결제 실패: " + requestBody);
-    }
-
-
-    // 성공 후에 추가 작업 수행 가능
-    // $.ajax({
-    //     type: 'POST',
-    //     url: '/subscribe/payments/onetime',
-    //     contentType: 'application/json',
-    //     data: JSON.stringify({
-    //         pg: 'nice.iamport01m',
-    //         merchant_uid: merchant_uid,
-    //         amount: totalPrice,
-    //         card_number: card_number,
-    //         expiry: expiry,
-    //         birth: birth,
-    //         pwd_2digit: pwd_2digit,
-    //         customer_uid: customer_uid,
-    //         // buyer_email: buyerEmail,
-    //         // buyer_name: buyerName,
-    //         // buyer_tel: buyerTel,
-    //         // buyer_addr: buyerAddr,
-    //         // buyer_postcode: buyerPostcode
-    //     }),
-    //     success: function (response) {
-    //         console.log(response)
-    //         if (response.status === "success") {
-    //             alert("결제 성공");
-    //             window.location.href = "/my-page";
-    //         } else {
-    //             alert("결제 실패: " + response.message);
-    //         }
-    //     },
-    //     error: function (error) {
-    //         console.error('Error:', error);
-    //         alert("결제 실패: 서버 오류");
-    //     }
-    // });
+        if (responseData.code === 0) {
+            alert("결제 성공");
+            window.location.href = "/my-page";
+        } else {
+            alert("결제 실패: " + requestBody);
+        }
 
     } else {
         alert('로그인 후에 결제할 수 있습니다.');
