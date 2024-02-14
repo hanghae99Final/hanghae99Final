@@ -22,7 +22,6 @@ function requestNicePay() {
     const orderContainer = document.querySelector('.order_container');
     const orderId = orderContainer.getAttribute('data-order-id');
 
-
     if (isAuthenticated) {
         const quantity = parseInt(document.getElementById("orderQuantity").textContent);
         const totalPrice = parseInt(productPrice) * quantity;
@@ -73,7 +72,7 @@ async function requestCardPay() {
         const expiry = document.getElementById("cardExpiry").value;
         const pwd_2digit = document.getElementById("cardPassword").value;
         const birth = document.getElementById("userBirth").value;
-        const customer_uid = card_number + expiry; // 임의의 고객 식별자
+        const customer_uid = card_number + expiry; 
         const pg = "nice.iamport01m";
 
         const requestBody = JSON.stringify({
@@ -93,15 +92,13 @@ async function requestCardPay() {
         },
         body: requestBody
     });
-    console.log(response)
+      
     if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(`Failed to issue billing key: ${errorMessage}`);
     }
 
     const responseData = await response.json();
-    // 빌링키 발급에 성공하면 여기서 처리
-    console.log(responseData);
     alert("빌링키 발급 성공");
 
     // 성공 후에 추가 작업 수행 가능
