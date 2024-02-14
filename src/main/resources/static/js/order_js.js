@@ -72,7 +72,7 @@ async function requestCardPay() {
         const expiry = document.getElementById("cardExpiry").value;
         const pwd_2digit = document.getElementById("cardPassword").value;
         const birth = document.getElementById("userBirth").value;
-        const customer_uid = card_number + expiry; 
+        const customer_uid = card_number + expiry;
         const pg = "nice.iamport01m";
 
         const requestBody = JSON.stringify({
@@ -92,7 +92,7 @@ async function requestCardPay() {
         },
         body: requestBody
     });
-      
+
     if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(`Failed to issue billing key: ${errorMessage}`);
