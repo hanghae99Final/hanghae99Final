@@ -50,10 +50,11 @@ public class PaymentController {
     }
 
     @PostMapping("/subscriptions/issue-billing")
-    public IamportResponse<BillingCustomer> paymentByImpUid(@RequestBody PaymentRequestDto requestDto)
+    public ResponseEntity<IamportResponse<BillingCustomer>> paymentByImpUid(@RequestBody PaymentRequestDto requestDto)
             throws IamportResponseException, IOException {
         BillingCustomerData data = paymentService.getPaymentData(requestDto);
-        String customerUid = requestDto.getCard_number() + requestDto.getExpiry();
-        return iamportClient.postBillingCustomer(customerUid, data);
+        String customerUid = requestDto.getCustomer_uid();
+        IamportResponse<BillingCustomer> response = iamportClient.postBillingCustomer(customerUid, data);
+        return ResponseEntity.ok(response);
     }
 }

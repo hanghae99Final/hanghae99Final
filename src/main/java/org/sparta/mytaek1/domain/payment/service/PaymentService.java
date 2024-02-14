@@ -32,13 +32,14 @@ public class PaymentService {
         String cardNumber = requestDto.getCard_number();
         String expiry = requestDto.getExpiry();
         String birth = requestDto.getBirth();
-        BillingCustomerData data = new BillingCustomerData(cardNumber + expiry, cardNumber, expiry, birth);
+        String pwd2Digit =requestDto.getPwd_2digit();
+        BillingCustomerData data = new BillingCustomerData(requestDto.getCustomer_uid(), cardNumber,expiry,birth);
+        data.setPwd2Digit(pwd2Digit);
         data.setPg(requestDto.getPg());
-        data.setPwd2Digit(requestDto.getPwd_2digit());
-        data.setCustomerName(requestDto.getBuyer_name());
-        data.setCustomerTel(requestDto.getBuyer_tel());
-        data.setCustomerAddr(requestDto.getBuyer_addr());
-        data.setCustomerPostcode(requestDto.getBuyer_postcode());
+//        data.setCustomerName(requestDto.getBuyer_name());
+//        data.setCustomerTel(requestDto.getBuyer_tel());
+//        data.setCustomerAddr(requestDto.getBuyer_addr());
+//        data.setCustomerPostcode(requestDto.getBuyer_postcode());
         return data;
     }
 }
