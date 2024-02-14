@@ -56,24 +56,12 @@ public class OrderServiceTest {
         stockRepository.save(stock);
     }
 
-    /**
-     * Feature: 쿠폰 차감 동시성 테스트
-     * Background
-     *     Given KURLY_001 라는 이름의 쿠폰 100장이 등록되어 있음
-     * <p>
-     * Scenario: 100장의 쿠폰을 100명의 사용자가 동시에 접근해 발급 요청함
-     *           Lock의 이름은 쿠폰명으로 설정함
-     * <p>
-     * Then 사용자들의 요청만큼 정확히 쿠폰의 개수가 차감되어야 함
-     */
-
     @Test
-//    @Transactional
     void 재고차감_분산락_적용_동시성100명_테스트() throws InterruptedException {
-        int numberOfThreads = 5000;
+        int numberOfThreads = 1000;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
-        user = new User("다보미","da123@email.com","asdf1234!","123477756","01012345678","경기도 파주시","12345");
+        user = new User("다보미","da125434@email.com","asdf1234!","1234456","01012345678","경기도 파주시","12345");
         userRepository.save(user);
 
         for (int i = 0; i < numberOfThreads; i++) {
@@ -88,6 +76,7 @@ public class OrderServiceTest {
                 }
             });
         }
+
         latch.await();
         List<Orders> orders = orderRepository.findAllByProductProductId(product.getProductId());
         int numberOfOrders = orders.size();

@@ -30,7 +30,7 @@ public class OrderService {
     private final StockService stockService;
 
     @DistributedLock(key = "#lockName")
-    public OrderResponseDto createOrder(long lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
+    public OrderResponseDto createOrder(Long lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
         Product product = productService.findProduct(productId);
         Stock stock = stockService.findStockById(productId);
 
@@ -47,13 +47,13 @@ public class OrderService {
 
     @Scheduled(fixedRate = 10000)
     @Transactional
-    public void deleteOrder() {
+    public void scheduledDeleteOrder() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime tenMinutesAgo = now.minusMinutes(10);
+        LocalDateTime tenMinutesAgo = now.minusSeconds(10);
         List<Orders> ordersToDelete = orderRepository.findByPaymentStatusAndCreatedAtBefore(false, tenMinutesAgo);
 
         for (Orders order : ordersToDelete) {
-            if (order.getCreatedAt().plusMinutes(10).isBefore(now)) {
+            if (order.getCreatedAt().plusSeconds(10).isBefore(now)) {
                 Stock stock = stockService.findStockByProduct(order.getProduct().getProductId());
                 stock.cancelStock(order.getQuantity());
                 orderRepository.delete(order);
@@ -70,4 +70,10 @@ public class OrderService {
     public Orders findOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
     }
+
+//    @DistributedLock(key = "#lockName")
+//    private void deleteOrder(Long lockName, Orders order, Stock stock) {
+//        stock.cancelStock(order.getQuantity());
+//        orderRepository.delete(order);
+//    }
 }
