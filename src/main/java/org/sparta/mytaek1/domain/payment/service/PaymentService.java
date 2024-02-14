@@ -52,7 +52,6 @@ public class PaymentService {
 
     @Async
     public CompletableFuture<IamportResponse<Payment>> getPaymentOnetime(PaymentOnetimeDto paymentOnetimeDto) throws IOException, IamportResponseException {
-        log.info("비동기 시작~");
         String merchant_uid = paymentOnetimeDto.getMerchant_uid();
         BigDecimal amount = paymentOnetimeDto.getAmount();
         String cardNumber = paymentOnetimeDto.getCard_number();
@@ -71,47 +70,6 @@ public class PaymentService {
         data.setBuyerPostcode(paymentOnetimeDto.getBuyer_postcode());
 
         IamportResponse<Payment> payment = iamportClient.onetimePayment(data);
-        log.info("비동기 끝~");
         return CompletableFuture.completedFuture(payment);
     }
-
-//    public IamportResponse<Payment> getPaymentOnetime(PaymentOnetimeDto paymentOnetimeDto) throws IOException, IamportResponseException {
-//        log.info("비동기 시작~");
-//        String merchant_uid = paymentOnetimeDto.getMerchant_uid();
-//        BigDecimal amount = paymentOnetimeDto.getAmount();
-//        String cardNumber = paymentOnetimeDto.getCard_number();
-//        String expiry = paymentOnetimeDto.getExpiry();
-//        String birth = paymentOnetimeDto.getBirth();
-//        String pwd2Digit = paymentOnetimeDto.getPwd_2digit();
-//        CardInfo card =new CardInfo(cardNumber,expiry,birth,pwd2Digit);
-//
-//        OnetimePaymentData data = new OnetimePaymentData(merchant_uid,amount, card);
-//        data.setCustomer_uid(paymentOnetimeDto.getCustomer_uid());
-//        data.setPg(paymentOnetimeDto.getPg());
-//        data.setBuyerName(paymentOnetimeDto.getBuyer_name());
-//        data.setBuyerEmail(paymentOnetimeDto.getBuyer_email());
-//        data.setBuyerTel(paymentOnetimeDto.getBuyer_tel());
-//        data.setBuyerAddr(paymentOnetimeDto.getBuyer_addr());
-//        data.setBuyerPostcode(paymentOnetimeDto.getBuyer_postcode());
-//
-//        log.info("비동기 끝~");
-//        return iamportClient.onetimePayment(data);
-//    }
-
-    public void asyncTest1() {
-        log.info("테스트1");
-    }
-
-    public void asyncTest2() {
-        log.info("테스트2");
-    }
-
-    public void asyncTest3() {
-        log.info("테스트3");
-    }
-
-    public void asyncTest4() {
-        log.info("테스트4");
-    }
-
 }

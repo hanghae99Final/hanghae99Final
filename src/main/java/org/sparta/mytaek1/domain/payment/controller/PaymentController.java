@@ -48,25 +48,10 @@ public class PaymentController {
         return ResponseEntity.ok(orderResponseDto);
     }
 
-//    @PostMapping("/subscribe/payments/onetime")
-//    public ResponseEntity<IamportResponse<Payment>> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto)
-//            throws IamportResponseException, IOException {
-//        IamportResponse<Payment> response = paymentService.getPaymentOnetime(paymentOnetimeDto);
-//        paymentService.asyncTest1();
-//        paymentService.asyncTest2();
-//        paymentService.asyncTest3();
-//        paymentService.asyncTest4();
-//        return ResponseEntity.ok(response);
-//    }
-
     @PostMapping("/subscribe/payments/onetime")
     public ResponseEntity<CompletableFuture<IamportResponse<Payment>>> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto)
             throws IamportResponseException, IOException {
         CompletableFuture<IamportResponse<Payment>> response = paymentService.getPaymentOnetime(paymentOnetimeDto);
-        paymentService.asyncTest1();
-        paymentService.asyncTest2();
-        paymentService.asyncTest3();
-        paymentService.asyncTest4();
         return ResponseEntity.ok(response);
     }
 }
