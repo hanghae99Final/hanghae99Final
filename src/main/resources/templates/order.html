@@ -26,6 +26,10 @@
     <p>Postcode: <span id="orderPostcode" th:if="${user != null}" th:text="${user.getPostcode()}"></span></p>
     <p>수량: <span id="orderQuantity" th:text="${order.getQuantity()}"></span></p>
     <p>총 가격: <span id="orderTotalPrice" th:text="${order.getTotalPrice()}"></span></p>
+    <label>카드번호: </label><input type="text" id="cardNumber" placeholder="0000-0000-0000-0000 형식에 맞춰서 입력해주세요." />
+    <label>유효기간: </label><input type="text" id="cardExpiry" placeholder="YYYY-MM 형식에 맞춰서 입력해주세요." />
+    <label>생년월일: </label><input type="text" id="userBirth" placeholder="yymmdd 형식에 맞춰서 입력해주세요." />
+    <label>카드 비밀번호 앞 두자리: </label><input id="cardPassword" type="text" name="pwd_2digit" />
     <button type="button" onclick="requestNicePay()">모듈로 결제하기</button>
     <button type="button" onclick="requestCardPay()">카드정보로 결제하기</button>
     <input type="hidden" id="buyerProductId" th:value="${product.getProductId()}" />
