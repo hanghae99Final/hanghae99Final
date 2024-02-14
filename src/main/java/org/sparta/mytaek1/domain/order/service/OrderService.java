@@ -49,11 +49,11 @@ public class OrderService {
     @Transactional
     public void scheduledDeleteOrder() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime tenMinutesAgo = now.minusSeconds(10);
+        LocalDateTime tenMinutesAgo = now.minusMinutes(10);
         List<Orders> ordersToDelete = orderRepository.findByPaymentStatusAndCreatedAtBefore(false, tenMinutesAgo);
 
         for (Orders order : ordersToDelete) {
-            if (order.getCreatedAt().plusSeconds(10).isBefore(now)) {
+            if (order.getCreatedAt().plusMinutes(10).isBefore(now)) {
                 Stock stock = stockService.findStockByProduct(order.getProduct().getProductId());
                 stock.cancelStock(order.getQuantity());
                 orderRepository.delete(order);

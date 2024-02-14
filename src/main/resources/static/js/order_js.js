@@ -102,6 +102,39 @@ async function requestCardPay() {
     alert("빌링키 발급 성공");
 
     // 성공 후에 추가 작업 수행 가능
+    $.ajax({
+        type: 'POST',
+        url: '/subscribe/payments/onetime',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            pg: 'nice.iamport01m',
+            merchant_uid: merchant_uid,
+            amount: totalPrice,
+            card_number: card_number,
+            expiry: expiry,
+            birth: birth,
+            pwd_2digit: pwd_2digit,
+            customer_uid: customer_uid,
+            // buyer_email: buyerEmail,
+            // buyer_name: buyerName,
+            // buyer_tel: buyerTel,
+            // buyer_addr: buyerAddr,
+            // buyer_postcode: buyerPostcode
+        }),
+        success: function (response) {
+            console.log(response)
+            if (response.status === "success") {
+                alert("결제 성공");
+                window.location.href = "/my-page";
+            } else {
+                alert("결제 실패: " + response.message);
+            }
+        },
+        error: function (error) {
+            console.error('Error:', error);
+            alert("결제 실패: 서버 오류");
+        }
+    });
 
     } else {
         alert('로그인 후에 결제할 수 있습니다.');
@@ -112,34 +145,3 @@ async function requestCardPay() {
 function checkCookieExistence(cookieName) {
     return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
 }
-// $.ajax({
-//     type: 'POST',
-//     url: '/subscriptions/issue-billing',
-//     contentType: 'application/json',
-//     data: JSON.stringify({
-//         pg: 'nice_v2',
-//         merchant_uid: merchant_uid,
-//         amount: totalPrice,
-//         card_number: card_number,
-//         expiry: expiry,
-//         birth: birth,
-//         pwd_2digit: pwd_2digit,
-//         buyer_email: buyerEmail,
-//         buyer_name: buyerName,
-//         buyer_tel: buyerTel,
-//         buyer_addr: buyerAddr,
-//         buyer_postcode: buyerPostcode
-//     }),
-//     success: function (response) {
-//         if (response.status === "success") {
-//             alert("결제 성공");
-//             window.location.href = "/my-page";
-//         } else {
-//             alert("결제 실패: " + response.message);
-//         }
-//     },
-//     error: function (error) {
-//         console.error('Error:', error);
-//         alert("결제 실패: 서버 오류");
-//     }
-// });
