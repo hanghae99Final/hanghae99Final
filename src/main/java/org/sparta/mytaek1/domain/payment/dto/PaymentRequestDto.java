@@ -6,12 +6,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class PaymentRequestDto {
+    private String pg;
     private String card_number;
     private String expiry;
     private String birth;
     private String pwd_2digit;
     private String customer_uid;
-    private String pg;
 //    private String merchant_uid;
 //    private Integer amount;
 //    private String buyer_email;

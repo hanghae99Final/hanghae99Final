@@ -59,11 +59,12 @@ public class PaymentController {
         IamportResponse<BillingCustomer> response = iamportClient.postBillingCustomer(customerUid, data);
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/subscribe/payments/onetime")
     public ResponseEntity<IamportResponse<Payment>> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto)
             throws IamportResponseException, IOException {
         OnetimePaymentData data = paymentService.getPaymentOnetime(paymentOnetimeDto);
-        IamportResponse<Payment> response =iamportClient.onetimePayment(data);
+        IamportResponse<Payment> response = iamportClient.onetimePayment(data);
         return ResponseEntity.ok(response);
     }
 }

@@ -48,7 +48,7 @@ public class PaymentService {
         return data;
     }
 
-    public OnetimePaymentData getPaymentOnetime(PaymentOnetimeDto paymentOnetimeDto) {
+    public OnetimePaymentData getPaymentOnetime(PaymentOnetimeDto paymentOnetimeDto) throws IOException {
         String merchant_uid = paymentOnetimeDto.getMerchant_uid();
         BigDecimal amount = paymentOnetimeDto.getAmount();
         String cardNumber = paymentOnetimeDto.getCard_number();
@@ -57,6 +57,14 @@ public class PaymentService {
         String pwd2Digit = paymentOnetimeDto.getPwd_2digit();
         CardInfo card =new CardInfo(cardNumber,expiry,birth,pwd2Digit);
 
-        return new OnetimePaymentData(merchant_uid,amount, card);
+        OnetimePaymentData data = new OnetimePaymentData(merchant_uid,amount, card);
+        data.setCustomer_uid(paymentOnetimeDto.getCustomer_uid());
+        data.setPg(paymentOnetimeDto.getPg());
+        data.setBuyerName(paymentOnetimeDto.getBuyer_name());
+        data.setBuyerEmail(paymentOnetimeDto.getBuyer_email());
+        data.setBuyerTel(paymentOnetimeDto.getBuyer_tel());
+        data.setBuyerAddr(paymentOnetimeDto.getBuyer_addr());
+        data.setBuyerPostcode(paymentOnetimeDto.getBuyer_postcode());
+        return data;
     }
 }

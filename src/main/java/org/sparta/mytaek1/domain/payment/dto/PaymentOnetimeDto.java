@@ -16,4 +16,9 @@ public class PaymentOnetimeDto {
     private String birth;
     private String pwd_2digit;
     private String customer_uid;
+    private String buyer_email;
+    private String buyer_name;
+    private String buyer_tel;
+    private String buyer_addr;
+    private String buyer_postcode;
 }
