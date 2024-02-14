@@ -2,7 +2,6 @@ package org.sparta.mytaek1.domain.payment.controller;
 
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
-import com.siot.IamportRestClient.request.OnetimePaymentData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import jakarta.annotation.PostConstruct;
@@ -14,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class PaymentController {
@@ -48,11 +48,25 @@ public class PaymentController {
         return ResponseEntity.ok(orderResponseDto);
     }
 
+//    @PostMapping("/subscribe/payments/onetime")
+//    public ResponseEntity<IamportResponse<Payment>> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto)
+//            throws IamportResponseException, IOException {
+//        IamportResponse<Payment> response = paymentService.getPaymentOnetime(paymentOnetimeDto);
+//        paymentService.asyncTest1();
+//        paymentService.asyncTest2();
+//        paymentService.asyncTest3();
+//        paymentService.asyncTest4();
+//        return ResponseEntity.ok(response);
+//    }
+
     @PostMapping("/subscribe/payments/onetime")
-    public ResponseEntity<IamportResponse<Payment>> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto)
+    public ResponseEntity<CompletableFuture<IamportResponse<Payment>>> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto)
             throws IamportResponseException, IOException {
-        OnetimePaymentData data = paymentService.getPaymentOnetime(paymentOnetimeDto);
-        IamportResponse<Payment> response = iamportClient.onetimePayment(data);
+        CompletableFuture<IamportResponse<Payment>> response = paymentService.getPaymentOnetime(paymentOnetimeDto);
+        paymentService.asyncTest1();
+        paymentService.asyncTest2();
+        paymentService.asyncTest3();
+        paymentService.asyncTest4();
         return ResponseEntity.ok(response);
     }
 }

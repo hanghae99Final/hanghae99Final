@@ -114,7 +114,7 @@ async function requestCardPay() {
                 type: 'PUT',
                 url: `/api/orders/${orderId}/paymentStatus`
             })
-            alert("결제 성공");
+            alert("결제 요청이 완료되었습니다.");
             window.location.href="/my-page";
         } else {
             alert("결제 실패: " + requestBody);
