@@ -63,7 +63,9 @@ function requestNicePay() {
 
 async function requestCardPay() {
     const isAuthenticated = checkCookieExistence('Authorization');
-
+    const orderContainer = document.querySelector('.order_container');
+    const orderId = orderContainer.getAttribute('data-order-id');
+    
     if (isAuthenticated) {
         const quantity = parseInt(document.getElementById("orderQuantity").textContent);
         const totalPrice = parseInt(productPrice) * quantity;
@@ -108,8 +110,12 @@ async function requestCardPay() {
         alert("빌링키 발급 성공");
 
         if (responseData.code === 0) {
+            $.ajax({
+                type: 'PUT',
+                url: `/api/orders/${orderId}/paymentStatus`
+            })
             alert("결제 성공");
-            window.location.href = "/my-page";
+            window.location.href="/my-page";
         } else {
             alert("결제 실패: " + requestBody);
         }

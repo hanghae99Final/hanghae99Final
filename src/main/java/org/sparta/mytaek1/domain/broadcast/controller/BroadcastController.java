@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastRequestDto;
-import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
 import org.sparta.mytaek1.global.message.SuccessMessage;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
@@ -28,13 +27,13 @@ public class BroadcastController {
     @PostMapping
     public ResponseEntity<String> createBroadcast(@AuthenticationPrincipal UserDetailsImpl auth,
                                                   @RequestBody @Valid BroadcastRequestDto requestDto) {
-        BroadcastResponseDto responseDto = broadcastService.createBroadcast(auth, requestDto);
+        broadcastService.createBroadcast(auth, requestDto);
         return new ResponseEntity<>(SuccessMessage.BROADCAST_START_MESSAGE.getSuccessMessage(), HttpStatus.CREATED);
     }
 
     @PostMapping("/{broadcastId}/end")
     public ResponseEntity<String> endBroadcast(@PathVariable long broadcastId) {
-        BroadcastResponseDto responseDto = broadcastService.endBroadcast(broadcastId);
+        broadcastService.endBroadcast(broadcastId);
         return new ResponseEntity<>(SuccessMessage.BROADCAST_END_MESSAGE.getSuccessMessage(), HttpStatus.OK);
     }
 }

@@ -47,9 +47,14 @@
        <ul>
          <li class="order_list" th:each="order : ${orderList}">
            <div class="order_list_box">
-               <p>구매 상품: <span th:text="${order.getProduct().getProductName()}"></span></p>
-               <p>구매 수량: <span th:text="${order.getQuantity()}"></span></p>
-               <p>총 가격: <span th:text="${order.getTotalPrice()}"></span></p>
+             <p>구매 상품: <span th:text="${order.getProduct().getProductName()}"></span></p>
+             <p>구매 수량: <span th:text="${order.getQuantity()}"></span></p>
+             <p>총 가격: <span th:text="${order.getTotalPrice()}"></span></p>
+             <p>결제 상태:
+               <span th:if="${order.paymentStatus == true}" th:text="결제완료"></span>
+               <span th:if="${order.paymentStatus == false}" th:text="결제대기"></span>
+             </p>
+
            </div>
          </li>
        </ul>
