@@ -69,8 +69,8 @@ jobs:
           envs: GITHUB_SHA
           script: |
             sudo docker ps
-            docker stop $(docker ps -a -q)
-            docker rm $(docker ps -a -q)
+            sudo docker stop $(docker ps -a -q)
+            sudo docker rm $(docker ps -a -q)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/mytaek1_service
             sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/mytaek1_service
             sudo docker image prune -f
