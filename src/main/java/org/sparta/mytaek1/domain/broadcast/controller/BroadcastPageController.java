@@ -6,6 +6,7 @@ import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
 import org.sparta.mytaek1.domain.stock.entity.Stock;
 import org.sparta.mytaek1.domain.stock.service.StockService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,8 @@ public class BroadcastPageController {
 
     private final BroadcastService broadcastService;
     private final StockService stockService;
+    @Value("${streaming.server.ip}")
+    private String streamingIp;
 
     @GetMapping("/broadcasts")
     public String showBroadcast() {
@@ -45,6 +48,7 @@ public class BroadcastPageController {
         model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
         model.addAttribute("product", broadcast.getProduct());
         model.addAttribute("stock", stock);
+        model.addAttribute("serverIp", streamingIp);
         return "broadcast";
     }
 }
