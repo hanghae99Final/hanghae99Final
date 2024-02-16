@@ -28,7 +28,8 @@
     </div>
     <script>
         let video = null;
-        let videoSrc = 'https://13.125.61.237/' + '[[${streamKey}]]' + '.m3u8';
+        let videoSrc = 'http://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '.m3u8';
+
 
         const initVideo = () => {
             video = document.querySelector('#video')
