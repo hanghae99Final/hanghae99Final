@@ -45,7 +45,7 @@ function requestNicePay() {
             }).done(function(data) {
                 if(data.response.status === "paid"){
                     $.ajax({
-                        type: 'PUT',
+                        type: 'PATCH',
                         url: `/api/orders/${orderId}/paymentStatus`
                     })
                     alert("결제 성공");
@@ -111,7 +111,7 @@ async function requestCardPay() {
 
         if (responseData.code === 0) {
             $.ajax({
-                type: 'PUT',
+                type: 'PATCH',
                 url: `/api/orders/${orderId}/paymentStatus`
             })
             alert("결제 요청이 완료되었습니다.");

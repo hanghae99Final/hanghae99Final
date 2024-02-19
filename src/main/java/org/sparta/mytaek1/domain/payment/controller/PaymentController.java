@@ -42,7 +42,7 @@ public class PaymentController {
         return iamportClient.paymentByImpUid(imp_uid);
     }
 
-    @PutMapping("/api/orders/{orderId}/paymentStatus")
+    @PatchMapping("/api/orders/{orderId}/paymentStatus")
     public ResponseEntity<OrderResponseDto> updatePayment(@PathVariable Long orderId) {
         OrderResponseDto orderResponseDto = paymentService.updatePaymentStatus(orderId);
         return ResponseEntity.ok(orderResponseDto);
