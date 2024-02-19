@@ -64,12 +64,12 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests)->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/api/join", "/static/**", "/api/user/login").permitAll()
-                        .requestMatchers(HttpMethod.PUT).permitAll()
-                        .requestMatchers(HttpMethod.DELETE).permitAll()
-                        .requestMatchers(HttpMethod.POST).permitAll()
-                        .requestMatchers(HttpMethod.GET).permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/", "/api/join", "/api/user/login").permitAll()
+//                        .requestMatchers(HttpMethod.DELETE).authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/broadcasts/start").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/orders/**").authenticated()
+                        .anyRequest().permitAll()
         );
 
         http.exceptionHandling((exceptionHandling) ->

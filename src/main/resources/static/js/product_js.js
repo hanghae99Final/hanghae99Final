@@ -3,6 +3,7 @@ const productPrice = document.getElementById("productPrice").textContent;
 const buyerProductId = document.getElementById("buyerProductId").value;
 
 function createOrder() {
+    const isAuthenticated = checkCookieExistence('Authorization');
     const quantity = parseInt(document.getElementById("quantity").value);
     const totalPrice = parseInt(productPrice) * quantity;
 
@@ -15,6 +16,11 @@ function createOrder() {
         quantity: quantity,
         totalPrice: totalPrice
     };
+
+    if (!isAuthenticated) {
+        alert('로그인 후에 주문할 수 있습니다.');
+        window.location.href = '/api/user/login-page';
+    }
 
     $.ajax({
         type: 'POST',
@@ -29,4 +35,8 @@ function createOrder() {
             console.error(error);
         }
     });
+}
+
+function checkCookieExistence(cookieName) {
+    return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
 }
