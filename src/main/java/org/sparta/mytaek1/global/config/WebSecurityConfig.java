@@ -65,9 +65,9 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/", "/api/join", "/api/user/login").permitAll()
-//                        .requestMatchers(HttpMethod.DELETE).authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/broadcasts/start").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/my-page").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/orders/**").authenticated()
                         .anyRequest().permitAll()
         );
