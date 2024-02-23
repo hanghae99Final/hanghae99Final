@@ -38,20 +38,6 @@ public class UserService {
         new UserResponseDto(user);
     }
 
-    public List<Broadcast> getBroadcasts(Long userId) {
-        User user = findUser(userId);
-        return new ArrayList<>(user.getBroadcastList());
-    }
-
-    public List<Orders> getOrders(Long userId) {
-        User user = findUser(userId);
-        return new ArrayList<>(user.getOrderList());
-    }
-
-    private User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
-    }
-
     public User findUserByEmail(String email) {
         Optional<User> optionalUser = userRepository.findByUserEmail(email);
         return optionalUser.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));

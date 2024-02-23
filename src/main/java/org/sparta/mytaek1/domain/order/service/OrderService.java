@@ -2,6 +2,7 @@ package org.sparta.mytaek1.domain.order.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.order.dto.OrderRequestDto;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.entity.Orders;
@@ -71,9 +72,7 @@ public class OrderService {
         return orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
     }
 
-//    @DistributedLock(key = "#lockName")
-//    private void deleteOrder(Long lockName, Orders order, Stock stock) {
-//        stock.cancelStock(order.getQuantity());
-//        orderRepository.delete(order);
-//    }
+    public List<Orders> findOrderListByUserId(Long userId) {
+        return orderRepository.findAllByUserUserId(userId);
+    }
 }

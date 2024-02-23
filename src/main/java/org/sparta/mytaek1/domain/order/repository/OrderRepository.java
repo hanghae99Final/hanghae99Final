@@ -12,4 +12,6 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     List<Orders> findAllByProductProductId(Long productId);
 
     List<Orders> findByPaymentStatusAndCreatedAtBefore(boolean status, LocalDateTime tenMinutesAgo);
+
+    List<Orders> findAllByUserUserId(Long userId);
 }

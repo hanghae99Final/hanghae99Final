@@ -14,4 +14,6 @@ public interface BroadcastRepository extends JpaRepository<Broadcast, Long> {
     List<Broadcast> findAllByOnAirTrue();
 
     Broadcast findByBroadcastTitle(String testTitle);
+
+    List<Broadcast> findAllByUserUserId(Long userId);
 }

@@ -47,8 +47,11 @@ public class BroadcastService {
         Broadcast broadCast = getBroadcastByBroadcastId(broadcastId);
 
         broadCast.endBroadcast();
-        BroadcastResponseDto responseDto = new BroadcastResponseDto(broadCast);
-        return responseDto;
+        return new BroadcastResponseDto(broadCast);
+    }
+
+    public List<Broadcast> findBroadcastListByUserId(Long userId) {
+        return broadcastRepository.findAllByUserUserId(userId);
     }
 
     @Transactional(readOnly = true)
