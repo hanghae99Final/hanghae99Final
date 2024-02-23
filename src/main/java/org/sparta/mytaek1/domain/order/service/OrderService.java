@@ -2,7 +2,6 @@ package org.sparta.mytaek1.domain.order.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.order.dto.OrderRequestDto;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.entity.Orders;
@@ -27,13 +26,12 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final ProductService productService;
     private final StockService stockService;
 
-    @DistributedLock(key = "#lockName")
-    public OrderResponseDto createOrder(Long lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
-        Product product = productService.findProduct(productId);
-        Stock stock = stockService.findStockById(productId);
+    @DistributedLock(key = "#productId")
+    public OrderResponseDto createOrder(Long productId, OrderRequestDto orderRequestDto, User user) {
+        Stock stock = stockService.findStockWithProduct(productId);
+        Product product = stock.getProduct();
 
         if (stock.getProductStock() < orderRequestDto.getQuantity()) {
             throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_STOCK_ERROR_MESSAGE.getErrorMessage());
