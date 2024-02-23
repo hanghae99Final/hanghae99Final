@@ -34,6 +34,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String tokenValue = jwtUtil.getTokenFromRequest(req);
 
         if (StringUtils.hasText(tokenValue)) {
+            System.out.println("너야?");
             tokenValue = jwtUtil.substringToken(tokenValue);
             log.info(tokenValue);
 

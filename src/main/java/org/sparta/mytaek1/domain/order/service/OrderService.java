@@ -45,7 +45,7 @@ public class OrderService {
         return new OrderResponseDto(order);
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 60000)
     @Transactional
     public void scheduledDeleteOrder() {
         LocalDateTime now = LocalDateTime.now();

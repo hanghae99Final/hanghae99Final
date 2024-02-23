@@ -60,7 +60,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = jwtUtil.createToken(email, auth);
         jwtUtil.addJwtToCookie(token, response);
-
         response.getWriter().write(SuccessMessage.LOGIN_SUCCESS_MESSAGE.getSuccessMessage());
     }
 
