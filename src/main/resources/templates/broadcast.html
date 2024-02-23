@@ -5,9 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyTaek1 - Broadcast</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/broadcast_style.css}"/>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+    <style>
+        #main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 56px);
+            padding: 1rem;
+        }
+
+        #video-container {
+            flex: 0 0 70%;
+            max-width: 70%;
+        }
+
+        video {
+            width: 100%;
+            height: 70vh;
+            object-fit: cover;
+        }
+
+        #button {
+            flex: 0 0 70%;
+            max-width: 70%;
+            height: 60px;
+            margin-left: 1rem;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar"></nav>
@@ -62,6 +88,54 @@
             location.href = '/products/' + productId;
         });
     </script>
-    <script type="text/javascript" th:src="@{/js/nav_js.js}"></script>
+    <script type="text/javascript">
+        function checkCookie(name) {
+            const cookies = document.cookie.split(';');
+
+            for (const cookie of cookies) {
+                const [cookieName, cookieValue] = cookie.trim().split('=');
+                if (cookieName === name) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const isAuthenticated = checkCookie('Authorization');
+
+            const navbar = document.querySelector('.navbar');
+            navbar.innerHTML = '';
+
+            const homeLink = document.createElement('a');
+            homeLink.href = '/';
+            homeLink.textContent = 'Home';
+            navbar.appendChild(homeLink);
+
+            if (isAuthenticated) {
+                const myPageLink = document.createElement('a');
+                myPageLink.href = '/my-page';
+                myPageLink.textContent = 'MyPage';
+                navbar.appendChild(myPageLink);
+
+                const logoutLink = document.createElement('a');
+                logoutLink.textContent = 'Logout';
+                logoutLink.addEventListener('click', function () {
+                    deleteCookie('Authorization');
+                });
+
+                logoutLink.href = '/';
+                navbar.appendChild(logoutLink);
+            } else {
+                const loginLink = document.createElement('a');
+                loginLink.href = '/api/user/login-page';
+                loginLink.textContent = 'Login';
+                navbar.appendChild(loginLink);
+            }
+        });
+
+        function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+    </script>
 </body>
 </html>

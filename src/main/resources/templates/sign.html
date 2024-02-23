@@ -6,12 +6,183 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link type="text/css" th:href="@{/css/sign_style.css}" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <meta charset="UTF-8">
     <title>MyTaek1 - Sign</title>
+    <style>
+        @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css");
+
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Montserrat", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .wrapper {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ebecf0;
+            overflow: hidden;
+        }
+        .container {
+            border-radius: 10px;
+            box-shadow: -5px -5px 10px #fff, 5px 5px 10px #babebc;
+            position: absolute;
+            width: 768px;
+            min-height: 480px;
+            overflow: hidden;
+        }
+        form {
+            background: #ebecf0;
+            display: flex;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+        form input {
+            background: #eee;
+            padding: 16px;
+            margin: 8px 0;
+            width: 85%;
+            border: 0;
+            outline: none;
+            border-radius: 20px;
+            box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff;
+        }
+        button {
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 15px 45px;
+            margin: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 80ms ease-in;
+        }
+        .form_btn {
+            box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
+        }
+        .form_btn:active {
+            box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
+        }
+        .overlay_btn {
+            background-color: dimgray;
+            color: #fff;
+            box-shadow: -5px -5px 10px gray, 5px 5px 8px gray;
+        }
+        .sign-in-container {
+            position: absolute;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            transition: all 0.5s;
+        }
+        .sign-up-container {
+            position: absolute;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            opacity: 0;
+            transition: all 0.5s;
+        }
+        .overlay-left {
+            display: flex;
+            flex-direction: column;
+            padding: 0 50px;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            opacity: 0;
+            background-color: dimgray;
+            color: #fff;
+            transition: all 0.5s;
+        }
+        .overlay-right {
+            display: flex;
+            flex-direction: column;
+            padding: 0 50px;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background-color: dimgray;
+            color: #fff;
+            transition: all 0.5s;
+        }
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 2;
+        }
+        .container.right-panel-active .overlay-right {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        .container.right-panel-active .overlay-left {
+            transform: translateX(-100%);
+            opacity: 1;
+            z-index: 2;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        form h1 {
+            font-weight: bold;
+            margin: 0;
+            color: #000;
+        }
+
+        p {
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin: 20px 0 30px;
+        }
+        span {
+            font-size: 12px;
+            color: #000;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+        .social-links div {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            border-radius: 50%;
+            box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
+            cursor: pointer;
+        }
+        .social-links a {
+            color: #000;
+        }
+        .social-links div:active {
+            box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
@@ -59,6 +230,105 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" th:src="@{/js/sign_js.js}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Cookies.remove('Authorization', {path: '/'});
+    });
+
+    const host = 'http://' + window.location.host;
+
+    const href = location.href;
+    const queryString = href.substring(href.indexOf("?")+1)
+
+    if (queryString === 'error') {
+        const errorDiv = document.getElementById('login-failed');
+        errorDiv.style.display = 'block';
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const signUpBtn = document.getElementById("signUp");
+        const signIn = document.getElementById("signIn");
+        const signInBtn = document.getElementById("signInBtn");
+        const container = document.querySelector(".container");
+
+        signUpBtn.addEventListener("click", function() {
+            container.classList.add("right-panel-active");
+        });
+
+        signIn.addEventListener("click", function() {
+            container.classList.remove("right-panel-active");
+        });
+
+        signInBtn.addEventListener("click", function() {
+            let email = $('#email').val();
+            let password = $('#password').val();
+
+            $.ajax({
+                type: "POST",
+                url: `/api/user/login`,
+                contentType: "application/json",
+                data: JSON.stringify({username: email, password: password}),
+            })
+                .done(function (res, status, xhr) {
+                    window.location.href = host;
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('statusCode: ' + xhr.status);
+                    showLoginFailedMessage();
+                });
+        });
+
+        $('#signUpBtn').click(function () {
+            const name = $('#name').val();
+            const email = $('#signupEmail').val();
+            const password = $('#signupPassword').val();
+            const userPhone = $('#userPhone').val();
+            const userAddress = $('#userAddress').val();
+            const postcode = $('#postcode').val();
+
+            if (!name || !email || !password) {
+                showSignupWarningMessage();
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/api/join',
+                contentType: "application/json",
+                data: JSON.stringify({
+                    userName: name,
+                    userEmail: email,
+                    password: password,
+                    userPhone: userPhone,
+                    userAddress: userAddress,
+                    postcode: postcode,
+                    auth: 'USER'
+                }),
+            })
+                .done(function (res, status, xhr) {
+                    showSignupSuccessMessage();
+                    console.log('Signup successful');
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('Signup failed');
+                });
+        });
+    });
+
+    function showSignupWarningMessage() {
+        const signupWarningMessage = document.getElementById('signupWarningMessage');
+        signupWarningMessage.style.display = 'block';
+    }
+
+    function showSignupSuccessMessage() {
+        const signupSuccessMessage = document.getElementById('signupSuccessMessage');
+        signupSuccessMessage.style.display = 'block';
+    }
+
+    function showLoginFailedMessage() {
+        const loginFailedMessage = document.getElementById('loginFailedMessage');
+        loginFailedMessage.style.display = 'block';
+    }
+</script>
 </body>
 </html>
