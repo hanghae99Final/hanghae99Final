@@ -64,7 +64,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderResponseDto getOrder(Long orderId) {
-        Orders order = orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
+        Orders order = orderRepository.findOrderWithUserById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
         return new OrderResponseDto(order);
     }
 
