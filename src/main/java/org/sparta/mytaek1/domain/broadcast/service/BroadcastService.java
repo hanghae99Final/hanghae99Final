@@ -24,7 +24,6 @@ import java.util.List;
 public class BroadcastService {
 
     private final BroadcastRepository broadcastRepository;
-    private final UserService userService;
     private final ProductService productService;
 
     @Transactional(readOnly = true)
@@ -34,7 +33,7 @@ public class BroadcastService {
     }
 
     public BroadcastResponseDto createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto) {
-        User user = userService.findUserByEmail(auth.getUsername());
+        User user = auth.getUser();
 
         Product product = productService.createProduct(requestDto);
 

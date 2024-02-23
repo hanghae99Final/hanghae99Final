@@ -37,10 +37,5 @@ public class UserService {
         User user =  userRepository.save(new User(userName, userEmail, password, streamKey, userPhone, userAddress, postcode));
         new UserResponseDto(user);
     }
-
-    public User findUserByEmail(String email) {
-        Optional<User> optionalUser = userRepository.findByUserEmail(email);
-        return optionalUser.orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
-    }
 }
 
