@@ -17,20 +17,23 @@
         * {
             box-sizing: border-box;
         }
+
         body {
             font-family: "Montserrat", sans-serif;
             margin: 0;
             padding: 0;
         }
+
         .wrapper {
             width: 100%;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #ebecf0;
             overflow: hidden;
+            background: #ebecf0;
         }
+
         .container {
             border-radius: 10px;
             box-shadow: -5px -5px 10px #fff, 5px 5px 10px #babebc;
@@ -39,6 +42,7 @@
             min-height: 480px;
             overflow: hidden;
         }
+
         form {
             background: #ebecf0;
             display: flex;
@@ -48,6 +52,7 @@
             justify-content: center;
             align-items: center;
         }
+
         form input {
             background: #eee;
             padding: 16px;
@@ -58,6 +63,7 @@
             border-radius: 20px;
             box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff;
         }
+
         button {
             border-radius: 20px;
             border: none;
@@ -71,17 +77,21 @@
             cursor: pointer;
             transition: transform 80ms ease-in;
         }
+
         .form_btn {
             box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
         }
+
         .form_btn:active {
             box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
         }
+
         .overlay_btn {
             background-color: dimgray;
             color: #fff;
             box-shadow: -5px -5px 10px gray, 5px 5px 8px gray;
         }
+
         .sign-in-container {
             position: absolute;
             left: 0;
@@ -89,6 +99,7 @@
             height: 100%;
             transition: all 0.5s;
         }
+
         .sign-up-container {
             position: absolute;
             left: 0;
@@ -97,6 +108,7 @@
             opacity: 0;
             transition: all 0.5s;
         }
+
         .overlay-left {
             display: flex;
             flex-direction: column;
@@ -112,6 +124,7 @@
             color: #fff;
             transition: all 0.5s;
         }
+
         .overlay-right {
             display: flex;
             flex-direction: column;
@@ -126,27 +139,29 @@
             color: #fff;
             transition: all 0.5s;
         }
+
         .container.right-panel-active .sign-in-container {
             transform: translateX(100%);
             opacity: 0;
         }
+
         .container.right-panel-active .sign-up-container {
             transform: translateX(100%);
             opacity: 1;
             z-index: 2;
         }
+
         .container.right-panel-active .overlay-right {
             transform: translateX(-100%);
             opacity: 0;
         }
+
         .container.right-panel-active .overlay-left {
             transform: translateX(-100%);
             opacity: 1;
             z-index: 2;
         }
-        .social-links {
-            margin: 20px 0;
-        }
+
         form h1 {
             font-weight: bold;
             margin: 0;
@@ -159,12 +174,14 @@
             letter-spacing: 0.5px;
             margin: 20px 0 30px;
         }
+
         span {
             font-size: 12px;
             color: #000;
             letter-spacing: 0.5px;
             margin-bottom: 10px;
         }
+
         .social-links div {
             width: 40px;
             height: 40px;
@@ -176,41 +193,55 @@
             box-shadow: -5px -5px 10px #fff, 5px 5px 8px #babebc;
             cursor: pointer;
         }
+
         .social-links a {
             color: #000;
         }
+
         .social-links div:active {
             box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
+        }
+
+
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar a {
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
         }
     </style>
 </head>
 <body>
+<nav class="navbar"></nav>
 <div class="wrapper">
     <div class="container">
         <div class="sign-up-container">
             <form>
-                <p id="signupWarningMessage" style="font-weight:100; text-align:center; color: red; display: none;">
-                    모든 정보를 입력해주세요.
-                </p>
                 <input type="text" id="name" placeholder="Name">
                 <input type="email" id="signupEmail" placeholder="Email">
                 <input type="password" id="signupPassword" placeholder="Password">
                 <input type="text" id="userPhone" placeholder="Phone">
                 <input type="text" id="userAddress" placeholder="Address">
                 <input type="text" id="postcode" placeholder="Postcode">
-                <p id="signupSuccessMessage" style="font-weight:100; text-align:center; color: green; display: none;">
-                    회원가입이 완료되었습니다!
-                </p>
                 <button class="form_btn" type="button" id="signUpBtn">Sign Up</button>
             </form>
         </div>
         <div class="sign-in-container">
             <form>
                 <h1>Sign In</h1>
-                <p id="loginFailedMessage" style="font-weight:100; text-align:center; color: red; display: none;">
-                    로그인에 실패했습니다.<br />
-                    회원 정보를 확인해 주세요.
-                </p>
                 <input type="email" name="email" id="email" placeholder="Email">
                 <input type="password" name="password" id="password" placeholder="Password">
                 <button class="form_btn" type="button" id="signInBtn">Sign In</button>
@@ -274,7 +305,7 @@
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
                     console.log('statusCode: ' + xhr.status);
-                    showLoginFailedMessage();
+                    alert("로그인에 실패했습니다. 회원 정보를 확인해 주세요.");
                 });
         });
 
@@ -287,7 +318,7 @@
             const postcode = $('#postcode').val();
 
             if (!name || !email || !password) {
-                showSignupWarningMessage();
+                alert("모든 정보를 입력해주세요.");
                 return;
             }
 
@@ -306,7 +337,7 @@
                 }),
             })
                 .done(function (res, status, xhr) {
-                    showSignupSuccessMessage();
+                    alert("회원가입이 완료되었습니다!");
                     console.log('Signup successful');
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
@@ -314,21 +345,55 @@
                 });
         });
     });
+</script>
+<script>
+    function checkCookie(name) {
+        const cookies = document.cookie.split(';');
 
-    function showSignupWarningMessage() {
-        const signupWarningMessage = document.getElementById('signupWarningMessage');
-        signupWarningMessage.style.display = 'block';
+        for (const cookie of cookies) {
+            const [cookieName, cookieValue] = cookie.trim().split('=');
+            if (cookieName === name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    function showSignupSuccessMessage() {
-        const signupSuccessMessage = document.getElementById('signupSuccessMessage');
-        signupSuccessMessage.style.display = 'block';
-    }
+    window.addEventListener("DOMContentLoaded", () => {
+        const isAuthenticated = checkCookie('Authorization');
 
-    function showLoginFailedMessage() {
-        const loginFailedMessage = document.getElementById('loginFailedMessage');
-        loginFailedMessage.style.display = 'block';
-    }
+        const navbar = document.querySelector('.navbar');
+        navbar.innerHTML = '';
+
+        const homeLink = document.createElement('a');
+        homeLink.href = '/';
+        homeLink.textContent = 'Home';
+        navbar.appendChild(homeLink);
+
+        if (isAuthenticated) {
+            const myPageLink = document.createElement('a');
+            myPageLink.href = '/my-page';
+            myPageLink.textContent = 'MyPage';
+            navbar.appendChild(myPageLink);
+
+            const logoutLink = document.createElement('a');
+            logoutLink.textContent = 'Logout';
+            logoutLink.addEventListener('click', function () {
+                deleteCookie('Authorization');
+            });
+
+            logoutLink.href = '/';
+            navbar.appendChild(logoutLink);
+        } else {
+            const loginLink = document.createElement('a');
+            loginLink.href = '/api/user/login-page';
+            loginLink.textContent = 'Login';
+            navbar.appendChild(loginLink);
+        }
+    });
+
+    function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
 </script>
 </body>
 </html>
