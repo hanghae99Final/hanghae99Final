@@ -29,8 +29,7 @@ public class OrderController {
                                               @RequestBody OrderRequestDto orderRequestDto,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
-        Stock stock = stockService.findStockById(productId);
-        OrderResponseDto orderResponseDto = orderService.createOrder(stock.getStockId(), productId, orderRequestDto, user);
+        OrderResponseDto orderResponseDto = orderService.createOrder(productId, orderRequestDto, user);
         return ResponseEntity.ok(orderResponseDto);
     }
 }

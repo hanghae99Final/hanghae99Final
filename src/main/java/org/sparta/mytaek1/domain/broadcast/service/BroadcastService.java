@@ -24,7 +24,6 @@ import java.util.List;
 public class BroadcastService {
 
     private final BroadcastRepository broadcastRepository;
-    private final UserService userService;
     private final ProductService productService;
 
     @Transactional(readOnly = true)
@@ -34,7 +33,7 @@ public class BroadcastService {
     }
 
     public BroadcastResponseDto createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto) {
-        User user = userService.findUserByEmail(auth.getUsername());
+        User user = auth.getUser();
 
         Product product = productService.createProduct(requestDto);
 
@@ -47,8 +46,11 @@ public class BroadcastService {
         Broadcast broadCast = getBroadcastByBroadcastId(broadcastId);
 
         broadCast.endBroadcast();
-        BroadcastResponseDto responseDto = new BroadcastResponseDto(broadCast);
-        return responseDto;
+        return new BroadcastResponseDto(broadCast);
+    }
+
+    public List<Broadcast> findBroadcastListByUserId(Long userId) {
+        return broadcastRepository.findAllByUserUserId(userId);
     }
 
     @Transactional(readOnly = true)

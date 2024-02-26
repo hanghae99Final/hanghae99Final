@@ -26,13 +26,12 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final ProductService productService;
     private final StockService stockService;
 
-    @DistributedLock(key = "#lockName")
-    public OrderResponseDto createOrder(Long lockName, Long productId, OrderRequestDto orderRequestDto, User user) {
-        Product product = productService.findProduct(productId);
-        Stock stock = stockService.findStockById(productId);
+    @DistributedLock(key = "#productId")
+    public OrderResponseDto createOrder(Long productId, OrderRequestDto orderRequestDto, User user) {
+        Stock stock = stockService.findStockWithProduct(productId);
+        Product product = stock.getProduct();
 
         if (stock.getProductStock() < orderRequestDto.getQuantity()) {
             throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_STOCK_ERROR_MESSAGE.getErrorMessage());
@@ -63,7 +62,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderResponseDto getOrder(Long orderId) {
-        Orders order = orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
+        Orders order = orderRepository.findOrderWithUserById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
         return new OrderResponseDto(order);
     }
 
@@ -71,9 +70,7 @@ public class OrderService {
         return orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
     }
 
-//    @DistributedLock(key = "#lockName")
-//    private void deleteOrder(Long lockName, Orders order, Stock stock) {
-//        stock.cancelStock(order.getQuantity());
-//        orderRepository.delete(order);
-//    }
+    public List<Orders> findOrderListByUserId(Long userId) {
+        return orderRepository.findAllByUserUserId(userId);
+    }
 }

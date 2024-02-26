@@ -70,7 +70,7 @@ public class OrderServiceTest {
                     Long productId = product.getProductId();
                     OrderRequestDto orderRequestDto = new OrderRequestDto(1,1);
                     Stock stock1 = stockService.findStockById(product.getProductId());
-                    orderService.createOrder(stock1.getStockId(), productId, orderRequestDto, user);
+                    orderService.createOrder( productId, orderRequestDto, user);
                 } finally {
                     latch.countDown();
                 }

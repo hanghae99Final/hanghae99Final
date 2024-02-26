@@ -4,7 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
+import org.sparta.mytaek1.domain.broadcast.repository.BroadcastRepository;
+import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
 import org.sparta.mytaek1.domain.order.entity.Orders;
+import org.sparta.mytaek1.domain.order.repository.OrderRepository;
+import org.sparta.mytaek1.domain.order.service.OrderService;
+import org.sparta.mytaek1.domain.user.entity.User;
+import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.sparta.mytaek1.domain.user.service.UserService;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.security.core.Authentication;
@@ -16,12 +22,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class UserPageController {
 
-    private final UserService userService;
+    private final BroadcastService broadcastService;
+    private final OrderService orderService;
 
     @GetMapping("/my-page")
     public String myPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -32,8 +40,8 @@ public class UserPageController {
         String userPhone = userDetails.getUser().getUserPhone();
         String userAddress = userDetails.getUser().getUserAddress();
         String postcode = userDetails.getUser().getPostcode();
-        List<Broadcast> broadcastList = userService.getBroadcasts(userId);
-        List<Orders> orderList = userService.getOrders(userId);
+        List<Broadcast> broadcastList = broadcastService.findBroadcastListByUserId(userId);
+        List<Orders> orderList = orderService.findOrderListByUserId(userId);
 
         model.addAttribute("userName", userName);
         model.addAttribute("userEmail", userEmail);

@@ -20,8 +20,9 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductFindResponseDto getProduct(Long productId) {
-        Stock stock = stockService.findStockById(productId);
-        Product product = findProduct(productId);
+        Stock stock = stockService.findStockWithProduct(productId);
+        Product product = stock.getProduct();
+
         return new ProductFindResponseDto(product, stock);
     }
 
