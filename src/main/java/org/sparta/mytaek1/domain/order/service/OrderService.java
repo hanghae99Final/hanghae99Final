@@ -44,19 +44,16 @@ public class OrderService {
         return new OrderResponseDto(order);
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 10000)
     @Transactional
     public void scheduledDeleteOrder() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime tenMinutesAgo = now.minusMinutes(10);
+        LocalDateTime tenMinutesAgo = now.minusSeconds(10);
         List<Orders> ordersToDelete = orderRepository.findByPaymentStatusAndCreatedAtBefore(false, tenMinutesAgo);
 
         for (Orders order : ordersToDelete) {
-            if (order.getCreatedAt().plusMinutes(10).isBefore(now)) {
-                Stock stock = stockService.findStockByProduct(order.getProduct().getProductId());
-                stock.cancelStock(order.getQuantity());
-                orderRepository.delete(order);
-            }
+            Stock stock = stockService.findStockByProduct(order.getProduct().getProductId());
+            deleteOrder(order.getProduct().getProductId(), order, stock);
         }
     }
 
@@ -73,4 +70,11 @@ public class OrderService {
     public List<Orders> findOrderListByUserId(Long userId) {
         return orderRepository.findAllByUserUserId(userId);
     }
+
+    @DistributedLock(key = "#productId")
+    private void deleteOrder(Long productId, Orders order, Stock stock) {
+        stock.cancelStock(order.getQuantity());
+        orderRepository.delete(order);
+    }
 }
+
