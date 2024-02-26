@@ -44,11 +44,11 @@ public class OrderService {
         return new OrderResponseDto(order);
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 60000)
     @Transactional
     public void scheduledDeleteOrder() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime tenMinutesAgo = now.minusSeconds(10);
+        LocalDateTime tenMinutesAgo = now.minusMinutes(10);
         List<Orders> ordersToDelete = orderRepository.findByPaymentStatusAndCreatedAtBefore(false, tenMinutesAgo);
 
         for (Orders order : ordersToDelete) {
