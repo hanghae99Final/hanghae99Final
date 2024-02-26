@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyTaek1 - Broadcast</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
         #main-content {
             display: flex;
             justify-content: center;
@@ -17,8 +22,22 @@
         }
 
         #video-container {
-            flex: 0 0 70%;
+            flex: 0 0 50%;
             max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        #product-button-container {
+            max-width: 30%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
         }
 
         video {
@@ -27,115 +46,149 @@
             object-fit: cover;
         }
 
-        #button {
-            flex: 0 0 70%;
-            max-width: 70%;
-            height: 60px;
-            margin-left: 1rem;
+        #product-info {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background-color: dimgray;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: dimgray;
+        }
+
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar a {
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        #product-info {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar"></nav>
-    <div id="main-content">
-        <div id="video-container">
-            <video id="video" controls playsinline autoplay></video>
-        </div>
-        <div id="product-button-container"
-             style="flex: 0 0 30%; max-width: 30%; flex-direction: column; display: flex; justify-content: center; align-items: center;">
-            <div id="product-info" class="p-3">
-                <h3 th:text="'상품 명: ' + ${product.getProductName()}"></h3>
-                <p th:text="'상품 가격: ' + ${product.getProductPrice()}"></p>
-                <p th:text="'상품 설명: ' + ${product.getProductDescription()}"></p>
-                <p th:text="'상품 수량: ' + ${stock.getProductStock()}"></p>
-            </div>
-            <button id="button" class="btn btn-primary btn-block" style="margin-top: 1rem;">상품 보러가기</button>
-        </div>
+<nav class="navbar"></nav>
+<div id="main-content">
+    <div id="video-container">
+        <video id="video" controls playsinline autoplay></video>
     </div>
-    <script>
-        let video = null;
-        let videoSrc = 'https://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '.m3u8';
+    <div id="product-button-container">
+        <div id="product-info" class="p-3">
+            <h3 th:text="'상품 명: ' + ${product.getProductName()}"></h3>
+            <p th:text="'상품 가격: ' + ${product.getProductPrice()}"></p>
+            <p th:text="'상품 설명: ' + ${product.getProductDescription()}"></p>
+            <p th:text="'상품 수량: ' + ${stock.getProductStock()}"></p>
+        </div>
+        <button id="button" class="btn btn-primary btn-block">상품 보러가기</button>
+    </div>
+</div>
+<script>
+    let video = null;
+    let videoSrc = 'https://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '.m3u8';
 
+    const initVideo = () => {
+        video = document.querySelector('#video');
+    };
 
-        const initVideo = () => {
-            video = document.querySelector('#video')
+    window.addEventListener("DOMContentLoaded", () => {
+        initVideo();
+        initHls();
+    });
+
+    const initHls = () => {
+        if (Hls.isSupported()) {
+            hls = new Hls({
+                autoStartLoad: false,
+            });
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.startLoad();
+        } else {
+            video.src = videoSrc;
         }
+    };
 
-        window.addEventListener("DOMContentLoaded", () => {
-            initVideo();
-        })
+    document.getElementById('button').addEventListener('click', function () {
+        let productId = '[[${product.getProductId()}]]';
+        location.href = '/products/' + productId;
+    });
+</script>
+<script type="text/javascript">
+    function checkCookie(name) {
+        const cookies = document.cookie.split(';');
 
-        const initHls = () => {
-            if (Hls.isSupported()) {
-                hls = new Hls({
-                    autoStartLoad: false,
-                });
-                hls.loadSource(videoSrc);
-                hls.attachMedia(video);
-                hls.startLoad();
-            } else {
-                video.src = videoSrc;
+        for (const cookie of cookies) {
+            const [cookieName, cookieValue] = cookie.trim().split('=');
+            if (cookieName === name) {
+                return true;
             }
         }
 
-        window.addEventListener("DOMContentLoaded", () => {
-            initVideo();
-            initHls();
-        })
+        return false;
+    }
 
-        document.getElementById('button').addEventListener('click', function () {
-            let productId = '[[${product.getProductId()}]]';
-            location.href = '/products/' + productId;
-        });
-    </script>
-    <script type="text/javascript">
-        function checkCookie(name) {
-            const cookies = document.cookie.split(';');
+    window.addEventListener("DOMContentLoaded", () => {
+        const isAuthenticated = checkCookie('Authorization');
 
-            for (const cookie of cookies) {
-                const [cookieName, cookieValue] = cookie.trim().split('=');
-                if (cookieName === name) {
-                    return true;
-                }
-            }
+        const navbar = document.querySelector('.navbar');
+        navbar.innerHTML = '';
 
-            return false;
+        const homeLink = document.createElement('a');
+        homeLink.href = '/';
+        homeLink.textContent = 'Home';
+        navbar.appendChild(homeLink);
+
+        if (isAuthenticated) {
+            const myPageLink = document.createElement('a');
+            myPageLink.href = '/my-page';
+            myPageLink.textContent = 'MyPage';
+            navbar.appendChild(myPageLink);
+
+            const logoutLink = document.createElement('a');
+            logoutLink.textContent = 'Logout';
+            logoutLink.addEventListener('click', function () {
+                deleteCookie('Authorization');
+            });
+
+            logoutLink.href = '/';
+            navbar.appendChild(logoutLink);
+        } else {
+            const loginLink = document.createElement('a');
+            loginLink.href = '/api/user/login-page';
+            loginLink.textContent = 'Login';
+            navbar.appendChild(loginLink);
         }
+    });
 
-        window.addEventListener("DOMContentLoaded", () => {
-            const isAuthenticated = checkCookie('Authorization');
-
-            const navbar = document.querySelector('.navbar');
-            navbar.innerHTML = '';
-
-            const homeLink = document.createElement('a');
-            homeLink.href = '/';
-            homeLink.textContent = 'Home';
-            navbar.appendChild(homeLink);
-
-            if (isAuthenticated) {
-                const myPageLink = document.createElement('a');
-                myPageLink.href = '/my-page';
-                myPageLink.textContent = 'MyPage';
-                navbar.appendChild(myPageLink);
-
-                const logoutLink = document.createElement('a');
-                logoutLink.textContent = 'Logout';
-                logoutLink.addEventListener('click', function () {
-                    deleteCookie('Authorization');
-                });
-
-                logoutLink.href = '/';
-                navbar.appendChild(logoutLink);
-            } else {
-                const loginLink = document.createElement('a');
-                loginLink.href = '/api/user/login-page';
-                loginLink.textContent = 'Login';
-                navbar.appendChild(loginLink);
-            }
-        });
-
-        function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
-    </script>
+    function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+</script>
 </body>
 </html>

@@ -38,6 +38,88 @@
             });
         }
     </script>
+    <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            color: #666;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: dimgray;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: dimgray;
+        }
+
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar a {
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .obs-info {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .obs-info p {
+            margin: 5px 0;
+            color: dimgray;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar"></nav>
@@ -62,7 +144,12 @@
         <label for="productStock">Product Stock:</label>
         <input type="text" id="productStock" name="productStock" required><br>
 
-        <button type="submit">Submit</button>
+        <div class="obs-info">
+            <p>OBS를 통해 방송을 시작해주세요.</p>
+            <p>서버 : rtmps://mytaek1-streaming.store/stream</p>
+            <p>스트림키 : 마이페이지에서 스트림키를 확인해주세요.</p>
+        </div>
+        <button type="submit">방송 시작하기</button>
     </form>
     <script type="text/javascript">
         function checkCookie(name) {
