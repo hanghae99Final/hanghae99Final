@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.sparta.mytaek1.domain.order.dto.OrderRequestDto;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.service.OrderService;
-import org.sparta.mytaek1.domain.stock.entity.Stock;
 import org.sparta.mytaek1.domain.stock.service.StockService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
