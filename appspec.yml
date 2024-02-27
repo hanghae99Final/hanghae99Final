@@ -13,10 +13,16 @@ permissions:
     owner: ubuntu
     group: ubuntu
 
+# hooks:
+  # AfterInstall:
+  #   - location: scripts/stop.sh
+  #     timeout: 60
+  # ApplicationStart:
+  #   - location: scripts/start.sh
+  #     timeout: 60
+
 hooks:
-  AfterInstall:
-    - location: scripts/stop.sh
-      timeout: 60
   ApplicationStart:
-    - location: scripts/start.sh
+    - location: /scripts/gh_deploy.sh
       timeout: 60
+      runas: ubuntu
