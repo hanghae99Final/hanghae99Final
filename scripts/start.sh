@@ -20,9 +20,9 @@
 
 #!/bin/bash
 
-chmod +x /var/log/aws/codedeploy-agent/
-ROOT_PATH="/home/ubuntu/spring-github-action"
-JAR="/var/log/aws/codedeploy-agent/application.jar"
+
+ROOT_PATH="/home/ubuntu"
+JAR="$ROOT_PATH/application.jar"
 
 APP_LOG="/var/log/aws/codedeploy-agent/application.log"
 ERROR_LOG="/var/log/aws/codedeploy-agent/error.log"
