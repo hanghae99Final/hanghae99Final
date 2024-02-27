@@ -1,5 +1,4 @@
-# JAR="$ROOT_PATH/application.jar"
-JAR="../build/libs/mytaek1-0.0.1-SNAPSHOT.jar"
+JAR="/home/ubuntu/build/libs/mytaek1-0.0.1-SNAPSHOT.jar"
 STOP_LOG="/var/log/aws/codedeploy-agent/stop.log"
 SERVICE_PID=$(pgrep -f $JAR) # 실행중인 Spring 서버의 PID
 
