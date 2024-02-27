@@ -20,9 +20,3 @@ hooks:
   ApplicationStart:
     - location: scripts/start.sh
       timeout: 60
-
-# hooks:
-#   ApplicationStart:
-#     - location: /scripts/gh_deploy.sh
-#       timeout: 60
-#       runas: ubuntu
