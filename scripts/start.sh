@@ -21,7 +21,7 @@
 #!/bin/bash
 
 
-ROOT_PATH="/home/ubuntu"
+ROOT_PATH="/home/ubuntu/spring-github-action"
 JAR="$ROOT_PATH/application.jar"
 
 APP_LOG="/var/log/aws/codedeploy-agent/application.log"

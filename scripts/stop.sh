@@ -12,7 +12,7 @@
 
 #!/bin/bash
 
-ROOT_PATH="/home/ubuntu"
+ROOT_PATH="/home/ubuntu/spring-github-action"
 JAR="$ROOT_PATH/application.jar"
 STOP_LOG="/var/log/aws/codedeploy-agent/stop.log"
 SERVICE_PID=$(pgrep -f $JAR) # 실행중인 Spring 서버의 PID
