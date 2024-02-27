@@ -1,13 +1,15 @@
-JAR="$ROOT_PATH/application.jar"
+JAR="/application.jar"
 
-APP_LOG="$ROOT_PATH/application.log"
-ERROR_LOG="$ROOT_PATH/error.log"
-START_LOG="$ROOT_PATH/start.log"
+chmod +x /var/log/aws/codedeploy-agent/
+
+APP_LOG="/var/log/aws/codedeploy-agent/application.log"
+ERROR_LOG="/var/log/aws/codedeploy-agent/error.log"
+START_LOG="/var/log/aws/codedeploy-agent/start.log"
 
 NOW=$(date +%c)
 
 echo "[$NOW] $JAR 복사" >> $START_LOG
-cp $ROOT_PATH/build/libs/mytaek1-0.0.1-SNAPSHOT.jar $JAR
+cp /home/ubuntu/build/libs/mytaek1-0.0.1-SNAPSHOT.jar $JAR
 
 echo "[$NOW] > $JAR 실행" >> $START_LOG
 nohup java -jar $JAR > $APP_LOG 2> $ERROR_LOG &
