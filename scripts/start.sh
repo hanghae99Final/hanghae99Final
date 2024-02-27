@@ -20,12 +20,13 @@
 
 #!/bin/bash
 
+chmod +x /var/log/aws/codedeploy-agent/
 ROOT_PATH="/home/ubuntu/spring-github-action"
-JAR="$ROOT_PATH/application.jar"
+JAR="/var/log/aws/codedeploy-agent/application.jar"
 
-APP_LOG="$ROOT_PATH/application.log"
-ERROR_LOG="$ROOT_PATH/error.log"
-START_LOG="$ROOT_PATH/start.log"
+APP_LOG="/var/log/aws/codedeploy-agent/application.log"
+ERROR_LOG="/var/log/aws/codedeploy-agent/error.log"
+START_LOG="/var/log/aws/codedeploy-agent/start.log"
 
 NOW=$(date +%c)
 
