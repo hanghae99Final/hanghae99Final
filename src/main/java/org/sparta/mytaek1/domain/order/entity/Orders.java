@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.mytaek1.domain.order.dto.OrderRequestDto;
+import org.sparta.mytaek1.domain.payment.dto.CancelPayDto;
 import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.audit.Auditable;
@@ -31,6 +32,8 @@ public class Orders extends Auditable {
 
     private boolean paymentStatus;
 
+    private String merchantUid;
+
     public Orders(OrderRequestDto orderRequestDto, Product product, User user, boolean paymentStatus) {
         this.quantity = orderRequestDto.getQuantity();
         this.totalPrice = orderRequestDto.getTotalPrice();
@@ -41,5 +44,9 @@ public class Orders extends Auditable {
 
     public void update() {
         this.paymentStatus = true;
+    }
+
+    public void updateMechant(String merchantUid) {
+        this.merchantUid = merchantUid;
     }
 }

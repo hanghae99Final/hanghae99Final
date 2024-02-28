@@ -222,9 +222,9 @@
                 buyer_name: buyerName,
                 buyer_tel: buyerTel,
                 buyer_addr: buyerAddr,
-                buyer_postcode: buyerPostcode
+                buyer_postcode: buyerPostcode,
+                buyer_orderId : orderId
             });
-
             const response = await fetch("/subscribe/payments/onetime", {
                 method: "POST",
                 headers: {

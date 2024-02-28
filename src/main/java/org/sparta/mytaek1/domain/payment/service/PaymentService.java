@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.domain.order.service.OrderService;
+import org.sparta.mytaek1.domain.payment.dto.CancelPayDto;
 import org.sparta.mytaek1.domain.payment.dto.PaymentOnetimeDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;

@@ -120,6 +120,7 @@
                <span th:if="${order.paymentStatus == true}" th:text="결제완료"></span>
                <span th:if="${order.paymentStatus == false}" th:text="결제대기"></span>
              </p>
+             <button onclick="cancelPay()">결제 취소</button>
            </div>
          </li>
        </ul>
@@ -174,6 +175,11 @@
     });
 
     function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+  </script>
+  <script>
+    function cancelPay() {
+
+    }
   </script>
 </body>
 </html>
