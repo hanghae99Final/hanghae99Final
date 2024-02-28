@@ -76,7 +76,7 @@ public class PaymentService {
     }
 
     public IamportResponse<Payment> cancelPayment(CancelPayment cancelPayment) throws IamportResponseException, IOException {
-        CancelData data = new CancelData(cancelPayment.getMerchantUid(),false);
+        CancelData data = new CancelData(cancelPayment.getMerchant_uid(),false);
         return iamportClient.cancelPaymentByImpUid(data);
     }
 }
