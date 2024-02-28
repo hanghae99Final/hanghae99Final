@@ -173,7 +173,12 @@
             }, function (rsp) {
                 $.ajax({
                     type: 'POST',
-                    url: '/verify/' + rsp.imp_uid
+                    url: '/verify/' + rsp.imp_uid,
+                    data: JSON.stringify({
+                        merchant_uid: merchant_uid,
+                        orderId : orderId
+                    }),
+                    contentType: 'application/json',
                 }).done(function(data) {
                     if(data.response.status === "paid"){
                         $.ajax({
