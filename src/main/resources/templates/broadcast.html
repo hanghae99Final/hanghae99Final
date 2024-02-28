@@ -155,7 +155,7 @@ const initHls = () => {
     }
 };
 
-// Function to change video quality
+
 const changeVideoQuality = (qualityIndex) => {
     selectedQuality = qualityIndex;
     if (Hls.isSupported()) {
@@ -163,7 +163,7 @@ const changeVideoQuality = (qualityIndex) => {
         hls.startLoad();
     } else {
         video.src = videoSrcArray[selectedQuality];
-        video.play(); // Start playing the new source
+        video.play();
     }
 };
 
