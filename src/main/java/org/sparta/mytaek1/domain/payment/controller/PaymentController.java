@@ -7,6 +7,8 @@ import com.siot.IamportRestClient.response.Payment;
 import jakarta.annotation.PostConstruct;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.service.OrderService;
+import org.sparta.mytaek1.domain.payment.dto.CancelPayment;
+import org.sparta.mytaek1.domain.payment.dto.ImpUidupdateDto;
 import org.sparta.mytaek1.domain.payment.dto.PaymentOnetimeDto;
 import org.sparta.mytaek1.domain.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,8 +41,9 @@ public class PaymentController {
 
     @ResponseBody
     @PostMapping("/verify/{imp_uid}")
-    public IamportResponse<Payment> paymentByImpUid(@PathVariable("imp_uid") String imp_uid)
+    public IamportResponse<Payment> paymentByImpUid(@PathVariable("imp_uid") String imp_uid,@RequestBody ImpUidupdateDto impUidupdateDto)
             throws IamportResponseException, IOException {
+        orderService.updateMerchant(impUidupdateDto.getOrderId(),impUidupdateDto.getMerchant_uid());
         return iamportClient.paymentByImpUid(imp_uid);
     }
 
@@ -55,6 +58,11 @@ public class PaymentController {
             throws IamportResponseException, IOException {
         CompletableFuture<IamportResponse<Payment>> response = paymentService.getPaymentOnetime(paymentOnetimeDto);
         orderService.updateMerchant(paymentOnetimeDto.getBuyer_orderId(),paymentOnetimeDto.getMerchant_uid());
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("/payments/cancel")
+    public ResponseEntity<IamportResponse<Payment>> cancelPayment(@RequestBody CancelPayment cancelPayment) throws IamportResponseException, IOException {
+        IamportResponse<Payment> response = paymentService.cancelPayment(cancelPayment);
         return ResponseEntity.ok(response);
     }
 }

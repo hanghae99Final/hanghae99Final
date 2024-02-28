@@ -3,6 +3,7 @@ package org.sparta.mytaek1.domain.payment.service;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.request.CardInfo;
 import com.siot.IamportRestClient.request.OnetimePaymentData;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.domain.order.service.OrderService;
+import org.sparta.mytaek1.domain.payment.dto.CancelPayment;
 import org.sparta.mytaek1.domain.payment.dto.PaymentOnetimeDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -71,5 +73,10 @@ public class PaymentService {
 
         IamportResponse<Payment> payment = iamportClient.onetimePayment(data);
         return CompletableFuture.completedFuture(payment);
+    }
+
+    public IamportResponse<Payment> cancelPayment(CancelPayment cancelPayment) throws IamportResponseException, IOException {
+        CancelData data = new CancelData(cancelPayment.getMerchantUid(),false);
+        return iamportClient.cancelPaymentByImpUid(data);
     }
 }

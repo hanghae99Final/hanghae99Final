@@ -120,7 +120,8 @@
                <span th:if="${order.paymentStatus == true}" th:text="결제완료"></span>
                <span th:if="${order.paymentStatus == false}" th:text="결제대기"></span>
              </p>
-             <button onclick="cancelPay()">결제 취소</button>
+             <span th:text="${order.getMerchantUid()}" id="merchant-uid"></span>
+             <button onclick="cancelPay(this)" th:if="${order.paymentStatus == true}" th:data-merchantuid="${order.getMerchantUid()}">결제 취소</button>
            </div>
          </li>
        </ul>
@@ -177,9 +178,32 @@
     function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
   </script>
   <script>
-    function cancelPay() {
-
+    async function cancelPay(button) {
+      const merchant_uid = button.getAttribute("data-merchantuid");
+      try {
+        const response = await fetch("/payments/cancel", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            merchant_uid: merchant_uid,
+          })
+        });
+        const responseData = await response.json();
+        console.log("시발",response)
+        if (response.ok) {
+          alert("환불 요청이 완료되었습니다.");
+          // window.location.href="/my-page";
+        } else {
+          throw new Error(responseData.message || "환불 실패");
+        }
+      } catch (error) {
+        console.error("환불 실패:", error);
+        alert("환불 실패: " + error.message);
+      }
     }
   </script>
+
 </body>
 </html>
