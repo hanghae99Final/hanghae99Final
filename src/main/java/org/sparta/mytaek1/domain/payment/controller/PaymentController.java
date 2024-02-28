@@ -7,7 +7,6 @@ import com.siot.IamportRestClient.response.Payment;
 import jakarta.annotation.PostConstruct;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.service.OrderService;
-import org.sparta.mytaek1.domain.payment.dto.CancelPayDto;
 import org.sparta.mytaek1.domain.payment.dto.PaymentOnetimeDto;
 import org.sparta.mytaek1.domain.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Value;
