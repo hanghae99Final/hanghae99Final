@@ -6,12 +6,15 @@ import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
 import org.sparta.mytaek1.domain.stock.entity.Stock;
 import org.sparta.mytaek1.domain.stock.service.StockService;
+import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -41,10 +44,15 @@ public class BroadcastPageController {
     }
 
     @GetMapping("/broadcasts/{broadcastId}")
-    public String showBroadcast(@PathVariable Long broadcastId, Model model) {
+    public String showBroadcast(@PathVariable Long broadcastId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
         Long productId = broadcast.getProduct().getProductId();
         Stock stock = stockService.findStockByProduct(productId);
+        Long authenticatedUserId = (userDetails != null) ? userDetails.getId() : null;
+        Long broadcasterUserId = broadcast.getUser().getUserId();
+
+        model.addAttribute("authenticatedUserId", authenticatedUserId);
+        model.addAttribute("broadcasterUserId", broadcasterUserId);
         model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
         model.addAttribute("product", broadcast.getProduct());
         model.addAttribute("stock", stock);

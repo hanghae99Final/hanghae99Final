@@ -108,6 +108,9 @@
             <p th:text="'상품 수량: ' + ${stock.getProductStock()}"></p>
         </div>
         <button id="button" class="btn btn-primary btn-block">상품 보러가기</button>
+        <div id="end-broadcast-button-container" th:if="${authenticatedUserId}">
+            <button id="end-broadcast-button" class="btn btn-danger btn-block">방송 종료</button>
+        </div>
     </div>
 </div>
 <script>
@@ -189,6 +192,20 @@
     });
 
     function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+</script>
+<script type="text/javascript">
+    const broadcasterUserId = '[[${broadcasterUserId}]]';
+    const authenticatedUserId = '[[${authenticatedUserId}]]';
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const endBroadcastButtonContainer = document.getElementById('end-broadcast-button-container');
+
+        if (broadcasterUserId === authenticatedUserId) {
+            endBroadcastButtonContainer.style.display = 'block';
+        } else {
+            endBroadcastButtonContainer.style.display = 'none';
+        }
+    });
 </script>
 </body>
 </html>
