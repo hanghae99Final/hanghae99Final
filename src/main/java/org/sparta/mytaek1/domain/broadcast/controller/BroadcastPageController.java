@@ -51,6 +51,7 @@ public class BroadcastPageController {
         Long authenticatedUserId = (userDetails != null) ? userDetails.getId() : null;
         Long broadcasterUserId = broadcast.getUser().getUserId();
 
+        model.addAttribute("broadcastId", broadcast.getBroadcastId());
         model.addAttribute("authenticatedUserId", authenticatedUserId);
         model.addAttribute("broadcasterUserId", broadcasterUserId);
         model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
