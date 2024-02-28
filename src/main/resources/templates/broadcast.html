@@ -132,14 +132,14 @@ const initVideo = () => {
 };
 
 const playVideoFromEnd = () => {
-    video.currentTime = video.duration; // Set the current time to the end of the video
-    video.play(); // Start playing from the end
+    video.currentTime = video.duration;
+    video.play();
 };
 
 window.addEventListener("DOMContentLoaded", () => {
     initVideo();
     initHls();
-    video.addEventListener('loadedmetadata', playVideoFromEnd); // Start playing from the end
+    video.addEventListener('loadedmetadata', playVideoFromEnd);
 });
 
 const initHls = () => {
