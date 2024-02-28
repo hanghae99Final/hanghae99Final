@@ -131,9 +131,15 @@ const initVideo = () => {
     video = document.querySelector('#video');
 };
 
+const playVideoFromEnd = () => {
+    video.currentTime = video.duration; // Set the current time to the end of the video
+    video.play(); // Start playing from the end
+};
+
 window.addEventListener("DOMContentLoaded", () => {
     initVideo();
     initHls();
+    video.addEventListener('loadedmetadata', playVideoFromEnd); // Start playing from the end
 });
 
 const initHls = () => {
