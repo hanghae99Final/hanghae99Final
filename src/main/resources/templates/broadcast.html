@@ -99,6 +99,11 @@
 <div id="main-content">
     <div id="video-container">
         <video id="video" controls playsinline autoplay></video>
+        <div id="quality-buttons">
+            <button onclick="changeVideoQuality(0)">720p</button>
+            <button onclick="changeVideoQuality(1)">480p</button>
+            <button onclick="changeVideoQuality(2)">360p</button>
+        </div>
     </div>
     <div id="product-button-container">
         <div id="product-info" class="p-3">
@@ -111,35 +116,53 @@
     </div>
 </div>
 <script>
-    let video = null;
-    let videoSrc = 'https://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '.m3u8';
+let video = null;
+let videoSrcArray = [
+    'https://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '_720p' +  '.m3u8',
+    'https://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '_480p' + '.m3u8',
+    'https://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '_360p' + '.m3u8'
+];
+let selectedQuality = 0; // Default to the highest quality (720p)
 
-    const initVideo = () => {
-        video = document.querySelector('#video');
-    };
+const initVideo = () => {
+    video = document.querySelector('#video');
+};
 
-    window.addEventListener("DOMContentLoaded", () => {
-        initVideo();
-        initHls();
-    });
+window.addEventListener("DOMContentLoaded", () => {
+    initVideo();
+    initHls();
+});
 
-    const initHls = () => {
-        if (Hls.isSupported()) {
-            hls = new Hls({
-                autoStartLoad: false,
-            });
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-            hls.startLoad();
-        } else {
-            video.src = videoSrc;
-        }
-    };
+const initHls = () => {
+    if (Hls.isSupported()) {
+        hls = new Hls({
+            autoStartLoad: false,
+        });
+        hls.loadSource(videoSrcArray[selectedQuality]);
+        hls.attachMedia(video);
+        hls.startLoad();
+    } else {
+        video.src = videoSrcArray[selectedQuality];
+    }
+};
 
-    document.getElementById('button').addEventListener('click', function () {
-        let productId = '[[${product.getProductId()}]]';
-        location.href = '/products/' + productId;
-    });
+// Function to change video quality
+const changeVideoQuality = (qualityIndex) => {
+    selectedQuality = qualityIndex;
+    if (Hls.isSupported()) {
+        hls.loadSource(videoSrcArray[selectedQuality]);
+        hls.startLoad();
+    } else {
+        video.src = videoSrcArray[selectedQuality];
+        video.play(); // Start playing the new source
+    }
+};
+
+document.getElementById('button').addEventListener('click', function () {
+    let productId = '[[${product.getProductId()}]]';
+    location.href = '/products/' + productId;
+});
+
 </script>
 <script type="text/javascript">
     function checkCookie(name) {
