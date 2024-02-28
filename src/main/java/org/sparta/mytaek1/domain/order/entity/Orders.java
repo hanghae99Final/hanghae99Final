@@ -31,6 +31,8 @@ public class Orders extends Auditable {
 
     private boolean paymentStatus;
 
+    private String merchantUid;
+
     public Orders(OrderRequestDto orderRequestDto, Product product, User user, boolean paymentStatus) {
         this.quantity = orderRequestDto.getQuantity();
         this.totalPrice = orderRequestDto.getTotalPrice();
@@ -41,5 +43,9 @@ public class Orders extends Auditable {
 
     public void update() {
         this.paymentStatus = true;
+    }
+
+    public void updateMechant(String merchantUid) {
+        this.merchantUid = merchantUid;
     }
 }

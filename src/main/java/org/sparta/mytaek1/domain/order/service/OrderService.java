@@ -7,7 +7,6 @@ import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.domain.order.repository.OrderRepository;
 import org.sparta.mytaek1.domain.product.entity.Product;
-import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.stock.entity.Stock;
 import org.sparta.mytaek1.domain.stock.service.StockService;
 import org.sparta.mytaek1.domain.user.entity.User;
@@ -75,6 +74,12 @@ public class OrderService {
     private void deleteOrder(Long productId, Orders order, Stock stock) {
         stock.cancelStock(order.getQuantity());
         orderRepository.delete(order);
+    }
+
+    @Transactional
+    public void updateMerchant(Long orderId,String merchantUid) {
+        Orders orders = findOrderById(orderId);
+        orders.updateMechant(merchantUid);
     }
 }
 

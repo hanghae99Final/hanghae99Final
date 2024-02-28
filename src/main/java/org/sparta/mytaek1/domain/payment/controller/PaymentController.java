@@ -6,6 +6,7 @@ import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import jakarta.annotation.PostConstruct;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
+import org.sparta.mytaek1.domain.order.service.OrderService;
 import org.sparta.mytaek1.domain.payment.dto.PaymentOnetimeDto;
 import org.sparta.mytaek1.domain.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 public class PaymentController {
 
+    private final OrderService orderService;
     private final PaymentService paymentService;
     @Value("${iamport.api.key}")
     private String apiKey;
@@ -26,10 +28,10 @@ public class PaymentController {
     private String apiSecretKey;
     private IamportClient iamportClient;
 
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(OrderService orderService, PaymentService paymentService) {
+        this.orderService = orderService;
         this.paymentService = paymentService;
     }
-
     @PostConstruct
     public void init() {
         this.iamportClient = new IamportClient(apiKey, apiSecretKey);
@@ -52,6 +54,7 @@ public class PaymentController {
     public ResponseEntity<CompletableFuture<IamportResponse<Payment>>> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto)
             throws IamportResponseException, IOException {
         CompletableFuture<IamportResponse<Payment>> response = paymentService.getPaymentOnetime(paymentOnetimeDto);
+        orderService.updateMerchant(paymentOnetimeDto.getBuyer_orderId(),paymentOnetimeDto.getMerchant_uid());
         return ResponseEntity.ok(response);
     }
 }
