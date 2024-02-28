@@ -6,5 +6,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CancelPayment {
-    private String merchantUid;
+    private String merchant_uid;
 }
