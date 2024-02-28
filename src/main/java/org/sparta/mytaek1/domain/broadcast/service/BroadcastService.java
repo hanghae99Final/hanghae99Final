@@ -42,11 +42,10 @@ public class BroadcastService {
         return new BroadcastResponseDto(broadcast);
     }
 
-    public BroadcastResponseDto endBroadcast(long broadcastId) {
+    public void endBroadcast(long broadcastId) {
         Broadcast broadCast = getBroadcastByBroadcastId(broadcastId);
 
         broadCast.endBroadcast();
-        return new BroadcastResponseDto(broadCast);
     }
 
     public List<Broadcast> findBroadcastListByUserId(Long userId) {

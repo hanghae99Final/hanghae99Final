@@ -113,6 +113,9 @@
             <p th:text="'상품 수량: ' + ${stock.getProductStock()}"></p>
         </div>
         <button id="button" class="btn btn-primary btn-block">상품 보러가기</button>
+        <div id="end-broadcast-button-container" th:if="${authenticatedUserId}">
+            <button id="end-broadcast-button" class="btn btn-danger btn-block">방송 종료</button>
+        </div>
     </div>
 </div>
 <script>
@@ -212,6 +215,49 @@ document.getElementById('button').addEventListener('click', function () {
     });
 
     function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+</script>
+<script type="text/javascript">
+    const broadcasterUserId = '[[${broadcasterUserId}]]';
+    const authenticatedUserId = '[[${authenticatedUserId}]]';
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const endBroadcastButtonContainer = document.getElementById('end-broadcast-button-container');
+
+        if (broadcasterUserId === authenticatedUserId) {
+            endBroadcastButtonContainer.style.display = 'block';
+            endBroadcastButtonContainer.addEventListener('click', function () {
+                endBroadcast();
+            });
+        } else {
+            endBroadcastButtonContainer.style.display = 'none';
+        }
+    });
+
+    function endBroadcast() {
+        const broadcastId = '[[${broadcastId}]]';
+
+
+        fetch(`/api/broadcasts/${broadcastId}/end`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log(data);
+                alert("방송이 종료되었습니다.");
+                window.location.href = '/';
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
 </script>
 </body>
 </html>
