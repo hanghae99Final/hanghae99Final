@@ -21,4 +21,5 @@ public class PaymentOnetimeDto {
     private String buyer_tel;
     private String buyer_addr;
     private String buyer_postcode;
+    private Long buyer_orderId;
 }
