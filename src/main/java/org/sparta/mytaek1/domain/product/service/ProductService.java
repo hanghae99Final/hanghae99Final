@@ -10,6 +10,7 @@ import org.sparta.mytaek1.domain.stock.service.StockService;
 import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final StockService stockService;
+    private final ImageService imageService;
 
     @Transactional(readOnly = true)
     public ProductFindResponseDto getProduct(Long productId) {
@@ -27,8 +29,9 @@ public class ProductService {
     }
 
     @Transactional
-    public Product createProduct(BroadcastRequestDto requestDto) {
-        Product product = new Product(requestDto.getProductName(), requestDto.getProductDescription(), requestDto.getProductPrice());
+    public Product createProduct(BroadcastRequestDto requestDto, MultipartFile imageFile) {
+        String imageUrl = imageService.uploadImage(imageFile);
+        Product product = new Product(requestDto.getProductName(), requestDto.getProductDescription(), requestDto.getProductPrice(), imageUrl);
         productRepository.save(product);
         stockService.createStock(product, requestDto.getProductStock());
 

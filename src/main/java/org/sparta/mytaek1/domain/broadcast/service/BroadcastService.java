@@ -9,11 +9,11 @@ import org.sparta.mytaek1.domain.broadcast.repository.BroadcastRepository;
 import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.user.entity.User;
-import org.sparta.mytaek1.domain.user.service.UserService;
 import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -35,13 +35,13 @@ public class BroadcastService {
 
 
 
-    public void createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto) {
+    public void createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto, MultipartFile imageFile) {
         if(checkUserOnAir(auth.getId())){
             throw new IllegalArgumentException(ErrorMessage.EXIST_ONAIR_BROADCAST_ERROR_MESSAGE.getErrorMessage());
         }
 
         User user = auth.getUser();
-        Product product = productService.createProduct(requestDto);
+        Product product = productService.createProduct(requestDto, imageFile);
 
         Broadcast broadcast = new Broadcast(requestDto.getBroadcastTitle(), requestDto.getBroadcastDescription(), user, product);
         broadcastRepository.save(broadcast);
