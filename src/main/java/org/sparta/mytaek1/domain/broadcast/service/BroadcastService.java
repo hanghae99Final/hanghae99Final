@@ -64,6 +64,6 @@ public class BroadcastService {
     }
 
     public Boolean checkUserOnAir(Long userId) {
-        return broadcastRepository.existsByUserUserIdAndOnAir(userId, true);
+        return broadcastRepository.existsByUserIdAndOnAir(userId, true);
     }
 }
