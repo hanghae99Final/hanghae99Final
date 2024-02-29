@@ -21,4 +21,6 @@ public interface BroadcastRepository extends JpaRepository<Broadcast, Long> {
 
     @Query("SELECT b FROM Broadcast b LEFT JOIN FETCH b.product p WHERE b.user.userId = :userId")
     List<Broadcast> findAllByUserUserId(Long userId);
+
+    Boolean existsByUserUserIdAndOnAir(Long userId,Boolean onAir);
 }
