@@ -1,9 +1,9 @@
 package org.sparta.mytaek1.global.config;
 
 
-import org.sparta.mytaek1.domain.user.jwt.JwtAuthenticationFilter;
-import org.sparta.mytaek1.domain.user.jwt.JwtAuthorizationFilter;
-import org.sparta.mytaek1.domain.user.jwt.JwtUtil;
+import org.sparta.mytaek1.global.jwt.JwtAuthenticationFilter;
+import org.sparta.mytaek1.global.jwt.JwtAuthorizationFilter;
+import org.sparta.mytaek1.global.jwt.JwtUtil;
 import org.sparta.mytaek1.global.security.CustomAccessDeniedHandler;
 import org.sparta.mytaek1.global.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

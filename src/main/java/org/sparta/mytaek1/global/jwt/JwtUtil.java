@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.domain.user.jwt;
+package org.sparta.mytaek1.global.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -31,7 +31,7 @@ public class JwtUtil {
     private static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String JWT_LOG_HEAD = "JWT 관련 로그";
-    private final long TOKEN_TIME = 1000L;
+    private final long TOKEN_TIME = 3000L;
 
     @Value("${jwt.secret.key}")
     private String secretKey;

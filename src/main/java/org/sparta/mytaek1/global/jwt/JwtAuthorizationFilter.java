@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.domain.user.jwt;
+package org.sparta.mytaek1.global.jwt;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -35,6 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String accessToken = jwtUtil.getTokenFromRequest(req);
 
         if (StringUtils.hasText(accessToken)) {
+            log.info("너왔어?");
             accessToken = jwtUtil.substringToken(accessToken);
 
             if (!jwtUtil.validateToken(accessToken)) {
@@ -46,6 +47,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             Claims info = jwtUtil.getUserInfoFromToken(accessToken);
 
             try {
+                log.info("확인했어?");
                 setAuthentication(info.getSubject());
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -53,6 +55,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 return;
             }
         } else if (jwtUtil.containsRefreshToken(req)) {
+            log.info("리프레시 토큰 했어?");
             String refreshToken = jwtUtil.getRefreshTokenFromRequest(req);
 
             if (!jwtUtil.validateToken(refreshToken)) {
