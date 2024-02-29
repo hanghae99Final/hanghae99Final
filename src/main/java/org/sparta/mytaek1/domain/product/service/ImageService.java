@@ -26,6 +26,8 @@ public class ImageService {
 
     @Value("${cloud.aws.s3.imageBucket}")
     private String bucket;
+    @Value("${cloud.aws.bucket.address}")
+    private String bucketAddress;
     private final AmazonS3 amazonS3;
 
     public String uploadImage(MultipartFile file) {
@@ -42,7 +44,8 @@ public class ImageService {
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        fileUrl = new StringBuilder("https://mytaek1.store.com/").append(fileName).toString();
+//        fileUrl = new StringBuilder("https://seungbaeimage.s3.ap-northeast-2.amazonaws.com/").append(fileName).toString();
+        fileUrl = new StringBuilder(bucketAddress).append(fileName).toString();
 
         return fileUrl;
     }
