@@ -13,32 +13,41 @@
             });
         });
 
-        function submitForm() {
-            const formData = {
-                broadcastTitle: $("#broadcastTitle").val(),
-                broadcastDescription: $("#broadcastDescription").val(),
-                productName: $("#productName").val(),
-                productDescription: $("#productDescription").val(),
-                productPrice: $("#productPrice").val(),
-                productStock: $("#productStock").val()
-            };
+function submitForm() {
+    const formData = {
+        broadcastTitle: $("#broadcastTitle").val(),
+        broadcastDescription: $("#broadcastDescription").val(),
+        productName: $("#productName").val(),
+        productDescription: $("#productDescription").val(),
+        productPrice: $("#productPrice").val(),
+        productStock: $("#productStock").val()
+    };
 
-            $.ajax({
-                type: "POST",
-                url: "/api/broadcasts",
-                contentType: "application/json",
-                data: JSON.stringify(formData),
-                success: function(response) {
-                    console.log(response);
-                    window.location.href = "/";
-                },
-                error: function(error) {
-                    console.error(error);
-                    alert('이미 방송중입니다. 이전 방송을 종료해주세요.');
-                    window.location.href = "/";
-                }
-            });
+    const jsonData = JSON.stringify(formData);
+
+    const form = new FormData();
+    form.append('requestDto', new Blob([jsonData], { type: 'application/json' }));
+
+    const imageFile = $("#imageFile")[0].files[0];
+    form.append('imageFile', imageFile);
+
+    $.ajax({
+        type: "POST",
+        url: "/api/broadcasts",
+        data: form,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log(response);
+            window.location.href = "/";
+        },
+        error: function(error) {
+            console.error(error);
+            alert('이미 방송중입니다. 이전 방송을 종료해주세요.');
+            window.location.href = "/";
         }
+    });
+}
     </script>
     <style>
         body {
@@ -145,6 +154,10 @@
 
         <label for="productStock">Product Stock:</label>
         <input type="text" id="productStock" name="productStock" required><br>
+
+        <label for="imageFile">Image File:</label>
+        <input type="file" id="imageFile" name="imageFile" accept="image/*" required><br>
+
 
         <div class="obs-info">
             <p>OBS를 통해 방송을 시작해주세요.</p>
