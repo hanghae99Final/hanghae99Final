@@ -21,9 +21,14 @@ public class Product extends Auditable {
     private String productDescription;
     private int productPrice;
 
+    private String imageUrl;
     public Product(String productName, String productDescription, int productPrice) {
         this.productName = productName;
         this.productDescription = productDescription;
         this.productPrice = productPrice;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
