@@ -31,7 +31,7 @@ public class JwtUtil {
     private static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String JWT_LOG_HEAD = "JWT 관련 로그";
-    private final long TOKEN_TIME = 60 * 60 * 1000L;
+    private final long TOKEN_TIME = 1000L;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -54,6 +54,79 @@ public class JwtUtil {
                         .claim(AUTHORIZATION_KEY, role)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
+                        .signWith(key, signatureAlgorithm)
+                        .compact();
+    }
+
+    public String createRefreshToken(String email, UserRoleEnum role) {
+        Date date = new Date();
+        long refreshTokenTime = 7 * 24 * 60 * 60 * 1000L;
+
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setSubject(email)
+                        .claim(AUTHORIZATION_KEY, role)
+                        .setExpiration(new Date(date.getTime() + refreshTokenTime))
+                        .setIssuedAt(date)
+                        .signWith(key, signatureAlgorithm)
+                        .compact();
+    }
+
+    public void addRefreshTokenToCookie(String refreshToken, HttpServletResponse res) {
+        try {
+            refreshToken = URLEncoder.encode(refreshToken, "utf-8").replaceAll("\\+", "%20");
+
+            Cookie cookie = new Cookie("refresh_token", refreshToken);
+            cookie.setPath("/");
+
+            res.addCookie(cookie);
+        } catch (UnsupportedEncodingException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    public boolean containsRefreshToken(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("refresh_token")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public String getRefreshTokenFromRequest(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("refresh_token")) {
+                    try {
+                        return URLDecoder.decode(cookie.getValue(), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        return null;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public String generateAccessTokenFromRefreshToken(String refreshToken) {
+        Claims refreshTokenClaims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken).getBody();
+        String email = refreshTokenClaims.getSubject();
+        UserRoleEnum role = UserRoleEnum.valueOf((String) refreshTokenClaims.get(AUTHORIZATION_KEY));
+
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + TOKEN_TIME);
+
+        return BEARER_PREFIX +
+                Jwts.builder()
+                        .setSubject(email)
+                        .claim(AUTHORIZATION_KEY, role)
+                        .setExpiration(expiration)
+                        .setIssuedAt(now)
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }
@@ -97,11 +170,6 @@ public class JwtUtil {
 
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-    }
-
-    public String getUserEmail(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getName();
     }
 
     public String getTokenFromRequest(HttpServletRequest req) {

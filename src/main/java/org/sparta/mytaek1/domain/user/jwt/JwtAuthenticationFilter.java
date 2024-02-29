@@ -58,8 +58,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String email = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         UserRoleEnum auth = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
-        String token = jwtUtil.createToken(email, auth);
-        jwtUtil.addJwtToCookie(token, response);
+        String accessToken = jwtUtil.createToken(email, auth);
+        String refreshToken = jwtUtil.createRefreshToken(email, auth);
+
+        jwtUtil.addJwtToCookie(accessToken, response);
+        jwtUtil.addRefreshTokenToCookie(refreshToken, response);
+
         response.getWriter().write(SuccessMessage.LOGIN_SUCCESS_MESSAGE.getSuccessMessage());
     }
 

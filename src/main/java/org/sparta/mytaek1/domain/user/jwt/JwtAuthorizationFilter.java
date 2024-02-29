@@ -29,33 +29,55 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
-        String tokenValue = jwtUtil.getTokenFromRequest(req);
+        String accessToken = jwtUtil.getTokenFromRequest(req);
 
-        if (StringUtils.hasText(tokenValue)) {
-            tokenValue = jwtUtil.substringToken(tokenValue);
-            log.info(tokenValue);
+        if (StringUtils.hasText(accessToken)) {
+            accessToken = jwtUtil.substringToken(accessToken);
 
-            if (!jwtUtil.validateToken(tokenValue)) {
+            if (!jwtUtil.validateToken(accessToken)) {
                 log.error(TOKEN_ERROR_LOG);
+                handleInvalidToken(res);
                 return;
             }
 
-            Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
+            Claims info = jwtUtil.getUserInfoFromToken(accessToken);
 
             try {
                 setAuthentication(info.getSubject());
             } catch (Exception e) {
                 log.error(e.getMessage());
+                handleAuthenticationException(res);
                 return;
             }
+        } else if (jwtUtil.containsRefreshToken(req)) {
+            String refreshToken = jwtUtil.getRefreshTokenFromRequest(req);
+
+            if (!jwtUtil.validateToken(refreshToken)) {
+                log.error(TOKEN_ERROR_LOG);
+                handleInvalidToken(res);
+                return;
+            }
+
+            String newAccessToken = jwtUtil.generateAccessTokenFromRefreshToken(refreshToken);
+            jwtUtil.addJwtToCookie(newAccessToken, res);
         }
+
         res.setContentType("text/plain;charset=utf-8");
         filterChain.doFilter(req, res);
     }
 
-    public void setAuthentication(String username) {
+    private void handleInvalidToken(HttpServletResponse res) throws IOException {
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+    }
+
+    private void handleAuthenticationException(HttpServletResponse res) throws IOException {
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed");
+    }
+
+    private void setAuthentication(String username) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(username);
         context.setAuthentication(authentication);
@@ -64,7 +86,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private Authentication createAuthentication(String email) {
-        UserDetails staffDetails = userDetailsService.loadUserByUsername(email);
-        return new UsernamePasswordAuthenticationToken(staffDetails, null, staffDetails.getAuthorities());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 }
