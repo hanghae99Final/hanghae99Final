@@ -63,6 +63,7 @@ public class PaymentController {
     @PostMapping("/payments/cancel")
     public ResponseEntity<IamportResponse<Payment>> cancelPayment(@RequestBody CancelPayment cancelPayment) throws IamportResponseException, IOException {
         IamportResponse<Payment> response = paymentService.cancelPayment(cancelPayment);
+        orderService.cancelPaymentStatus(cancelPayment.getOrder_id());
         return ResponseEntity.ok(response);
     }
 }

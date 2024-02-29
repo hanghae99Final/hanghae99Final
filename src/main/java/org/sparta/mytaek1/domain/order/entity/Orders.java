@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sparta.mytaek1.domain.order.dto.OrderRequestDto;
+import org.sparta.mytaek1.domain.payment.dto.UpdatePaymentDto;
 import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.audit.Auditable;
@@ -29,23 +30,27 @@ public class Orders extends Auditable {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private boolean paymentStatus;
+    @Enumerated(value = EnumType.STRING)
+    private OrderState paymentStatus = OrderState.READY;
 
     private String merchantUid;
 
-    public Orders(OrderRequestDto orderRequestDto, Product product, User user, boolean paymentStatus) {
+    public Orders(OrderRequestDto orderRequestDto, Product product, User user) {
         this.quantity = orderRequestDto.getQuantity();
         this.totalPrice = orderRequestDto.getTotalPrice();
         this.user = user;
         this.product = product;
-        this.paymentStatus = paymentStatus;
     }
 
     public void update() {
-        this.paymentStatus = true;
+        this.paymentStatus = OrderState.CONFIRM;
     }
 
     public void updateMechant(String merchantUid) {
         this.merchantUid = merchantUid;
+    }
+
+    public void Cancel() {
+        this.paymentStatus = OrderState.CANCEL;
     }
 }

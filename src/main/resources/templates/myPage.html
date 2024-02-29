@@ -116,12 +116,17 @@
              <p>구매 상품: <span th:text="${order.getProduct().getProductName()}"></span></p>
              <p>구매 수량: <span th:text="${order.getQuantity()}"></span></p>
              <p>총 가격: <span th:text="${order.getTotalPrice()}"></span></p>
+<!--             <p>결제 상태:-->
+<!--               <span th:if="${order.paymentStatus == 'CONFIRM'}" th:text="결제완료"></span>-->
+<!--               <span th:if="${order.paymentStatus == 'READY'}" th:text="결제대기"></span>-->
+<!--             </p>-->
              <p>결제 상태:
-               <span th:if="${order.paymentStatus == true}" th:text="결제완료"></span>
-               <span th:if="${order.paymentStatus == false}" th:text="결제대기"></span>
+               <span th:if="${#strings.equals(order.paymentStatus,'CONFIRM')}" th:text="결제완료"></span>
+               <span th:if="${#strings.equals(order.paymentStatus,'READY')}" th:text="결제대기"></span>
+               <span th:if="${#strings.equals(order.paymentStatus,'CANCEL')}" th:text="결제환불"></span>
              </p>
              <span th:text="${order.getMerchantUid()}" id="merchant-uid"></span>
-             <button onclick="cancelPay(this)" th:if="${order.paymentStatus == true}" th:data-merchantuid="${order.getMerchantUid()}">결제 취소</button>
+             <button onclick="cancelPay(this)" th:if="${#strings.equals(order.paymentStatus,'CONFIRM')}" th:data-merchantuid="${order.getMerchantUid()}" th:data-orderid="${order.getOrderId()}">결제 취소</button>
            </div>
          </li>
        </ul>
@@ -180,6 +185,7 @@
   <script>
     async function cancelPay(button) {
       const merchant_uid = button.getAttribute("data-merchantuid");
+      const order_id = Number(button.getAttribute("data-orderid"));
       try {
         const response = await fetch("/payments/cancel", {
           method: "POST",
@@ -188,12 +194,13 @@
           },
           body: JSON.stringify({
             merchant_uid: merchant_uid,
+            order_id :order_id
           })
         });
         const responseData = await response.json();
         if (response.ok) {
           alert("환불 요청이 완료되었습니다.");
-          // window.location.href="/my-page";
+          window.location.href="/my-page";
         } else {
           throw new Error(responseData.message || "환불 실패");
         }
