@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.domain.user.jwt;
+package org.sparta.mytaek1.global.jwt;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -37,7 +37,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             tokenValue = jwtUtil.substringToken(tokenValue);
             log.info(tokenValue);
 
-            if (!jwtUtil.validateToken(tokenValue)) {
+            if (!jwtUtil.validateToken(tokenValue, res)) {
                 log.error(TOKEN_ERROR_LOG);
                 return;
             }

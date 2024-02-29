@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.domain.user.jwt;
+package org.sparta.mytaek1.global.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -11,11 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.sparta.mytaek1.global.security.UserRoleEnum;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -31,7 +30,7 @@ public class JwtUtil {
     private static final String AUTHORIZATION_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String JWT_LOG_HEAD = "JWT 관련 로그";
-    private final long TOKEN_TIME = 60 * 60 * 1000L;
+    private final long TOKEN_TIME = 60 * 60 * 1000L * 3;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -79,7 +78,23 @@ public class JwtUtil {
         throw new NullPointerException(ErrorMessage.NOT_EXIST_TOKEN_ERROR_MESSAGE.getErrorMessage());
     }
 
-    public boolean validateToken(String token) {
+//    public boolean validateToken(String token) {
+//        try {
+//            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+//            return true;
+//        } catch (SecurityException | MalformedJwtException | SignatureException e) {
+//            logger.error(ErrorMessage.INVALID_JWT_ERROR_MESSAGE.getErrorMessage());
+//        } catch (ExpiredJwtException e) {
+//            logger.error(ErrorMessage.EXPIRED_JWT_ERROR_MESSAGE.getErrorMessage());
+//        } catch (UnsupportedJwtException e) {
+//            logger.error(ErrorMessage.UNSUPPORTED_JWT_ERROR_MESSAGE.getErrorMessage());
+//        } catch (IllegalArgumentException e) {
+//            logger.error(ErrorMessage.EMPTY_JWT_ERROR_MESSAGE.getErrorMessage());
+//        }
+//        return false;
+//    }
+
+    public boolean validateToken(String token, HttpServletResponse res) throws IOException {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -87,6 +102,8 @@ public class JwtUtil {
             logger.error(ErrorMessage.INVALID_JWT_ERROR_MESSAGE.getErrorMessage());
         } catch (ExpiredJwtException e) {
             logger.error(ErrorMessage.EXPIRED_JWT_ERROR_MESSAGE.getErrorMessage());
+            clearTokenCookie(res);
+            redirectToLoginPage(res);
         } catch (UnsupportedJwtException e) {
             logger.error(ErrorMessage.UNSUPPORTED_JWT_ERROR_MESSAGE.getErrorMessage());
         } catch (IllegalArgumentException e) {
@@ -95,13 +112,9 @@ public class JwtUtil {
         return false;
     }
 
+
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-    }
-
-    public String getUserEmail(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getName();
     }
 
     public String getTokenFromRequest(HttpServletRequest req) {
@@ -118,5 +131,16 @@ public class JwtUtil {
             }
         }
         return null;
+    }
+
+    private void clearTokenCookie(HttpServletResponse res) {
+        Cookie cookie = new Cookie(AUTHORIZATION_HEADER, null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        res.addCookie(cookie);
+    }
+
+    private void redirectToLoginPage(HttpServletResponse res) throws IOException {
+        res.sendRedirect("/api/user/login-page");
     }
 }

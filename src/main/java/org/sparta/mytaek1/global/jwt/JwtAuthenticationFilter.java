@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.domain.user.jwt;
+package org.sparta.mytaek1.global.jwt;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
