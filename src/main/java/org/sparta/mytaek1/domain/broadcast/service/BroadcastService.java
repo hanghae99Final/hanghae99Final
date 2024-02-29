@@ -32,14 +32,19 @@ public class BroadcastService {
         return BroadcastResponseDto.fromBroadcastList(broadcastList);
     }
 
-    public BroadcastResponseDto createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto) {
-        User user = auth.getUser();
 
+
+
+    public void createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto) {
+        if(checkUserOnAir(auth.getId())){
+            throw new IllegalArgumentException(ErrorMessage.EXIST_ONAIR_BROADCAST_ERROR_MESSAGE.getErrorMessage());
+        }
+
+        User user = auth.getUser();
         Product product = productService.createProduct(requestDto);
 
         Broadcast broadcast = new Broadcast(requestDto.getBroadcastTitle(), requestDto.getBroadcastDescription(), user, product);
         broadcastRepository.save(broadcast);
-        return new BroadcastResponseDto(broadcast);
     }
 
     public void endBroadcast(long broadcastId) {
@@ -56,5 +61,9 @@ public class BroadcastService {
     public Broadcast getBroadcastByBroadcastId(Long broadcastId) {
         return broadcastRepository.findByBroadcastId(broadcastId)
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_BROADCAST_ERROR_MESSAGE.getErrorMessage()));
+    }
+
+    public Boolean checkUserOnAir(Long userId) {
+        return broadcastRepository.existsByUserIdAndOnAir(userId, true);
     }
 }
