@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class OrderController {
 
     private final OrderService orderService;
-    private final StockService stockService;
 
     @PostMapping("/products/{productId}/orders")
     public ResponseEntity<OrderResponseDto> createOrder(@PathVariable Long productId,
