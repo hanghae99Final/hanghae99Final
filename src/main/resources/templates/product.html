@@ -96,6 +96,9 @@
                     <td id="productName" th:text="${productFind.getProductName()}"></td>
                     <td id="productPrice" th:text="${productFind.getProductPrice()}"></td>
                     <td id="productStock" th:text="${productFind.getProductStock()}"></td>
+                    <div>
+                        <img th:src="${productFind.imageUrl}" style="max-width: 1000px; max-height: 1000px;">
+                    </div>
                 </tr>
                 </tbody>
             </table>
