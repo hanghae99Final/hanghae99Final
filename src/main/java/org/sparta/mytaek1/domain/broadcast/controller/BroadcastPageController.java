@@ -6,13 +6,20 @@ import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
 import org.sparta.mytaek1.domain.stock.entity.Stock;
 import org.sparta.mytaek1.domain.stock.service.StockService;
+import org.sparta.mytaek1.global.page.dto.PageDto;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -37,12 +44,11 @@ public class BroadcastPageController {
     }
 
     @GetMapping
-    public String getBroadcastsOnAir(Model model) {
-        List<BroadcastResponseDto> broadcastResponseDtoList = broadcastService.getAllBroadCast();
-        model.addAttribute("broadcastResponseDtoList", broadcastResponseDtoList);
+    public String getBroadcastsOnAir(Model model,@PageableDefault(page = 0 ,size = 1, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+        Page<BroadcastResponseDto> broadcastResponseDtoPage = broadcastService.getAllBroadCast(pageable);
+        model.addAttribute("broadcastResponseDtoPage", broadcastResponseDtoPage);
         return "broadcastList";
     }
-
     @GetMapping("/broadcasts/{broadcastId}")
     public String showBroadcast(@PathVariable Long broadcastId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
