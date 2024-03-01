@@ -58,8 +58,8 @@ public class BroadcastService {
         broadCast.endBroadcast();
     }
 
-    public List<Broadcast> findBroadcastListByUserId(Long userId) {
-        return broadcastRepository.findAllByUserUserId(userId);
+    public Page<Broadcast> findBroadcastListByUserId(Long userId,Pageable pageable) {
+        return broadcastRepository.findAllByUserUserId(userId,pageable);
     }
 
     @Transactional(readOnly = true)

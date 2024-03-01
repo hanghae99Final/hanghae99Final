@@ -13,6 +13,9 @@ import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.sparta.mytaek1.domain.user.service.UserService;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +35,7 @@ public class UserPageController {
     private final OrderService orderService;
 
     @GetMapping("/my-page")
-    public String myPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public String myPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails,@PageableDefault(size = 10) Pageable pageable) {
         Long userId = userDetails.getId();
         String userName = userDetails.getUser().getUserName();
         String userEmail = userDetails.getUser().getUserEmail();
@@ -40,8 +43,8 @@ public class UserPageController {
         String userPhone = userDetails.getUser().getUserPhone();
         String userAddress = userDetails.getUser().getUserAddress();
         String postcode = userDetails.getUser().getPostcode();
-        List<Broadcast> broadcastList = broadcastService.findBroadcastListByUserId(userId);
-        List<Orders> orderList = orderService.findOrderListByUserId(userId);
+        Page<Broadcast> broadcastList = broadcastService.findBroadcastListByUserId(userId,pageable);
+        Page<Orders> orderList = orderService.findOrderListByUserId(userId,pageable);
 
         model.addAttribute("userName", userName);
         model.addAttribute("userEmail", userEmail);
