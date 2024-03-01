@@ -2,6 +2,7 @@ package org.sparta.mytaek1.domain.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.repository.BroadcastRepository;
@@ -14,6 +15,7 @@ import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.sparta.mytaek1.domain.user.service.UserService;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +38,18 @@ public class UserPageController {
     private final OrderService orderService;
 
     @GetMapping("/my-page")
-    public String myPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails,@PageableDefault(size = 10) Pageable pageable) {
+    public String myPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails,
+                         @RequestParam(name = "broadcastPage", defaultValue = "0",required = false) Integer  broadcastPageParam,
+                         @RequestParam(name = "orderPage", defaultValue = "0",required = false) Integer  orderPageParam,
+                         HttpSession session) {
+        Integer broadcastPage = (broadcastPageParam != null) ? broadcastPageParam : (Integer) session.getAttribute("broadcastPage");
+        Integer orderPage = (orderPageParam != null) ? orderPageParam : (Integer) session.getAttribute("orderPage");
+
+        if (broadcastPage == null) broadcastPage = 0;
+        if (orderPage == null) orderPage = 0;
+
+        session.setAttribute("broadcastPage", broadcastPage);
+        session.setAttribute("orderPage", orderPage);
         Long userId = userDetails.getId();
         String userName = userDetails.getUser().getUserName();
         String userEmail = userDetails.getUser().getUserEmail();
@@ -43,8 +57,12 @@ public class UserPageController {
         String userPhone = userDetails.getUser().getUserPhone();
         String userAddress = userDetails.getUser().getUserAddress();
         String postcode = userDetails.getUser().getPostcode();
-        Page<Broadcast> broadcastList = broadcastService.findBroadcastListByUserId(userId,pageable);
-        Page<Orders> orderList = orderService.findOrderListByUserId(userId,pageable);
+
+        Pageable broadcastPageable = PageRequest.of(broadcastPage, 1);
+        Pageable orderPageable = PageRequest.of(orderPage, 1);
+
+        Page<Broadcast> broadcastList = broadcastService.findBroadcastListByUserId(userId,broadcastPageable);
+        Page<Orders> orderList = orderService.findOrderListByUserId(userId,orderPageable);
 
         model.addAttribute("userName", userName);
         model.addAttribute("userEmail", userEmail);
