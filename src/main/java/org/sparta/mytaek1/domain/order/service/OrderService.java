@@ -81,12 +81,12 @@ public class OrderService {
     @Transactional
     public void updateMerchant(Long orderId,String merchantUid) {
         Orders orders = findOrderById(orderId);
-        orders.updateMechant(merchantUid);
+        orders.updateMerchant(merchantUid);
     }
     @Transactional
     public void cancelPaymentStatus(Long orderId) {
         Orders order = findOrderById(orderId);
-        order.Cancel();
+        order.cancel();
     }
 }
 

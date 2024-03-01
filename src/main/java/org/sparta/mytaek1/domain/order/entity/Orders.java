@@ -45,11 +45,11 @@ public class Orders extends Auditable {
         this.paymentStatus = OrderState.CONFIRM;
     }
 
-    public void updateMechant(String merchantUid) {
+    public void updateMerchant(String merchantUid) {
         this.merchantUid = merchantUid;
     }
 
-    public void Cancel() {
+    public void cancel() {
         this.paymentStatus = OrderState.CANCEL;
     }
 }
