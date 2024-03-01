@@ -11,6 +11,8 @@ import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,14 +29,17 @@ public class BroadcastService {
     private final ProductService productService;
 
     @Transactional(readOnly = true)
-    public List<BroadcastResponseDto> getAllBroadCast() {
-        List<Broadcast> broadcastList = broadcastRepository.findAllByOnAirTrue();
-        return BroadcastResponseDto.fromBroadcastList(broadcastList);
+    public Page<BroadcastResponseDto> getAllBroadCast(Pageable pageable) {
+        Page<Broadcast> broadcastPage  = broadcastRepository.findAllByOnAirTrue(pageable);
+        return broadcastPage.map(broadcast -> new BroadcastResponseDto(
+                broadcast.getBroadcastId(),
+                broadcast.getBroadcastTitle(),
+                broadcast.getBroadcastDescription(),
+                broadcast.getUser().getUserName(),
+                broadcast.getProduct().getProductName(),
+                broadcast.getProduct().getImageUrl()
+        ));
     }
-
-
-
-
     public void createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto, MultipartFile imageFile) {
         if(checkUserOnAir(auth.getId())){
             throw new IllegalArgumentException(ErrorMessage.EXIST_ONAIR_BROADCAST_ERROR_MESSAGE.getErrorMessage());
@@ -53,8 +58,8 @@ public class BroadcastService {
         broadCast.endBroadcast();
     }
 
-    public List<Broadcast> findBroadcastListByUserId(Long userId) {
-        return broadcastRepository.findAllByUserUserId(userId);
+    public Page<Broadcast> findBroadcastListByUserId(Long userId,Pageable pageable) {
+        return broadcastRepository.findAllByUserUserId(userId,pageable);
     }
 
     @Transactional(readOnly = true)
