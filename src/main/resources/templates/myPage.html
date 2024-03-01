@@ -79,6 +79,24 @@
     ul {
       width: 100%;
     }
+
+    button {
+      background-color: dimgray;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: dimgray;
+    }
+
+    .order_list_box {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -112,21 +130,16 @@
        <h2 style="margin: 40px 0 20px 0;">Your Orders</h2>
        <ul>
          <li class="order_list" th:each="order : ${orderList}">
-           <div class="order_list_box">
+           <div class="order_list_box" onclick="goToOrderInfo(this)" th:data-orderId="${order.getOrderId()}" th:data-productId="${order.getProduct().getProductId()}">
              <p>구매 상품: <span th:text="${order.getProduct().getProductName()}"></span></p>
              <p>구매 수량: <span th:text="${order.getQuantity()}"></span></p>
              <p>총 가격: <span th:text="${order.getTotalPrice()}"></span></p>
-<!--             <p>결제 상태:-->
-<!--               <span th:if="${order.paymentStatus == 'CONFIRM'}" th:text="결제완료"></span>-->
-<!--               <span th:if="${order.paymentStatus == 'READY'}" th:text="결제대기"></span>-->
-<!--             </p>-->
              <p>결제 상태:
-               <span th:if="${#strings.equals(order.paymentStatus,'CONFIRM')}" th:text="결제완료"></span>
-               <span th:if="${#strings.equals(order.paymentStatus,'READY')}" th:text="결제대기"></span>
-               <span th:if="${#strings.equals(order.paymentStatus,'CANCEL')}" th:text="결제환불"></span>
+               <span th:if="${#strings.equals(order.paymentStatus,'CONFIRM')}" th:text="'결제 완료'"></span>
+               <span th:if="${#strings.equals(order.paymentStatus,'READY')}" th:text="'결제 대기'"></span>
+               <span th:if="${#strings.equals(order.paymentStatus,'CANCEL')}" th:text="'결제 취소'"></span>
              </p>
-             <span th:text="${order.getMerchantUid()}" id="merchant-uid"></span>
-             <button onclick="cancelPay(this)" th:if="${#strings.equals(order.paymentStatus,'CONFIRM')}" th:data-merchantuid="${order.getMerchantUid()}" th:data-orderid="${order.getOrderId()}">결제 취소</button>
+             <button onclick="cancelPay(this)" th:if="${#strings.equals(order.paymentStatus,'CONFIRM')}" th:data-merchantuId="${order.getMerchantUid()}" th:data-orderId="${order.getOrderId()}">결제 취소</button>
            </div>
          </li>
        </ul>
@@ -184,8 +197,8 @@
   </script>
   <script>
     async function cancelPay(button) {
-      const merchant_uid = button.getAttribute("data-merchantuid");
-      const order_id = Number(button.getAttribute("data-orderid"));
+      const merchant_uid = button.getAttribute("data-merchantuId");
+      const order_id = Number(button.getAttribute("data-orderId"));
       try {
         const response = await fetch("/payments/cancel", {
           method: "POST",
@@ -210,6 +223,13 @@
       }
     }
   </script>
+  <script type="text/javascript">
+    function goToOrderInfo(div) {
+      const orderId = Number(div.getAttribute("data-orderId"));
+      const productId = Number(div.getAttribute("data-productId"));
 
+      window.location.href = `/products/${productId}/orders/${orderId}`;
+    }
+  </script>
 </body>
 </html>
