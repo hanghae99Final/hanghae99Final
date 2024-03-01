@@ -43,7 +43,7 @@ function submitForm() {
         },
         error: function(error) {
             console.error(error);
-            alert('이미 방송중입니다. 이전 방송을 종료해주세요.');
+            alert(error.responseText);
             window.location.href = "/";
         }
     });
