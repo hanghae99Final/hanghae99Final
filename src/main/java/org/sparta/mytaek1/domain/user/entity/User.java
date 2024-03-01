@@ -8,6 +8,7 @@ import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.global.audit.Auditable;
 import org.sparta.mytaek1.global.security.UserRoleEnum;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -52,6 +53,8 @@ public class User extends Auditable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Orders> orderList;
 
+    private String refreshToken;
+
     public User(String userName, String userEmail, String password, String streamKey, String userPhone, String userAddress, String postcode) {
         this.userName = userName;
         this.userEmail = userEmail;
@@ -61,5 +64,9 @@ public class User extends Auditable {
         this.userPhone = userPhone;
         this.userAddress = userAddress;
         this.postcode = postcode;
+    }
+
+    public void updateRefreshToken(String updateRefreshToken) {
+        this.refreshToken = updateRefreshToken;
     }
 }
