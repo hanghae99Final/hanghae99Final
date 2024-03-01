@@ -1,8 +1,6 @@
 package org.sparta.mytaek1.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
-import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.domain.user.dto.UserRequestDto;
 import org.sparta.mytaek1.domain.user.dto.UserResponseDto;
 import org.sparta.mytaek1.domain.user.entity.User;
@@ -12,9 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
