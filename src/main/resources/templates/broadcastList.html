@@ -87,7 +87,8 @@
                 <td th:text="${broadcastResponseDto.userName}"></td>
                 <td th:text="${broadcastResponseDto.productName}"></td>
                 <td>
-                    <img th:src="${broadcastResponseDto.imageUrl}" style="max-width: 100px; max-height: 100px;">
+<!--                    <img th:src="${broadcastResponseDto.imageUrl}" style="max-width: 100px; max-height: 100px;">-->
+                    <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${broadcastResponseDto.imageUrl.substring(broadcastResponseDto.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
                 </td>
                 <td>
                     <button class="view-details-button" th:attr="data-broadcast-id=${broadcastResponseDto.broadcastId}" style="cursor: pointer;">
