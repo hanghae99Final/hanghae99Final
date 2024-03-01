@@ -8,9 +8,7 @@ import org.sparta.mytaek1.global.message.SuccessMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +23,12 @@ public class UserController {
             userService.createUser(requestDto);
             return new ResponseEntity<>(SuccessMessage.JOIN_SUCCESS_MESSAGE.getSuccessMessage(), HttpStatus.CREATED);
         });
+    }
+
+    @GetMapping("/streamkeys/{streamKey}")
+    public ResponseEntity<String> checkStreamKey(@PathVariable String streamKey){
+        userService.checkStreamKey(streamKey);
+        return ResponseEntity.ok("Stream key is valid");
     }
 
     private ResponseEntity<String> handleRequest(RequestHandler handler) {

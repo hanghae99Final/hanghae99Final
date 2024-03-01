@@ -37,5 +37,12 @@ public class UserService {
         User user =  userRepository.save(new User(userName, userEmail, password, streamKey, userPhone, userAddress, postcode));
         new UserResponseDto(user);
     }
+
+    public void checkStreamKey(String streamKey) {
+        Boolean check = userRepository.existsByStreamKey(streamKey);
+        if(!check){
+            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_STREAMKEY_ERROR_MESSAGE.getErrorMessage());
+        }
+    }
 }
 
