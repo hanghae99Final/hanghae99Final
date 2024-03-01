@@ -112,7 +112,8 @@
             <p th:text="'상품 설명: ' + ${product.getProductDescription()}"></p>
             <p th:text="'상품 수량: ' + ${stock.getProductStock()}"></p>
             <td>
-                <img th:src="${product.imageUrl}" style="max-width: 100px; max-height: 100px;">
+<!--                <img th:src="${product.imageUrl}" style="max-width: 100px; max-height: 100px;">-->
+                <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${product.imageUrl.substring(product.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
             </td>
         </div>
         <button id="button" class="btn btn-primary btn-block">상품 보러가기</button>
