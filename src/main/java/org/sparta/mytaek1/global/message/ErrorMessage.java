@@ -6,6 +6,7 @@ public enum ErrorMessage {
     NOT_EXIST_USER_ERROR_MESSAGE("존재하지 않는 사용자입니다."),
     NOT_EXIST_EMAIL_ERROR_MESSAGE("존재하지 않는 이메일입니다."),
     EXIST_ONAIR_BROADCAST_ERROR_MESSAGE("이미 존재하는 방송입니다."),
+    NOT_EXIST_STREAMKEY_ERROR_MESSAGE("존재하지 않는 스트림 키입니다."),
     NOT_EXIST_BROADCAST_ERROR_MESSAGE("존재하지 않는 방송입니다."),
     NOT_EXIST_PRODUCT_ERROR_MESSAGE("존재하지 않는 상품입니다."),
     NOT_EXIST_STOCK_ERROR_MESSAGE("재고가 없습니다."),
