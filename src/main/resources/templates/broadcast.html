@@ -111,6 +111,9 @@
             <p th:text="'상품 가격: ' + ${product.getProductPrice()}"></p>
             <p th:text="'상품 설명: ' + ${product.getProductDescription()}"></p>
             <p th:text="'상품 수량: ' + ${stock.getProductStock()}"></p>
+            <td>
+                <img th:src="${product.imageUrl}" style="max-width: 100px; max-height: 100px;">
+            </td>
         </div>
         <button id="button" class="btn btn-primary btn-block">상품 보러가기</button>
         <div id="end-broadcast-button-container" th:if="${authenticatedUserId}">

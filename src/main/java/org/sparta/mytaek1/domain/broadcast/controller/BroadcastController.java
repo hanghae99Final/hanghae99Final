@@ -10,10 +10,10 @@ import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/broadcasts")
 @Slf4j
@@ -23,8 +23,9 @@ public class BroadcastController {
 
     @PostMapping
     public ResponseEntity<String> createBroadcast(@AuthenticationPrincipal UserDetailsImpl auth,
-                                                  @RequestBody @Valid BroadcastRequestDto requestDto) {
-        broadcastService.createBroadcast(auth, requestDto);
+                                                  @RequestPart @Valid BroadcastRequestDto requestDto,
+                                                  @RequestPart MultipartFile imageFile) {
+        broadcastService.createBroadcast(auth, requestDto, imageFile);
         return new ResponseEntity<>(SuccessMessage.BROADCAST_START_MESSAGE.getSuccessMessage(), HttpStatus.CREATED);
     }
 

@@ -14,13 +14,15 @@ public class BroadcastResponseDto {
     private final String broadcastDescription;
     private final String userName;
     private final String productName;
+    private final String imageUrl;
 
-    public BroadcastResponseDto(long broadcastId, String broadcastTitle, String broadcastDescription, String userName, String productName) {
+    public BroadcastResponseDto(long broadcastId, String broadcastTitle, String broadcastDescription, String userName, String productName, String imageUrl) {
         this.broadcastId = broadcastId;
         this.broadcastTitle = broadcastTitle;
         this.broadcastDescription = broadcastDescription;
         this.userName = userName;
         this.productName = productName;
+        this.imageUrl = imageUrl;
     }
 
     public BroadcastResponseDto(Broadcast broadcast) {
@@ -29,6 +31,7 @@ public class BroadcastResponseDto {
         this.broadcastDescription = broadcast.getBroadcastDescription();
         this.userName = broadcast.getUser().getUserName();
         this.productName = broadcast.getProduct().getProductName();
+        this.imageUrl = broadcast.getProduct().getImageUrl();
     }
 
     public static List<BroadcastResponseDto> fromBroadcastList(List<Broadcast> broadcastList) {

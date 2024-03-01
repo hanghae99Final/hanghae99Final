@@ -56,6 +56,7 @@ public class BroadcastPageController {
         model.addAttribute("broadcasterUserId", broadcasterUserId);
         model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
         model.addAttribute("product", broadcast.getProduct());
+        model.addAttribute("imageUrl", broadcast.getProduct().getImageUrl());
         model.addAttribute("stock", stock);
         model.addAttribute("serverIp", streamingIp);
         return "broadcast";

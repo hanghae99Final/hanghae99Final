@@ -13,11 +13,13 @@ public class ProductFindResponseDto {
     private String productName;
     private int productPrice;
     private int productStock;
+    private String imageUrl;
 
     public ProductFindResponseDto(Product product, Stock stock) {
         this.productId = product.getProductId();
         this.productName =product.getProductName();
         this.productPrice = product.getProductPrice();
         this.productStock = stock.getProductStock();
+        this.imageUrl = product.getImageUrl();
     }
 }

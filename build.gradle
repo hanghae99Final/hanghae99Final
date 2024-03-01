@@ -47,6 +47,9 @@ dependencies {
     // Redisson dependency
     implementation 'org.redisson:redisson:3.16.0'
     implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
+
+    // aws s3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 allprojects {
     repositories {
