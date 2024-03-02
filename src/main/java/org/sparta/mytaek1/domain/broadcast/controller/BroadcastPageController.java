@@ -10,6 +10,7 @@ import org.sparta.mytaek1.domain.stock.service.StockService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -38,14 +41,12 @@ public class BroadcastPageController {
 
     @GetMapping("/broadcasts/start")
     public String getBroadCastForm() {
+        log.info("호출 완료");
         return "broadcastForm";
     }
 
     @GetMapping
-    @PreAuthorize("permitAll")
-    public String getBroadcastsOnAir(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-//        log.info("Email : " + userDetails.getUsername());
-//        log.info("Authorities : " + userDetails.getAuthorities());
+    public String getBroadcastsOnAir(Model model) {
         List<BroadcastResponseDto> broadcastResponseDtoList = broadcastService.getAllBroadCast();
         model.addAttribute("broadcastResponseDtoList", broadcastResponseDtoList);
         return "broadcastList";
