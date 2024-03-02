@@ -45,8 +45,6 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         log.info(LOGIN_SUCCESS_EMAIL_LOG, email);
         log.info(LOGIN_SUCCESS_ACCESS_TOKEN_LOG, accessToken);
         log.info(LOGIN_SUCCESS_TOKEN_EXPIRED_LOG, accessTokenExpiration);
-        log.info(authentication.getPrincipal().toString());
-        log.info(authentication.getAuthorities().toString());
     }
 
     private String extractUsername(Authentication authentication) {
