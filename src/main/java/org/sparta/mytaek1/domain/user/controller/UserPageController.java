@@ -11,11 +11,10 @@ import org.sparta.mytaek1.domain.order.repository.OrderRepository;
 import org.sparta.mytaek1.domain.order.service.OrderService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
-import org.sparta.mytaek1.domain.user.service.UserService;
-import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,18 +29,19 @@ public class UserPageController {
 
     private final BroadcastService broadcastService;
     private final OrderService orderService;
+    private final UserRepository userRepository;
 
     @GetMapping("/my-page")
-    public String myPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long userId = userDetails.getId();
-        String userName = userDetails.getUser().getUserName();
-        String userEmail = userDetails.getUser().getUserEmail();
-        String streamKey = userDetails.getUser().getStreamKey();
-        String userPhone = userDetails.getUser().getUserPhone();
-        String userAddress = userDetails.getUser().getUserAddress();
-        String postcode = userDetails.getUser().getPostcode();
-        List<Broadcast> broadcastList = broadcastService.findBroadcastListByUserId(userId);
-        List<Orders> orderList = orderService.findOrderListByUserId(userId);
+    public String myPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        User user = userRepository.findByUserEmail(userDetails.getUsername()).orElseThrow();
+        String userName = user.getUserName();
+        String userEmail = user.getUserEmail();
+        String streamKey = user.getStreamKey();
+        String userPhone = user.getUserPhone();
+        String userAddress = user.getUserAddress();
+        String postcode = user.getPostcode();
+        List<Broadcast> broadcastList = broadcastService.findBroadcastListByUserId(user.getUserId());
+        List<Orders> orderList = orderService.findOrderListByUserId(user.getUserId());
 
         model.addAttribute("userName", userName);
         model.addAttribute("userEmail", userEmail);

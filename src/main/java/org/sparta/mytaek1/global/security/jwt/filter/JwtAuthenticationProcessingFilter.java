@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.global.jwt.filter;
+package org.sparta.mytaek1.global.security.jwt.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,10 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
-import org.sparta.mytaek1.global.jwt.service.JwtService;
+import org.sparta.mytaek1.global.security.jwt.service.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,14 +18,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private static final String CHECK_ACCESS_LOG_MESSAGE = "checkAccessTokenAndAuthentication() 호출";
-    private static final String NO_CHECK_URL = "/api/user/login";
+    private static final String NO_CHECK_URL = "/login";
     private final JwtService jwtService;
     private final UserRepository userRepository;
 
@@ -40,8 +38,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         }
 
         String refreshToken = jwtService.extractRefreshToken(request)
-            .filter(jwtService::isTokenValid)
-            .orElse(null);
+                .filter(jwtService::isTokenValid)
+                .orElse(null);
 
         if (refreshToken != null) {
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
@@ -54,10 +52,12 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     }
 
     public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
-        userRepository.findByRefreshToken(refreshToken).ifPresent(user -> {
-            String reIssuedRefreshToken = reIssueRefreshToken(user);
-            jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(user.getUserEmail()), reIssuedRefreshToken);
-        });
+        userRepository.findByRefreshToken(refreshToken)
+                .ifPresent(admin -> {
+                    String reIssuedRefreshToken = reIssueRefreshToken(admin);
+                    jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(admin.getUserEmail()),
+                            reIssuedRefreshToken);
+                });
     }
 
     private String reIssueRefreshToken(User user) {
@@ -69,24 +69,27 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
                                                   FilterChain filterChain) throws ServletException, IOException {
-        log.info(CHECK_ACCESS_LOG_MESSAGE);
-        jwtService.extractAccessToken(request);
+        log.info("checkAccessTokenAndAuthentication() 호출");
         jwtService.extractAccessToken(request)
-                .filter(jwtService::isTokenValid).flatMap(jwtService::extractEmail).flatMap(userRepository::findByUserEmail).ifPresent(this::saveAuthentication);
-
+                .filter(jwtService::isTokenValid)
+                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
+                        .ifPresent(email -> userRepository.findByUserEmail(email)
+                                .ifPresent(this::saveAuthentication)));
+        log.info("saveAuthentication() 호출");
         filterChain.doFilter(request, response);
     }
 
-    public void saveAuthentication(User myUser) {
-        String password = myUser.getPassword();
+    public void saveAuthentication(User myMember) {
+        String password = myMember.getPassword();
 
-        UserDetails userDetailsUser = new org.springframework.security.core.userdetails.User(
-            myUser.getUserEmail(),
-            password,
-            Collections.singleton(new SimpleGrantedAuthority(myUser.getRole().name()))
-        );
+        UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
+                .username(myMember.getUserEmail())
+                .password(password)
+                .roles(myMember.getRole().name())
+                .build();
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsUser, null,
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(userDetailsUser, null,
                         authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

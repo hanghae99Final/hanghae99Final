@@ -1,28 +1,33 @@
 package org.sparta.mytaek1.domain.broadcast.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastResponseDto;
 import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
 import org.sparta.mytaek1.domain.stock.entity.Stock;
 import org.sparta.mytaek1.domain.stock.service.StockService;
-import org.sparta.mytaek1.global.security.UserDetailsImpl;
+import org.sparta.mytaek1.domain.user.entity.User;
+import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class BroadcastPageController {
 
     private final BroadcastService broadcastService;
     private final StockService stockService;
+    private final UserRepository userRepository;
     @Value("${streaming.server.ip}")
     private String streamingIp;
 
@@ -37,18 +42,22 @@ public class BroadcastPageController {
     }
 
     @GetMapping
-    public String getBroadcastsOnAir(Model model) {
+    @PreAuthorize("permitAll")
+    public String getBroadcastsOnAir(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+//        log.info("Email : " + userDetails.getUsername());
+//        log.info("Authorities : " + userDetails.getAuthorities());
         List<BroadcastResponseDto> broadcastResponseDtoList = broadcastService.getAllBroadCast();
         model.addAttribute("broadcastResponseDtoList", broadcastResponseDtoList);
         return "broadcastList";
     }
 
     @GetMapping("/broadcasts/{broadcastId}")
-    public String showBroadcast(@PathVariable Long broadcastId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public String showBroadcast(@PathVariable Long broadcastId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
         Long productId = broadcast.getProduct().getProductId();
         Stock stock = stockService.findStockByProduct(productId);
-        Long authenticatedUserId = (userDetails != null) ? userDetails.getId() : null;
+        User user = userRepository.findByUserEmail(userDetails.getUsername()).orElseThrow();
+        Long authenticatedUserId = (userDetails != null) ? user.getUserId() : null;
         Long broadcasterUserId = broadcast.getUser().getUserId();
 
         model.addAttribute("broadcastId", broadcast.getBroadcastId());

@@ -22,7 +22,7 @@ public class UserResponseDto {
         this.userId = user.getUserId();
         this.userName = user.getUserName();
         this.userEmail = user.getUserEmail();
-        this.role = user.getRole().getAuthority();
+        this.role = user.getRole().toString();
         this.streamKey = user.getStreamKey();
         this.broadcastList = user.getBroadcastList();
         this.orderList = user.getOrderList();

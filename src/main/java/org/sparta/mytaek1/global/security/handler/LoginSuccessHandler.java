@@ -1,16 +1,19 @@
-package org.sparta.mytaek1.domain.user.handler;
+package org.sparta.mytaek1.global.security.handler;
 
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
-import org.sparta.mytaek1.global.jwt.service.JwtService;
+import org.sparta.mytaek1.global.security.jwt.service.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +30,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) {
+                                        Authentication authentication) throws IOException, ServletException {
         String email = extractUsername(authentication);
         String accessToken = jwtService.createAccessToken(email);
         String refreshToken = jwtService.createRefreshToken();
@@ -42,6 +45,8 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         log.info(LOGIN_SUCCESS_EMAIL_LOG, email);
         log.info(LOGIN_SUCCESS_ACCESS_TOKEN_LOG, accessToken);
         log.info(LOGIN_SUCCESS_TOKEN_EXPIRED_LOG, accessTokenExpiration);
+        log.info(authentication.getPrincipal().toString());
+        log.info(authentication.getAuthorities().toString());
     }
 
     private String extractUsername(Authentication authentication) {

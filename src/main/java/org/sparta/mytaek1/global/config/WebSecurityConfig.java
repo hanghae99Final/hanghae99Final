@@ -3,14 +3,13 @@ package org.sparta.mytaek1.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.sparta.mytaek1.domain.user.filter.CustomJsonUsernamePasswordAuthenticationFilter;
-import org.sparta.mytaek1.domain.user.handler.LoginFailureHandler;
-import org.sparta.mytaek1.domain.user.handler.LoginSuccessHandler;
+import org.sparta.mytaek1.global.security.jwt.filter.CustomJsonUsernamePasswordAuthenticationFilter;
+import org.sparta.mytaek1.global.security.handler.LoginFailureHandler;
+import org.sparta.mytaek1.global.security.handler.LoginSuccessHandler;
 import org.sparta.mytaek1.domain.user.repository.UserRepository;
-import org.sparta.mytaek1.domain.user.service.LoginService;
-import org.sparta.mytaek1.global.jwt.filter.JwtAuthenticationProcessingFilter;
-import org.sparta.mytaek1.global.jwt.service.JwtService;
-import org.sparta.mytaek1.global.security.CustomAccessDeniedHandler;
+import org.sparta.mytaek1.global.security.jwt.service.LoginService;
+import org.sparta.mytaek1.global.security.jwt.filter.JwtAuthenticationProcessingFilter;
+import org.sparta.mytaek1.global.security.jwt.service.JwtService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,13 +17,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -32,6 +29,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     private final LoginService loginService;
@@ -64,7 +62,8 @@ public class WebSecurityConfig {
 
     @Bean
     public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
-        CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
+        CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
+                = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
         customJsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
         customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
         customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
@@ -78,11 +77,11 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(Customizer.withDefaults());
-
-        http.sessionManagement((sessionManagement) ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
+        http
+                .csrf(cs -> cs.disable())
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(f -> f.disable())
+                .httpBasic(h -> h.disable());
 
         http.authorizeHttpRequests((authorizeHttpRequests)->
                 authorizeHttpRequests
@@ -94,17 +93,6 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/orders/**").authenticated()
                         .anyRequest().permitAll()
         );
-
-        http.exceptionHandling((exceptionHandling) ->
-                exceptionHandling
-                        .accessDeniedHandler(new CustomAccessDeniedHandler())
-        );
-
-        http
-                .csrf(cs -> cs.disable())
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin(f -> f.disable())
-                .httpBasic(h -> h.disable());
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);

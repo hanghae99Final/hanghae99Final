@@ -1,4 +1,4 @@
-package org.sparta.mytaek1.domain.user.handler;
+package org.sparta.mytaek1.global.security.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
