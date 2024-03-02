@@ -60,13 +60,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 });
     }
 
-    private String reIssueRefreshToken(User user) {
-        String reIssuedRefreshToken = jwtService.createRefreshToken();
-        user.updateRefreshToken(reIssuedRefreshToken);
-        userRepository.saveAndFlush(user);
-        return reIssuedRefreshToken;
-    }
-
     public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
                                                   FilterChain filterChain) throws ServletException, IOException {
         log.info("checkAccessTokenAndAuthentication() 호출");
@@ -77,6 +70,13 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                                 .ifPresent(this::saveAuthentication)));
         log.info("saveAuthentication() 호출");
         filterChain.doFilter(request, response);
+    }
+
+    private String reIssueRefreshToken(User user) {
+        String reIssuedRefreshToken = jwtService.createRefreshToken();
+        user.updateRefreshToken(reIssuedRefreshToken);
+        userRepository.saveAndFlush(user);
+        return reIssuedRefreshToken;
     }
 
     public void saveAuthentication(User myMember) {

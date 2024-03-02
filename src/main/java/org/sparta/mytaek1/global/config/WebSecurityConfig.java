@@ -29,7 +29,6 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     private final LoginService loginService;
@@ -86,7 +85,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests)->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/api/join", "/api/user/login").permitAll()
+                        .requestMatchers("/", "/api/join", "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/broadcasts/start").authenticated()
                         .requestMatchers(HttpMethod.GET, "/my-page").authenticated()
