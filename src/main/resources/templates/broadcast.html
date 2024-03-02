@@ -178,21 +178,12 @@ document.getElementById('button').addEventListener('click', function () {
 
 </script>
 <script type="text/javascript">
-    function checkCookie(name) {
-        const cookies = document.cookie.split(';');
-
-        for (const cookie of cookies) {
-            const [cookieName, cookieValue] = cookie.trim().split('=');
-            if (cookieName === name) {
-                return true;
-            }
+    function checkCookieExistence(cookieName) {
+            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
         }
 
-        return false;
-    }
-
     window.addEventListener("DOMContentLoaded", () => {
-        const isAuthenticated = checkCookie('Authorization');
+        const isAuthenticated = checkCookieExistence('refresh_token');
 
         const navbar = document.querySelector('.navbar');
         navbar.innerHTML = '';
