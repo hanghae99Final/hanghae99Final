@@ -69,47 +69,24 @@ public class JwtService {
         return BEARER + token;
     }
 
-//    public void sendAccessToken(HttpServletResponse response, String accessToken) {
-//        response.setStatus(HttpServletResponse.SC_OK);
-//
-//        response.setHeader(accessHeader, accessToken);
-//    }
-
     public void sendAccessToken(HttpServletResponse response, String accessToken) {
         response.setStatus(HttpServletResponse.SC_OK);
-        Cookie cookie = new Cookie("access_token", accessToken);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true); // HTTPS를 통해서만 전송되도록 설정
-        response.addCookie(cookie);
+        Cookie accessCookie = new Cookie("access_token", accessToken);
+        accessCookie.setMaxAge(accessTokenExpirationPeriod);
+        response.addCookie(accessCookie);
+        log.info("Access Token 쿠키 설정 완료");
     }
 
-//    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
-//        response.setStatus(HttpServletResponse.SC_OK);
-//
-//        setAccessTokenHeader(response, accessToken);
-//        setRefreshTokenHeader(response, refreshToken);
-//        log.info("Access Token, Refresh Token 헤더 설정 완료");
-//    }
         public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
             response.setStatus(HttpServletResponse.SC_OK);
             Cookie accessCookie = new Cookie("access_token", accessToken);
-            accessCookie.setHttpOnly(true);
-            accessCookie.setSecure(true); // HTTPS를 통해서만 전송되도록 설정
             accessCookie.setMaxAge(accessTokenExpirationPeriod);
             Cookie refreshCookie = new Cookie("refresh_token", refreshToken);
-            refreshCookie.setHttpOnly(true);
-            refreshCookie.setSecure(true); // HTTPS를 통해서만 전송되도록 설정
             refreshCookie.setMaxAge(refreshTokenExpirationPeriod);
             response.addCookie(accessCookie);
             response.addCookie(refreshCookie);
             log.info("Access Token, Refresh Token 쿠키 설정 완료");
         }
-
-//    public Optional<String> extractAccessToken(HttpServletRequest request) {
-//        return Optional.ofNullable(request.getHeader(accessHeader))
-//                .filter(refreshToken -> refreshToken.startsWith(BEARER))
-//                .map(refreshToken -> refreshToken.replace(BEARER, ""));
-//    }
 
     public Optional<String> extractAccessToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -118,7 +95,6 @@ public class JwtService {
                 if ("access_token".equals(cookie.getName())) {
                     String token = cookie.getValue();
                     if (token != null && token.startsWith(BEARER)) {
-                        log.info("BEARER 삭제 해야함");
                         return Optional.of(token.replace(BEARER, ""));
                     }
                 }
@@ -142,13 +118,6 @@ public class JwtService {
         return Optional.empty();
     }
 
-//    public Optional<String> extractRefreshToken(HttpServletRequest request) {
-//        return Optional.ofNullable(request.getHeader(refreshHeader))
-//                .filter(refreshToken -> refreshToken.startsWith(BEARER))
-//                .map(refreshToken -> refreshToken.replace(BEARER, ""));
-
-//    }
-
     public Optional<String> extractEmail(String accessToken) {
         try {
             return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
@@ -160,14 +129,6 @@ public class JwtService {
             log.error("액세스 토큰이 유효하지 않습니다.");
             return Optional.empty();
         }
-    }
-
-    public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-        response.setHeader(accessHeader, accessToken);
-    }
-
-    public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-        response.setHeader(refreshHeader, refreshToken);
     }
 
     public void updateRefreshToken(String email, String refreshToken) {
