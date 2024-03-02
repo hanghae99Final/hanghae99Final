@@ -67,38 +67,39 @@
     </style>
 </head>
 <body>
-    <nav class="navbar"></nav>
-    <h2>Broadcast List</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>User Name</th>
-                <th>Product Name</th>
-                <th>Product Image</th>
-                <th>View Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="broadcastResponseDto : ${broadcastResponseDtoList}">
-                <td th:text="${broadcastResponseDto.broadcastTitle}"></td>
-                <td th:text="${broadcastResponseDto.broadcastDescription}"></td>
-                <td th:text="${broadcastResponseDto.userName}"></td>
-                <td th:text="${broadcastResponseDto.productName}"></td>
-                <td>
-                    <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${broadcastResponseDto.imageUrl.substring(broadcastResponseDto.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
-                </td>
-                <td>
-                    <button class="view-details-button" th:attr="data-broadcast-id=${broadcastResponseDto.broadcastId}" style="cursor: pointer;">
-                        View Details
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <button class="broadcast-start-button">방송 시작하기</button>
-    <script type="text/javascript">
+<nav class="navbar"></nav>
+<h2>Broadcast List</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>User Name</th>
+        <th>Product Name</th>
+        <th>Product Image</th>
+        <th>View Details</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="broadcastResponseDto : ${broadcastResponseDtoList}">
+        <td th:text="${broadcastResponseDto.broadcastTitle}"></td>
+        <td th:text="${broadcastResponseDto.broadcastDescription}"></td>
+        <td th:text="${broadcastResponseDto.userName}"></td>
+        <td th:text="${broadcastResponseDto.productName}"></td>
+        <td>
+            <!--                    <img th:src="${broadcastResponseDto.imageUrl}" style="max-width: 100px; max-height: 100px;">-->
+            <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${broadcastResponseDto.imageUrl.substring(broadcastResponseDto.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
+        </td>
+        <td>
+            <button class="view-details-button" th:attr="data-broadcast-id=${broadcastResponseDto.broadcastId}" style="cursor: pointer;">
+                View Details
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<button class="broadcast-start-button">방송 시작하기</button>
+<script type="text/javascript">
         document.querySelectorAll('.view-details-button').forEach(function (button) {
             button.addEventListener('click', function () {
                 const broadcastId = button.getAttribute('data-broadcast-id');
@@ -107,7 +108,7 @@
         });
 
         document.querySelectorAll('.broadcast-start-button').forEach(function (button) {
-            const isAuthenticated = checkCookieExistence('Authorization');
+            const isAuthenticated = checkCookieExistence('refresh_token');
 
             button.addEventListener('click', function () {
                 if (!isAuthenticated) {
@@ -123,22 +124,17 @@
             return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
         }
     </script>
-    <script type="text/javascript">
-        function checkCookie(name) {
-            const cookies = document.cookie.split(';');
+</body>
+</html>
 
-            for (const cookie of cookies) {
-                const [cookieName, cookieValue] = cookie.trim().split('=');
-                if (cookieName === name) {
-                    return true;
-                }
-            }
 
-            return false;
+<script type="text/javascript">
+        function checkCookieExistence(cookieName) {
+            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
         }
 
         window.addEventListener("DOMContentLoaded", () => {
-            const isAuthenticated = checkCookie('Authorization');
+            const isAuthenticated = checkCookieExistence('refresh_token');
 
             const navbar = document.querySelector('.navbar');
             navbar.innerHTML = '';
@@ -172,5 +168,3 @@
 
         function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
     </script>
-</body>
-</html>
