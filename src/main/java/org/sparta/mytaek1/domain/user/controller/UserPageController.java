@@ -58,8 +58,8 @@ public class UserPageController {
         String userAddress = userDetails.getUser().getUserAddress();
         String postcode = userDetails.getUser().getPostcode();
 
-        Pageable broadcastPageable = PageRequest.of(broadcastPage, 1);
-        Pageable orderPageable = PageRequest.of(orderPage, 1);
+        Pageable broadcastPageable = PageRequest.of(broadcastPage, 10);
+        Pageable orderPageable = PageRequest.of(orderPage, 10);
 
         Page<Broadcast> broadcastList = broadcastService.findBroadcastListByUserId(userId,broadcastPageable);
         Page<Orders> orderList = orderService.findOrderListByUserId(userId,orderPageable);
