@@ -263,7 +263,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        Cookies.remove('Authorization', {path: '/'});
+        Cookies.remove('refresh_token', {path: '/'});
     });
 
     const host = 'http://' + window.location.host;
@@ -296,7 +296,7 @@
 
             $.ajax({
                 type: "POST",
-                url: `/api/user/login`,
+                url: `/login`,
                 contentType: "application/json",
                 data: JSON.stringify({username: email, password: password}),
             })
@@ -361,7 +361,7 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-        const isAuthenticated = checkCookie('Authorization');
+        const isAuthenticated = checkCookie('refresh_token');
 
         const navbar = document.querySelector('.navbar');
         navbar.innerHTML = '';
@@ -380,7 +380,8 @@
             const logoutLink = document.createElement('a');
             logoutLink.textContent = 'Logout';
             logoutLink.addEventListener('click', function () {
-                deleteCookie('Authorization');
+                deleteCookie('access_token');
+                deleteCookie('refresh_token');
             });
 
             logoutLink.href = '/';

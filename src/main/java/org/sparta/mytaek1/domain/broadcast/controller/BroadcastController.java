@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.sparta.mytaek1.domain.broadcast.dto.BroadcastRequestDto;
 import org.sparta.mytaek1.domain.broadcast.service.BroadcastService;
 import org.sparta.mytaek1.global.message.SuccessMessage;
-import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +22,7 @@ public class BroadcastController {
     private final BroadcastService broadcastService;
 
     @PostMapping
-    public ResponseEntity<String> createBroadcast(@AuthenticationPrincipal UserDetailsImpl auth,
+    public ResponseEntity<String> createBroadcast(@AuthenticationPrincipal UserDetails auth,
                                                   @RequestPart @Valid BroadcastRequestDto requestDto,
                                                   @RequestPart MultipartFile imageFile) {
         broadcastService.createBroadcast(auth, requestDto, imageFile);

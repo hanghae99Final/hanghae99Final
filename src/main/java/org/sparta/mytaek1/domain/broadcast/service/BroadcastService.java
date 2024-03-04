@@ -9,7 +9,9 @@ import org.sparta.mytaek1.domain.broadcast.repository.BroadcastRepository;
 import org.sparta.mytaek1.domain.product.entity.Product;
 import org.sparta.mytaek1.domain.product.service.ProductService;
 import org.sparta.mytaek1.domain.user.entity.User;
+import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.sparta.mytaek1.global.message.ErrorMessage;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.sparta.mytaek1.global.security.UserDetailsImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +29,7 @@ public class BroadcastService {
 
     private final BroadcastRepository broadcastRepository;
     private final ProductService productService;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public Page<BroadcastResponseDto> getAllBroadCast(Pageable pageable) {
@@ -40,12 +43,14 @@ public class BroadcastService {
                 broadcast.getProduct().getImageUrl()
         ));
     }
-    public void createBroadcast(UserDetailsImpl auth, BroadcastRequestDto requestDto, MultipartFile imageFile) {
-        if(checkUserOnAir(auth.getId())){
+  
+    public void createBroadcast(UserDetails auth, BroadcastRequestDto requestDto, MultipartFile imageFile) {
+        User user = userRepository.findByUserEmail(auth.getUsername()).orElseThrow();
+        if(checkUserOnAir(user.getUserId())){
+
             throw new IllegalArgumentException(ErrorMessage.EXIST_ONAIR_BROADCAST_ERROR_MESSAGE.getErrorMessage());
         }
 
-        User user = auth.getUser();
         Product product = productService.createProduct(requestDto, imageFile);
 
         Broadcast broadcast = new Broadcast(requestDto.getBroadcastTitle(), requestDto.getBroadcastDescription(), user, product);

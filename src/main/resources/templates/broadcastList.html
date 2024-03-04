@@ -119,7 +119,6 @@
                 <td th:text="${broadcastResponseDto.userName}"></td>
                 <td th:text="${broadcastResponseDto.productName}"></td>
                 <td>
-<!--                    <img th:src="${broadcastResponseDto.imageUrl}" style="max-width: 100px; max-height: 100px;">-->
                     <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${broadcastResponseDto.imageUrl.substring(broadcastResponseDto.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
                 </td>
                 <td>
@@ -154,15 +153,17 @@
         });
 
         document.querySelectorAll('.broadcast-start-button').forEach(function (button) {
-            const isAuthenticated = checkCookieExistence('Authorization');
+            const isAuthenticated = checkCookieExistence('refresh_token');
 
             button.addEventListener('click', function () {
                 if (!isAuthenticated) {
                     alert('로그인 후에 방송할 수 있습니다.');
                     window.location.href = '/api/user/login-page';
                 }
+                if(isAuthenticated){
+                    window.location.href = '/broadcasts/start';
+                }
 
-                window.location.href = '/broadcasts/start';
             });
         });
 
@@ -170,22 +171,17 @@
             return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
         }
     </script>
-    <script type="text/javascript">
-        function checkCookie(name) {
-            const cookies = document.cookie.split(';');
+</body>
+</html>
 
-            for (const cookie of cookies) {
-                const [cookieName, cookieValue] = cookie.trim().split('=');
-                if (cookieName === name) {
-                    return true;
-                }
-            }
 
-            return false;
+<script type="text/javascript">
+        function checkCookieExistence(cookieName) {
+            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
         }
 
         window.addEventListener("DOMContentLoaded", () => {
-            const isAuthenticated = checkCookie('Authorization');
+            const isAuthenticated = checkCookieExistence('refresh_token');
 
             const navbar = document.querySelector('.navbar');
             navbar.innerHTML = '';
@@ -204,9 +200,9 @@
                 const logoutLink = document.createElement('a');
                 logoutLink.textContent = 'Logout';
                 logoutLink.addEventListener('click', function () {
-                    deleteCookie('Authorization');
+                    deleteCookie('access_token');
+                    deleteCookie('refresh_token');
                 });
-
                 logoutLink.href = '/';
                 navbar.appendChild(logoutLink);
             } else {
@@ -219,5 +215,3 @@
 
         function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
     </script>
-</body>
-</html>
