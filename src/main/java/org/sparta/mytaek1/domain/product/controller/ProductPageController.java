@@ -21,13 +21,12 @@ public class ProductPageController {
 
     @GetMapping("/products/{productId}")
     public String findProduct(@PathVariable Long productId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userRepository.findByUserEmail(userDetails.getUsername()).orElseThrow();
         model.addAttribute("productFind", productService.getProduct(productId));
 
         if (userDetails != null) {
+            User user = userRepository.findByUserEmail(userDetails.getUsername()).orElseThrow();
             model.addAttribute("user", user);
         }
-
         return "product";
     }
 }

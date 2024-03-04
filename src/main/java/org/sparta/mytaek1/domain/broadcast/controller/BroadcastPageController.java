@@ -57,12 +57,17 @@ public class BroadcastPageController {
         Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
         Long productId = broadcast.getProduct().getProductId();
         Stock stock = stockService.findStockByProduct(productId);
-        User user = userRepository.findByUserEmail(userDetails.getUsername()).orElseThrow();
-        Long authenticatedUserId = (userDetails != null) ? user.getUserId() : null;
         Long broadcasterUserId = broadcast.getUser().getUserId();
+        if (userDetails != null) {
+            User user = userRepository.findByUserEmail(userDetails.getUsername()).orElseThrow();
+            Long authenticatedUserId = user.getUserId();
+            model.addAttribute("authenticatedUserId", authenticatedUserId);
+        } else {
+            Long authenticatedUserId = null;
+            model.addAttribute("authenticatedUserId", authenticatedUserId);
 
+        }
         model.addAttribute("broadcastId", broadcast.getBroadcastId());
-        model.addAttribute("authenticatedUserId", authenticatedUserId);
         model.addAttribute("broadcasterUserId", broadcasterUserId);
         model.addAttribute("streamKey", broadcast.getUser().getStreamKey());
         model.addAttribute("product", broadcast.getProduct());
