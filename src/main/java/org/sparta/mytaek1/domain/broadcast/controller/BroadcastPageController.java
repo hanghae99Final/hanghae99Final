@@ -12,6 +12,11 @@ import org.sparta.mytaek1.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,7 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.util.List;
 
 @Controller
@@ -46,18 +50,19 @@ public class BroadcastPageController {
     }
 
     @GetMapping
-    public String getBroadcastsOnAir(Model model) {
-        List<BroadcastResponseDto> broadcastResponseDtoList = broadcastService.getAllBroadCast();
-        model.addAttribute("broadcastResponseDtoList", broadcastResponseDtoList);
+    public String getBroadcastsOnAir(Model model,@PageableDefault(page = 0 ,size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+        Page<BroadcastResponseDto> broadcastResponseDtoPage = broadcastService.getAllBroadCast(pageable);
+        model.addAttribute("broadcastResponseDtoPage", broadcastResponseDtoPage);
         return "broadcastList";
     }
-
+  
     @GetMapping("/broadcasts/{broadcastId}")
     public String showBroadcast(@PathVariable Long broadcastId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
         Broadcast broadcast = broadcastService.getBroadcastByBroadcastId(broadcastId);
         Long productId = broadcast.getProduct().getProductId();
         Stock stock = stockService.findStockByProduct(productId);
         Long broadcasterUserId = broadcast.getUser().getUserId();
+      
         if (userDetails != null) {
             User user = userRepository.findByUserEmail(userDetails.getUsername()).orElseThrow();
             Long authenticatedUserId = user.getUserId();

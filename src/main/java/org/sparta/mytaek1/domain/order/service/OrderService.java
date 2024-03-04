@@ -13,6 +13,8 @@ import org.sparta.mytaek1.domain.stock.service.StockService;
 import org.sparta.mytaek1.domain.user.entity.User;
 import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.sparta.mytaek1.global.redis.DistributedLock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,8 +70,8 @@ public class OrderService {
         return orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
     }
 
-    public List<Orders> findOrderListByUserId(Long userId) {
-        return orderRepository.findAllByUserUserId(userId);
+    public Page<Orders> findOrderListByUserId(Long userId, Pageable pageable) {
+        return orderRepository.findAllByUserUserId(userId,pageable);
     }
 
     @DistributedLock(key = "#productId")

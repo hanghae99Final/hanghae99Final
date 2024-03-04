@@ -64,42 +64,87 @@
             background-color: #ddd;
             color: black;
         }
+        .pagination {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .pagination li {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .pagination li a {
+            display: block;
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .pagination li.active a {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .pagination li.disabled a {
+            pointer-events: none;
+            background-color: #ccc;
+            color: #666;
+        }
+
     </style>
 </head>
 <body>
-<nav class="navbar"></nav>
-<h2>Broadcast List</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>User Name</th>
-        <th>Product Name</th>
-        <th>Product Image</th>
-        <th>View Details</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="broadcastResponseDto : ${broadcastResponseDtoList}">
-        <td th:text="${broadcastResponseDto.broadcastTitle}"></td>
-        <td th:text="${broadcastResponseDto.broadcastDescription}"></td>
-        <td th:text="${broadcastResponseDto.userName}"></td>
-        <td th:text="${broadcastResponseDto.productName}"></td>
-        <td>
-            <!--                    <img th:src="${broadcastResponseDto.imageUrl}" style="max-width: 100px; max-height: 100px;">-->
-            <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${broadcastResponseDto.imageUrl.substring(broadcastResponseDto.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
-        </td>
-        <td>
-            <button class="view-details-button" th:attr="data-broadcast-id=${broadcastResponseDto.broadcastId}" style="cursor: pointer;">
-                View Details
-            </button>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<button class="broadcast-start-button">방송 시작하기</button>
-<script type="text/javascript">
+    <nav class="navbar"></nav>
+    <h2>Broadcast List</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>User Name</th>
+                <th>Product Name</th>
+                <th>Product Image</th>
+                <th>View Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="broadcastResponseDto : ${broadcastResponseDtoPage}">
+                <td th:text="${broadcastResponseDto.broadcastTitle}"></td>
+                <td th:text="${broadcastResponseDto.broadcastDescription}"></td>
+                <td th:text="${broadcastResponseDto.userName}"></td>
+                <td th:text="${broadcastResponseDto.productName}"></td>
+                <td>
+                    <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${broadcastResponseDto.imageUrl.substring(broadcastResponseDto.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
+                </td>
+                <td>
+                    <button class="view-details-button" th:attr="data-broadcast-id=${broadcastResponseDto.broadcastId}" style="cursor: pointer;">
+                        View Details
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div th:if="${broadcastResponseDtoPage.totalPages > 0}">
+        <ul class="pagination">
+            <li th:class="${broadcastResponseDtoPage.number == 0} ? 'disabled' : ''">
+                <a th:href="@{/(page=${broadcastResponseDtoPage.number - 1})}">Previous</a>
+            </li>
+            <li th:each="pageNumber : ${#numbers.sequence(0, broadcastResponseDtoPage.totalPages - 1)}"
+                th:class="${pageNumber == broadcastResponseDtoPage.number} ? 'active' : ''">
+                <a th:href="@{/(page=${pageNumber})}" th:text="${pageNumber + 1}">Page number</a>
+            </li>
+            <li th:class="${broadcastResponseDtoPage.number + 1 == broadcastResponseDtoPage.totalPages} ? 'disabled' : ''">
+                <a th:href="@{/(page=${broadcastResponseDtoPage.number + 1})}">Next</a>
+            </li>
+        </ul>
+    </div>
+    <button class="broadcast-start-button">방송 시작하기</button>
+    <script type="text/javascript">
         document.querySelectorAll('.view-details-button').forEach(function (button) {
             button.addEventListener('click', function () {
                 const broadcastId = button.getAttribute('data-broadcast-id');

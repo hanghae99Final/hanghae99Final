@@ -97,6 +97,37 @@
     .order_list_box {
       cursor: pointer;
     }
+    .pagination {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .pagination li {
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    .pagination li a {
+      display: block;
+      padding: 8px 16px;
+      background-color: #f0f0f0;
+      color: #333;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .pagination li.active a {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .pagination li.disabled a {
+      pointer-events: none;
+      background-color: #ccc;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -125,6 +156,20 @@
             </div>
           </li>
         </ul>
+        <div th:if="${broadcastList.totalPages > 1}">
+          <ul class="pagination">
+            <li th:class="${broadcastList.number == 0} ? 'disabled' : ''">
+              <a th:href="@{/my-page(broadcastPage=${broadcastList.number > 0 ? broadcastList.number - 1 : 0}, orderPage=${session.orderPage})}">Previous</a>
+            </li>
+            <li th:each="pageNumber : ${#numbers.sequence(0, broadcastList.totalPages - 1)}"
+                th:class="${pageNumber == broadcastList.number} ? 'active' : ''">
+              <a th:href="@{/my-page(broadcastPage=${pageNumber}, orderPage=${session.orderPage})}" th:text="${pageNumber + 1}">Page number</a>
+            </li>
+            <li th:class="${broadcastList.number + 1 == broadcastList.totalPages} ? 'disabled' : ''">
+              <a th:href="@{/my-page(broadcastPage=${broadcastList.number + 1 < broadcastList.totalPages ? broadcastList.number + 1 : broadcastList.number}, orderPage=${session.orderPage})}">Next</a>
+            </li>
+          </ul>
+        </div>
       </div>
      <div class="order_container">
        <h2 style="margin: 40px 0 20px 0;">Your Orders</h2>
@@ -143,6 +188,20 @@
            </div>
          </li>
        </ul>
+       <div th:if="${orderList.totalPages > 1}">
+         <ul class="pagination">
+           <li th:class="${orderList.number == 0} ? 'disabled' : ''">
+             <a th:href="@{/my-page(broadcastPage=${session.broadcastPage}, orderPage=${orderList.number > 0 ? orderList.number - 1 : 0})}">Previous</a>
+           </li>
+           <li th:each="pageNumber : ${#numbers.sequence(0, orderList.totalPages - 1)}"
+               th:class="${pageNumber == orderList.number} ? 'active' : ''">
+             <a th:href="@{/my-page(broadcastPage=${session.broadcastPage}, orderPage=${pageNumber})}" th:text="${pageNumber + 1}">Page number</a>
+           </li>
+           <li th:class="${orderList.number + 1 == orderList.totalPages} ? 'disabled' : ''">
+             <a th:href="@{/my-page(broadcastPage=${session.broadcastPage}, orderPage=${orderList.number + 1 < orderList.totalPages ? orderList.number + 1 : orderList.number})}">Next</a>
+           </li>
+         </ul>
+       </div>
      </div>
     </div>
   </div>

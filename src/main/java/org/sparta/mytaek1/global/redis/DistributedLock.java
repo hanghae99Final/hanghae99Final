@@ -11,6 +11,6 @@ import java.util.concurrent.TimeUnit;
 public @interface DistributedLock {
     String key();
     TimeUnit timeUnit() default TimeUnit.SECONDS;
-    long waitTime() default 10L;
+    long waitTime() default 100L;
     long leaseTime() default 3L;
 }
