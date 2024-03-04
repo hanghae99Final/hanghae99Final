@@ -95,7 +95,7 @@
       background-color: dimgray;
     }
 
-    .order_list_box {
+    .order_info_title {
       cursor: pointer;
     }
 
@@ -177,7 +177,8 @@
        <h2 style="margin: 40px 0 20px 0;">Your Orders</h2>
        <ul>
          <li class="order_list" th:each="order : ${orderList}">
-           <div class="order_list_box" onclick="goToOrderInfo(this)" th:data-orderId="${order.getOrderId()}" th:data-productId="${order.getProduct().getProductId()}">
+           <div class="order_list_box">
+             <h4 class="order_info_title" onclick="goToOrderInfo(this)" th:data-orderId="${order.getOrderId()}" th:data-productId="${order.getProduct().getProductId()}">주문 정보</h4>
              <p>구매 상품: <span th:text="${order.getProduct().getProductName()}"></span></p>
              <p>구매 수량: <span th:text="${order.getQuantity()}"></span></p>
              <p>총 가격: <span th:text="${order.getTotalPrice()}"></span></p>
@@ -249,33 +250,29 @@
     function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
   </script>
   <script type="text/javascript">
-    async function cancelPay(button) {
+    function cancelPay(button) {
       const merchant_uid = button.getAttribute("data-merchantuId");
       const order_id = Number(button.getAttribute("data-orderId"));
-      try {
-        const response = await fetch("/payments/cancel", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            merchant_uid: merchant_uid,
-            order_id :order_id
-          })
-        });
 
-        const responseData = await response.json();
-
+      fetch("/payments/cancel", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          merchant_uid: merchant_uid,
+          order_id :order_id
+        })
+      })
+      .then(response => {
         if (response.ok) {
           alert("환불 요청이 완료되었습니다.");
           window.location.href="/my-page";
         } else {
-          throw new Error(responseData.message || "환불 실패");
+          console.error("환불 실패");
+          alert("환불 실패");
         }
-      } catch (error) {
-        console.error("환불 실패:", error);
-        alert("환불 실패: " + error.message);
-      }
+      });
     }
   </script>
   <script type="text/javascript">
