@@ -33,10 +33,4 @@ public class BroadcastResponseDto {
         this.productName = broadcast.getProduct().getProductName();
         this.imageUrl = broadcast.getProduct().getImageUrl();
     }
-
-    public static List<BroadcastResponseDto> fromBroadcastList(List<Broadcast> broadcastList) {
-        return broadcastList.stream()
-                .map(BroadcastResponseDto::new)
-                .collect(Collectors.toList());
-    }
 }

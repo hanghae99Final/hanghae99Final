@@ -95,171 +95,167 @@
     </style>
 </head>
 <body>
-<nav class="navbar"></nav>
-<div id="main-content">
-    <div id="video-container">
-        <video id="video" controls playsinline autoplay></video>
-        <div id="quality-buttons">
-            <button onclick="changeVideoQuality(0)">720p</button>
-            <button onclick="changeVideoQuality(1)">480p</button>
-            <button onclick="changeVideoQuality(2)">360p</button>
+    <nav class="navbar"></nav>
+    <div id="main-content">
+        <div id="video-container">
+            <video id="video" controls playsinline autoplay></video>
+            <div id="quality-buttons">
+                <button onclick="changeVideoQuality(0)">720p</button>
+                <button onclick="changeVideoQuality(1)">480p</button>
+                <button onclick="changeVideoQuality(2)">360p</button>
+            </div>
+        </div>
+        <div id="product-button-container">
+            <div id="product-info" class="p-3">
+                <h3 th:text="'상품 명: ' + ${broadcast.getProduct().getProductName()}"></h3>
+                <p th:text="'상품 가격: ' + ${broadcast.getProduct().getProductPrice()}"></p>
+                <p th:text="'상품 설명: ' + ${broadcast.getProduct().getProductDescription()}"></p>
+                <p th:text="'상품 수량: ' + ${stock.getProductStock()}"></p>
+                <td>
+                    <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${broadcast.getProduct().getImageUrl().substring(broadcast.getProduct().getImageUrl().lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
+                </td>
+            </div>
+            <button id="button" class="btn btn-primary btn-block">상품 보러가기</button>
+            <div id="end-broadcast-button-container" th:if="${authenticatedUserId}">
+                <button id="end-broadcast-button" class="btn btn-danger btn-block">방송 종료</button>
+            </div>
         </div>
     </div>
-    <div id="product-button-container">
-        <div id="product-info" class="p-3">
-            <h3 th:text="'상품 명: ' + ${product.getProductName()}"></h3>
-            <p th:text="'상품 가격: ' + ${product.getProductPrice()}"></p>
-            <p th:text="'상품 설명: ' + ${product.getProductDescription()}"></p>
-            <p th:text="'상품 수량: ' + ${stock.getProductStock()}"></p>
-            <td>
-<!--                <img th:src="${product.imageUrl}" style="max-width: 100px; max-height: 100px;">-->
-                <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${product.imageUrl.substring(product.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
-            </td>
-        </div>
-        <button id="button" class="btn btn-primary btn-block">상품 보러가기</button>
-        <div id="end-broadcast-button-container" th:if="${authenticatedUserId}">
-            <button id="end-broadcast-button" class="btn btn-danger btn-block">방송 종료</button>
-        </div>
-    </div>
-</div>
-<script>
-let video = null;
-let videoSrcArray = [
-    'https://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '_720p' +  '.m3u8',
-    'https://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '_480p' + '.m3u8',
-    'https://' + '[[${serverIp}]]' + '/' + '[[${streamKey}]]' + '_360p' + '.m3u8'
-];
-let selectedQuality = 0;
+    <script type="text/javascript">
+        let video = null;
+        let videoSrcArray = [
+            'https://' + '[[${serverIp}]]' + '/' + '[[${broadcast.getUser().getStreamKey()}]]' + '_720p' +  '.m3u8',
+            'https://' + '[[${serverIp}]]' + '/' + '[[${broadcast.getUser().getStreamKey()}]]' + '_480p' + '.m3u8',
+            'https://' + '[[${serverIp}]]' + '/' + '[[${broadcast.getUser().getStreamKey()}]]' + '_360p' + '.m3u8'
+        ];
+        let selectedQuality = 0;
 
-const initVideo = () => {
-    video = document.querySelector('#video');
-};
+        const initVideo = () => {
+            video = document.querySelector('#video');
+        };
 
-const playVideoFromEnd = () => {
-    video.currentTime = video.duration;
-    video.play();
-};
+        const playVideoFromEnd = () => {
+            video.currentTime = video.duration;
+            video.play();
+        };
 
-window.addEventListener("DOMContentLoaded", () => {
-    initVideo();
-    initHls();
-    video.addEventListener('loadedmetadata', playVideoFromEnd);
-});
-
-const initHls = () => {
-    if (Hls.isSupported()) {
-        hls = new Hls({
-            autoStartLoad: false,
+        window.addEventListener("DOMContentLoaded", () => {
+            initVideo();
+            initHls();
+            video.addEventListener('loadedmetadata', playVideoFromEnd);
         });
-        hls.loadSource(videoSrcArray[selectedQuality]);
-        hls.attachMedia(video);
-        hls.startLoad();
-    } else {
-        video.src = videoSrcArray[selectedQuality];
-    }
-};
 
+        const initHls = () => {
+            if (Hls.isSupported()) {
+                hls = new Hls({
+                    autoStartLoad: false,
+                });
+                hls.loadSource(videoSrcArray[selectedQuality]);
+                hls.attachMedia(video);
+                hls.startLoad();
+            } else {
+                video.src = videoSrcArray[selectedQuality];
+            }
+        };
 
-const changeVideoQuality = (qualityIndex) => {
-    selectedQuality = qualityIndex;
-    if (Hls.isSupported()) {
-        hls.loadSource(videoSrcArray[selectedQuality]);
-        hls.startLoad();
-    } else {
-        video.src = videoSrcArray[selectedQuality];
-        video.play();
-    }
-};
+        const changeVideoQuality = (qualityIndex) => {
+            selectedQuality = qualityIndex;
+            if (Hls.isSupported()) {
+                hls.loadSource(videoSrcArray[selectedQuality]);
+                hls.startLoad();
+            } else {
+                video.src = videoSrcArray[selectedQuality];
+                video.play();
+            }
+        };
 
-document.getElementById('button').addEventListener('click', function () {
-    let productId = '[[${product.getProductId()}]]';
-    location.href = '/products/' + productId;
-});
+        document.getElementById('button').addEventListener('click', function () {
+            let productId = '[[${broadcast.getProduct().getProductId()}]]';
+            location.href = '/products/' + productId;
+        });
+    </script>
+    <script type="text/javascript">
+        function checkCookieExistence(cookieName) {
+                return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
+            }
 
-</script>
-<script type="text/javascript">
-    function checkCookieExistence(cookieName) {
-            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
-        }
+        window.addEventListener("DOMContentLoaded", () => {
+            const isAuthenticated = checkCookieExistence('refresh_token');
 
-    window.addEventListener("DOMContentLoaded", () => {
-        const isAuthenticated = checkCookieExistence('refresh_token');
+            const navbar = document.querySelector('.navbar');
+            navbar.innerHTML = '';
 
-        const navbar = document.querySelector('.navbar');
-        navbar.innerHTML = '';
+            const homeLink = document.createElement('a');
+            homeLink.href = '/';
+            homeLink.textContent = 'Home';
+            navbar.appendChild(homeLink);
 
-        const homeLink = document.createElement('a');
-        homeLink.href = '/';
-        homeLink.textContent = 'Home';
-        navbar.appendChild(homeLink);
+            if (isAuthenticated) {
+                const myPageLink = document.createElement('a');
+                myPageLink.href = '/my-page';
+                myPageLink.textContent = 'MyPage';
+                navbar.appendChild(myPageLink);
 
-        if (isAuthenticated) {
-            const myPageLink = document.createElement('a');
-            myPageLink.href = '/my-page';
-            myPageLink.textContent = 'MyPage';
-            navbar.appendChild(myPageLink);
+                const logoutLink = document.createElement('a');
+                logoutLink.textContent = 'Logout';
+                logoutLink.addEventListener('click', function () {
+                    deleteCookie('access_token');
+                    deleteCookie('refresh_token');
+                });
 
-            const logoutLink = document.createElement('a');
-            logoutLink.textContent = 'Logout';
-            logoutLink.addEventListener('click', function () {
-                deleteCookie('access_token');
-                deleteCookie('refresh_token');
-            });
+                logoutLink.href = '/';
+                navbar.appendChild(logoutLink);
+            } else {
+                const loginLink = document.createElement('a');
+                loginLink.href = '/api/user/login-page';
+                loginLink.textContent = 'Login';
+                navbar.appendChild(loginLink);
+            }
+        });
 
-            logoutLink.href = '/';
-            navbar.appendChild(logoutLink);
-        } else {
-            const loginLink = document.createElement('a');
-            loginLink.href = '/api/user/login-page';
-            loginLink.textContent = 'Login';
-            navbar.appendChild(loginLink);
-        }
-    });
+        function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+    </script>
+    <script type="text/javascript">
+        const broadcasterUserId = '[[${broadcast.getUser().getUserId()}]]';
+        const authenticatedUserId = '[[${authenticatedUserId}]]';
 
-    function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
-</script>
-<script type="text/javascript">
-    const broadcasterUserId = '[[${broadcasterUserId}]]';
-    const authenticatedUserId = '[[${authenticatedUserId}]]';
+        window.addEventListener("DOMContentLoaded", () => {
+            const endBroadcastButtonContainer = document.getElementById('end-broadcast-button-container');
 
-    window.addEventListener("DOMContentLoaded", () => {
-        const endBroadcastButtonContainer = document.getElementById('end-broadcast-button-container');
+            if (broadcasterUserId === authenticatedUserId) {
+                endBroadcastButtonContainer.style.display = 'block';
+                endBroadcastButtonContainer.addEventListener('click', function () {
+                    endBroadcast();
+                });
+            } else {
+                endBroadcastButtonContainer.style.display = 'none';
+            }
+        });
 
-        if (broadcasterUserId === authenticatedUserId) {
-            endBroadcastButtonContainer.style.display = 'block';
-            endBroadcastButtonContainer.addEventListener('click', function () {
-                endBroadcast();
-            });
-        } else {
-            endBroadcastButtonContainer.style.display = 'none';
-        }
-    });
+        function endBroadcast() {
+            const broadcastId = '[[${broadcast.getBroadcastId()}]]';
 
-    function endBroadcast() {
-        const broadcastId = '[[${broadcastId}]]';
-
-
-        fetch(`/api/broadcasts/${broadcastId}/end`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
+            fetch(`/api/broadcasts/${broadcastId}/end`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             })
-            .then(data => {
-                console.log(data);
-                alert("방송이 종료되었습니다.");
-                window.location.href = '/';
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
-    }
-</script>
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log(data);
+                    alert("방송이 종료되었습니다.");
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+    </script>
 </body>
 </html>

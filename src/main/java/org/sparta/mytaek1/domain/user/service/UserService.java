@@ -21,23 +21,30 @@ public class UserService {
 
     @Transactional
     public void createUser(UserRequestDto requestDto) {
-        String userName = requestDto.getUserName();
-        String userEmail = requestDto.getUserEmail();
-        String password = passwordEncoder.encode(requestDto.getPassword());
-        String streamKey = UUID.randomUUID() + userEmail.split("@")[0];
-        String userPhone = requestDto.getUserPhone();
-        String userAddress = requestDto.getUserAddress();
-        String postcode = requestDto.getPostcode();
+        User user =  userRepository.save(
+            new User(
+                    requestDto.getUserName(),
+                    requestDto.getUserEmail(),
+                    passwordEncoder.encode(requestDto.getPassword()),
+                    UUID.randomUUID() + requestDto.getUserEmail().split("@")[0],
+                    requestDto.getUserPhone(),
+                    requestDto.getUserAddress(),
+                    requestDto.getPostcode()
+            )
+        );
 
-        User user =  userRepository.save(new User(userName, userEmail, password, streamKey, userPhone, userAddress, postcode));
         new UserResponseDto(user);
     }
 
     public void checkStreamKey(String streamKey) {
-        Boolean check = userRepository.existsByStreamKey(streamKey);
-        if(!check){
+        if (!userRepository.existsByStreamKey(streamKey)) {
             throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_STREAMKEY_ERROR_MESSAGE.getErrorMessage());
         }
+    }
+
+    public User findByUserEmail(String email) {
+        return userRepository.findByUserEmail(email).orElseThrow(() ->
+                new IllegalArgumentException(ErrorMessage.NOT_EXIST_USER_ERROR_MESSAGE.getErrorMessage()));
     }
 }
 

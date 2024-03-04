@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.sparta.mytaek1.domain.broadcast.entity.Broadcast;
 import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.global.audit.Auditable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 

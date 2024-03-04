@@ -19,28 +19,17 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<String> createUser(@Valid @RequestBody UserRequestDto requestDto) {
-        return handleRequest(() -> {
+        try {
             userService.createUser(requestDto);
             return new ResponseEntity<>(SuccessMessage.JOIN_SUCCESS_MESSAGE.getSuccessMessage(), HttpStatus.CREATED);
-        });
-    }
-
-    @GetMapping("/streamkeys/{streamKey}")
-    public ResponseEntity<String> checkStreamKey(@PathVariable String streamKey){
-        userService.checkStreamKey(streamKey);
-        return ResponseEntity.ok("Stream key is valid");
-    }
-
-    private ResponseEntity<String> handleRequest(RequestHandler handler) {
-        try {
-            return handler.handle();
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @FunctionalInterface
-    private interface RequestHandler {
-        ResponseEntity<String> handle();
+    @GetMapping("/stream-keys/{streamKey}")
+    public ResponseEntity<String> checkStreamKey(@PathVariable String streamKey){
+        userService.checkStreamKey(streamKey);
+        return ResponseEntity.ok(SuccessMessage.VALID_STREAM_KEY_MESSAGE.getSuccessMessage());
     }
 }

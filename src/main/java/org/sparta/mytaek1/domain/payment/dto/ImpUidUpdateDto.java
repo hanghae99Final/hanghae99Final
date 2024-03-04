@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ImpUidupdateDto {
+public class ImpUidUpdateDto {
     private String merchant_uid;
     private Long orderId;
 }

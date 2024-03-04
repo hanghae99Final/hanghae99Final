@@ -17,7 +17,8 @@ public enum ErrorMessage {
     EMPTY_JWT_ERROR_MESSAGE("JWT claims is empty, 잘못된 JWT 토큰 입니다."),
     PASSWORD_MISMATCH_ERROR_MESSAGE("로그인에 실패하였습니다."),
     AUTH_EXCEPTION_MESSAGE("로그인 해야 가능한 기능입니다."),
-    LOCK_NOT_ACQUIRED_ERROR_MESSAGE("락을 획득하지 못했습니다. 잠시 후 다시 시도해주세요.");
+    LOCK_NOT_ACQUIRED_ERROR_MESSAGE("락을 획득하지 못했습니다. 잠시 후 다시 시도해주세요."),
+    INVALID_FILE_FORMAT_FILE_TYPE_ERROR_MESSAGE("잘못된 형식의 파일입니다.");
 
     private final String errorMessage;
 

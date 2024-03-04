@@ -15,6 +15,7 @@
       margin:0;
       padding:0;
     }
+
     .mypage_container {
       width: 80%;
       margin: auto;
@@ -97,6 +98,7 @@
     .order_list_box {
       cursor: pointer;
     }
+
     .pagination {
       list-style: none;
       padding: 0;
@@ -134,22 +136,22 @@
   <nav class="navbar"></nav>
   <div class="mypage_container">
     <h1 style="margin: 20px;">
-      Welcome, <span th:text="${userName}"></span>!
+      Welcome, <span th:text="${user.getUserName()}"></span>!
     </h1>
-    <p>Your Email: <span th:text="${userEmail}"></span></p>
-    <p>Your Stream Key: <span th:text="${streamKey}"></span></p>
-    <p>Your Phone: <span th:text="${userPhone}"></span></p>
-    <p>Your Address: <span th:text="${userAddress}"></span></p>
-    <p>Your Postcode: <span th:text="${postcode}"></span></p>
+    <p>Your Email: <span th:text="${user.getUserEmail()}"></span></p>
+    <p>Your Stream Key: <span th:text="${user.getStreamKey()}"></span></p>
+    <p>Your Phone: <span th:text="${user.getUserPhone()}"></span></p>
+    <p>Your Address: <span th:text="${user.getUserAddress()}"></span></p>
+    <p>Your Postcode: <span th:text="${user.getPostcode()}"></span></p>
     <div class="flex-box">
       <div class="broadcast_container">
         <h2 style="margin: 40px 0 20px 0;">Your Broadcasts</h2>
         <ul>
           <li class="broadcast_list" th:each="broadcast : ${broadcastList}">
             <div class="broadcast_list_box">
-              <a th:href="@{'/broadcasts/' + ${broadcast.broadcastId}}" th:attr="data-boardId=${broadcast.broadcastId}">
-                <h3>방송 제목: <span th:text="${broadcast.broadcastTitle}"></span></h3>
-                <p>방송 설명: <span th:text="${broadcast.broadcastDescription}"></span></p>
+              <a th:href="@{'/broadcasts/' + ${broadcast.getBroadcastId()}}" th:attr="data-boardId=${broadcast.getBroadcastId()}">
+                <h3>방송 제목: <span th:text="${broadcast.getBroadcastTitle()}"></span></h3>
+                <p>방송 설명: <span th:text="${broadcast.getBroadcastDescription()}"></span></p>
                 <p>판매 상품: <span th:text="${broadcast.getProduct().getProductName()}"></span></p>
                 <p>상품 가격: <span th:text="${broadcast.getProduct().getProductPrice()}"></span></p>
               </a>
@@ -206,10 +208,9 @@
     </div>
   </div>
   <script type="text/javascript">
-  function checkCookieExistence(cookieName) {
-            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
-        }
-
+    function checkCookieExistence(cookieName) {
+        return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
+    }
 
     window.addEventListener("DOMContentLoaded", () => {
       const isAuthenticated = checkCookieExistence('refresh_token');
@@ -247,7 +248,7 @@
 
     function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
   </script>
-  <script>
+  <script type="text/javascript">
     async function cancelPay(button) {
       const merchant_uid = button.getAttribute("data-merchantuId");
       const order_id = Number(button.getAttribute("data-orderId"));
@@ -262,7 +263,9 @@
             order_id :order_id
           })
         });
+
         const responseData = await response.json();
+
         if (response.ok) {
           alert("환불 요청이 완료되었습니다.");
           window.location.href="/my-page";

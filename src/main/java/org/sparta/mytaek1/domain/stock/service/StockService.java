@@ -26,13 +26,7 @@ public class StockService {
     }
 
     @Transactional(readOnly = true)
-    public Stock findStockById(Long productId) {
-        return stockRepository.findByProductProductId(productId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_STOCK_ERROR_MESSAGE.getErrorMessage()));
-    }
-
-    @Transactional(readOnly = true)
     public Stock findStockWithProduct(Long stockId) {
         return stockRepository.findStockWithProduct(stockId);
     }
-
 }

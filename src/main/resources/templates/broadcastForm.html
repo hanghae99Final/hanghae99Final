@@ -13,41 +13,41 @@
             });
         });
 
-function submitForm() {
-    const formData = {
-        broadcastTitle: $("#broadcastTitle").val(),
-        broadcastDescription: $("#broadcastDescription").val(),
-        productName: $("#productName").val(),
-        productDescription: $("#productDescription").val(),
-        productPrice: $("#productPrice").val(),
-        productStock: $("#productStock").val()
-    };
+        function submitForm() {
+            const formData = {
+                broadcastTitle: $("#broadcastTitle").val(),
+                broadcastDescription: $("#broadcastDescription").val(),
+                productName: $("#productName").val(),
+                productDescription: $("#productDescription").val(),
+                productPrice: $("#productPrice").val(),
+                productStock: $("#productStock").val()
+            };
 
-    const jsonData = JSON.stringify(formData);
+            const jsonData = JSON.stringify(formData);
 
-    const form = new FormData();
-    form.append('requestDto', new Blob([jsonData], { type: 'application/json' }));
+            const form = new FormData();
+            form.append('requestDto', new Blob([jsonData], { type: 'application/json' }));
 
-    const imageFile = $("#imageFile")[0].files[0];
-    form.append('imageFile', imageFile);
+            const imageFile = $("#imageFile")[0].files[0];
+            form.append('imageFile', imageFile);
 
-    $.ajax({
-        type: "POST",
-        url: "/api/broadcasts",
-        data: form,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            console.log(response);
-            window.location.href = "/";
-        },
-        error: function(error) {
-            console.error(error);
-            alert(error.responseText);
-            window.location.href = "/";
+            $.ajax({
+                type: "POST",
+                url: "/api/broadcasts",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log(response);
+                    window.location.href = "/";
+                },
+                error: function(error) {
+                    console.error(error);
+                    alert(error.responseText);
+                    window.location.href = "/";
+                }
+            });
         }
-    });
-}
     </script>
     <style>
         body {
@@ -133,40 +133,40 @@ function submitForm() {
     </style>
 </head>
 <body>
-<nav class="navbar"></nav>
-<form method="post" action="/api/broadcasts">
-    <h2>방송 정보</h2>
-    <label for="broadcastTitle">Broadcast Title:</label>
-    <input type="text" id="broadcastTitle" name="broadcastTitle" required><br>
+    <nav class="navbar"></nav>
+    <form method="post" action="/api/broadcasts">
+        <h2>방송 정보</h2>
+        <label for="broadcastTitle">Broadcast Title:</label>
+        <input type="text" id="broadcastTitle" name="broadcastTitle" required><br>
 
-    <label for="broadcastDescription">Broadcast Description:</label>
-    <textarea id="broadcastDescription" name="broadcastDescription" required></textarea><br>
+        <label for="broadcastDescription">Broadcast Description:</label>
+        <textarea id="broadcastDescription" name="broadcastDescription" required></textarea><br>
 
-    <h2>상품 정보</h2>
-    <label for="productName">Product Name:</label>
-    <input type="text" id="productName" name="productName" required><br>
+        <h2>상품 정보</h2>
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="productName" required><br>
 
-    <label for="productDescription">Product Description:</label>
-    <input type="text" id="productDescription" name="productDescription" required><br>
+        <label for="productDescription">Product Description:</label>
+        <input type="text" id="productDescription" name="productDescription" required><br>
 
-    <label for="productPrice">Product Price:</label>
-    <input type="text" id="productPrice" name="productPrice" required><br>
+        <label for="productPrice">Product Price:</label>
+        <input type="text" id="productPrice" name="productPrice" required><br>
 
-    <label for="productStock">Product Stock:</label>
-    <input type="text" id="productStock" name="productStock" required><br>
+        <label for="productStock">Product Stock:</label>
+        <input type="text" id="productStock" name="productStock" required><br>
 
-    <label for="imageFile">Image File:</label>
-    <input type="file" id="imageFile" name="imageFile" accept="image/*" required><br>
+        <label for="imageFile">Image File:</label>
+        <input type="file" id="imageFile" name="imageFile" accept="image/*" required><br>
 
 
-    <div class="obs-info">
-        <p>OBS를 통해 방송을 시작해주세요.</p>
-        <p>서버 : rtmps://mytaek1-streaming.store/stream</p>
-        <p>스트림키 : 마이페이지에서 스트림키를 확인해주세요.</p>
-    </div>
-    <button type="submit">방송 시작하기</button>
-</form>
-<script type="text/javascript">
+        <div class="obs-info">
+            <p>OBS를 통해 방송을 시작해주세요.</p>
+            <p>서버 : rtmps://mytaek1-streaming.store/stream</p>
+            <p>스트림키 : 마이페이지에서 스트림키를 확인해주세요.</p>
+        </div>
+        <button type="submit">방송 시작하기</button>
+    </form>
+    <script type="text/javascript">
         function checkCookieExistence(cookieName) {
             return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
         }
