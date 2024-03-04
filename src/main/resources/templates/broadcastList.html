@@ -115,8 +115,10 @@
                     alert('로그인 후에 방송할 수 있습니다.');
                     window.location.href = '/api/user/login-page';
                 }
+                if(isAuthenticated){
+                    window.location.href = '/broadcasts/start';
+                }
 
-                window.location.href = '/broadcasts/start';
             });
         });
 
@@ -153,9 +155,9 @@
                 const logoutLink = document.createElement('a');
                 logoutLink.textContent = 'Logout';
                 logoutLink.addEventListener('click', function () {
-                    deleteCookie('Authorization');
+                    deleteCookie('access_token');
+                    deleteCookie('refresh_token');
                 });
-
                 logoutLink.href = '/';
                 navbar.appendChild(logoutLink);
             } else {

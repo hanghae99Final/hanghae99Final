@@ -163,7 +163,7 @@
         }
 
         window.addEventListener("DOMContentLoaded", () => {
-            const isAuthenticated = checkCookie('refresh_token');
+            const isAuthenticated = checkCookieExistence('refresh_token');
 
             const navbar = document.querySelector('.navbar');
             navbar.innerHTML = '';
@@ -182,7 +182,8 @@
                 const logoutLink = document.createElement('a');
                 logoutLink.textContent = 'Logout';
                 logoutLink.addEventListener('click', function () {
-                    deleteCookie('Authorization');
+                    deleteCookie('access_token');
+                    deleteCookie('refresh_token');
                 });
 
                 logoutLink.href = '/';

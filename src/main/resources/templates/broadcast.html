@@ -202,7 +202,8 @@ document.getElementById('button').addEventListener('click', function () {
             const logoutLink = document.createElement('a');
             logoutLink.textContent = 'Logout';
             logoutLink.addEventListener('click', function () {
-                deleteCookie('Authorization');
+                deleteCookie('access_token');
+                deleteCookie('refresh_token');
             });
 
             logoutLink.href = '/';
