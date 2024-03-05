@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyTaek1 - MyPage</title>
+  <script th:inline="javascript">
+    if (!sessionStorage.getItem('reloaded')) {
+      location.reload();
+      sessionStorage.setItem('reloaded', 'true');
+    }
+  </script>
+  <style>
+    * {
+      margin:0;
+      padding:0;
+    }
+
+    .mypage_container {
+      width: 80%;
+      margin: auto;
+      text-align: center;
+    }
+
+    .mypage_container > p {
+      line-height: 2em;
+    }
+
+    .flex-box {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .broadcast_container, .order_container {
+      width: 49%;
+    }
+
+    .broadcast_list, .order_list {
+      list-style: none;
+      width: 100%;
+    }
+
+    .broadcast_list_box, .order_list_box {
+      text-align: center;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      position: relative;
+      border: 1px solid #aaa;
+    }
+
+    .navbar {
+      background-color: #333;
+      overflow: hidden;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .navbar a {
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    .navbar a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+    }
+
+    ul {
+      width: 100%;
+    }
+
+    button {
+      background-color: dimgray;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: dimgray;
+    }
+
+    .order_info_title {
+      cursor: pointer;
+    }
+
+    .pagination {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .pagination li {
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    .pagination li a {
+      display: block;
+      padding: 8px 16px;
+      background-color: #f0f0f0;
+      color: #333;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .pagination li.active a {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .pagination li.disabled a {
+      pointer-events: none;
+      background-color: #ccc;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar"></nav>
+  <div class="mypage_container">
+    <h1 style="margin: 20px;">
+      Welcome, <span th:text="${user.getUserName()}"></span>!
+    </h1>
+    <p>Your Email: <span th:text="${user.getUserEmail()}"></span></p>
+    <p>Your Stream Key: <span th:text="${user.getStreamKey()}"></span></p>
+    <p>Your Phone: <span th:text="${user.getUserPhone()}"></span></p>
+    <p>Your Address: <span th:text="${user.getUserAddress()}"></span></p>
+    <p>Your Postcode: <span th:text="${user.getPostcode()}"></span></p>
+    <div class="flex-box">
+      <div class="broadcast_container">
+        <h2 style="margin: 40px 0 20px 0;">Your Broadcasts</h2>
+        <ul>
+          <li class="broadcast_list" th:each="broadcast : ${broadcastList}">
+            <div class="broadcast_list_box">
+              <a th:href="@{'/broadcasts/' + ${broadcast.getBroadcastId()}}" th:attr="data-boardId=${broadcast.getBroadcastId()}">
+                <h3>방송 제목: <span th:text="${broadcast.getBroadcastTitle()}"></span></h3>
+                <p>방송 설명: <span th:text="${broadcast.getBroadcastDescription()}"></span></p>
+                <p>판매 상품: <span th:text="${broadcast.getProduct().getProductName()}"></span></p>
+                <p>상품 가격: <span th:text="${broadcast.getProduct().getProductPrice()}"></span></p>
+              </a>
+            </div>
+          </li>
+        </ul>
+        <div th:if="${broadcastList.totalPages > 1}">
+          <ul class="pagination">
+            <li th:class="${broadcastList.number == 0} ? 'disabled' : ''">
+              <a th:href="@{/my-page(broadcastPage=${broadcastList.number > 0 ? broadcastList.number - 1 : 0}, orderPage=${session.orderPage})}">Previous</a>
+            </li>
+            <li th:each="pageNumber : ${#numbers.sequence(0, broadcastList.totalPages - 1)}"
+                th:class="${pageNumber == broadcastList.number} ? 'active' : ''">
+              <a th:href="@{/my-page(broadcastPage=${pageNumber}, orderPage=${session.orderPage})}" th:text="${pageNumber + 1}">Page number</a>
+            </li>
+            <li th:class="${broadcastList.number + 1 == broadcastList.totalPages} ? 'disabled' : ''">
+              <a th:href="@{/my-page(broadcastPage=${broadcastList.number + 1 < broadcastList.totalPages ? broadcastList.number + 1 : broadcastList.number}, orderPage=${session.orderPage})}">Next</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+     <div class="order_container">
+       <h2 style="margin: 40px 0 20px 0;">Your Orders</h2>
+       <ul>
+         <li class="order_list" th:each="order : ${orderList}">
+           <div class="order_list_box">
+             <h4 class="order_info_title" onclick="goToOrderInfo(this)" th:data-orderId="${order.getOrderId()}" th:data-productId="${order.getProduct().getProductId()}">주문 정보</h4>
+             <p>구매 상품: <span th:text="${order.getProduct().getProductName()}"></span></p>
+             <p>구매 수량: <span th:text="${order.getQuantity()}"></span></p>
+             <p>총 가격: <span th:text="${order.getTotalPrice()}"></span></p>
+             <p>결제 상태:
+               <span th:if="${#strings.equals(order.paymentStatus,'CONFIRM')}" th:text="'결제 완료'"></span>
+               <span th:if="${#strings.equals(order.paymentStatus,'READY')}" th:text="'결제 대기'"></span>
+               <span th:if="${#strings.equals(order.paymentStatus,'CANCEL')}" th:text="'결제 취소'"></span>
+             </p>
+             <button onclick="cancelPay(this)" th:if="${#strings.equals(order.paymentStatus,'CONFIRM')}" th:data-merchantuId="${order.getMerchantUid()}" th:data-orderId="${order.getOrderId()}">결제 취소</button>
+           </div>
+         </li>
+       </ul>
+       <div th:if="${orderList.totalPages > 1}">
+         <ul class="pagination">
+           <li th:class="${orderList.number == 0} ? 'disabled' : ''">
+             <a th:href="@{/my-page(broadcastPage=${session.broadcastPage}, orderPage=${orderList.number > 0 ? orderList.number - 1 : 0})}">Previous</a>
+           </li>
+           <li th:each="pageNumber : ${#numbers.sequence(0, orderList.totalPages - 1)}"
+               th:class="${pageNumber == orderList.number} ? 'active' : ''">
+             <a th:href="@{/my-page(broadcastPage=${session.broadcastPage}, orderPage=${pageNumber})}" th:text="${pageNumber + 1}">Page number</a>
+           </li>
+           <li th:class="${orderList.number + 1 == orderList.totalPages} ? 'disabled' : ''">
+             <a th:href="@{/my-page(broadcastPage=${session.broadcastPage}, orderPage=${orderList.number + 1 < orderList.totalPages ? orderList.number + 1 : orderList.number})}">Next</a>
+           </li>
+         </ul>
+       </div>
+     </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    function checkCookieExistence(cookieName) {
+        return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const isAuthenticated = checkCookieExistence('refresh_token');
+
+      const navbar = document.querySelector('.navbar');
+      navbar.innerHTML = '';
+
+      const homeLink = document.createElement('a');
+      homeLink.href = '/';
+      homeLink.textContent = 'Home';
+      navbar.appendChild(homeLink);
+
+      if (isAuthenticated) {
+        const myPageLink = document.createElement('a');
+        myPageLink.href = '/my-page';
+        myPageLink.textContent = 'MyPage';
+        navbar.appendChild(myPageLink);
+
+        const logoutLink = document.createElement('a');
+        logoutLink.textContent = 'Logout';
+        logoutLink.addEventListener('click', function () {
+          deleteCookie('access_token');
+          deleteCookie('refresh_token');
+        });
+
+        logoutLink.href = '/';
+        navbar.appendChild(logoutLink);
+      } else {
+        const loginLink = document.createElement('a');
+        loginLink.href = '/api/user/login-page';
+        loginLink.textContent = 'Login';
+        navbar.appendChild(loginLink);
+      }
+    });
+
+    function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+  </script>
+  <script type="text/javascript">
+    function cancelPay(button) {
+      const merchant_uid = button.getAttribute("data-merchantuId");
+      const order_id = Number(button.getAttribute("data-orderId"));
+
+      fetch("/payments/cancel", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          merchant_uid: merchant_uid,
+          order_id :order_id
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          alert("환불 요청이 완료되었습니다.");
+          window.location.href="/my-page";
+        } else {
+          console.error("환불 실패");
+          alert("환불 실패");
+        }
+      });
+    }
+  </script>
+  <script type="text/javascript">
+    function goToOrderInfo(div) {
+      const orderId = Number(div.getAttribute("data-orderId"));
+      const productId = Number(div.getAttribute("data-productId"));
+
+      window.location.href = `/products/${productId}/orders/${orderId}`;
+    }
+  </script>
+</body>
+</html>

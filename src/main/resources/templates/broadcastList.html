@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MyTaek1 - Broadcast List</title>
+    <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            color: #000;
+            text-align: center;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #babebc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .view-details-button, .broadcast-start-button {
+            cursor: pointer;
+            background-color: dimgray;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar a {
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .pagination {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .pagination li {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .pagination li a {
+            display: block;
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .pagination li.active a {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .pagination li.disabled a {
+            pointer-events: none;
+            background-color: #ccc;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar"></nav>
+<div style="display: flex; justify-content: center; align-items: center;">
+    <h2>Broadcast List</h2>
+</div>
+<div style="display: flex; width: 90%; justify-content: right; align-items: flex-end;">
+    <button class="broadcast-start-button">방송 시작하기</button>
+</div>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>User Name</th>
+                <th>Product Name</th>
+                <th>Product Image</th>
+                <th>View Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="broadcastResponseDto : ${broadcastResponseDtoPage}">
+                <td th:text="${broadcastResponseDto.broadcastTitle}"></td>
+                <td th:text="${broadcastResponseDto.broadcastDescription}"></td>
+                <td th:text="${broadcastResponseDto.userName}"></td>
+                <td th:text="${broadcastResponseDto.productName}"></td>
+                <td>
+                    <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${broadcastResponseDto.imageUrl.substring(broadcastResponseDto.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
+                </td>
+                <td>
+                    <button class="view-details-button" th:attr="data-broadcast-id=${broadcastResponseDto.broadcastId}" style="cursor: pointer;">
+                        View Details
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div th:if="${broadcastResponseDtoPage.totalPages > 0}">
+        <ul class="pagination">
+            <li th:class="${broadcastResponseDtoPage.number == 0} ? 'disabled' : ''">
+                <a th:href="@{/(page=${broadcastResponseDtoPage.number - 1})}">Previous</a>
+            </li>
+            <li th:each="pageNumber : ${#numbers.sequence(0, broadcastResponseDtoPage.totalPages - 1)}"
+                th:class="${pageNumber == broadcastResponseDtoPage.number} ? 'active' : ''">
+                <a th:href="@{/(page=${pageNumber})}" th:text="${pageNumber + 1}">Page number</a>
+            </li>
+            <li th:class="${broadcastResponseDtoPage.number + 1 == broadcastResponseDtoPage.totalPages} ? 'disabled' : ''">
+                <a th:href="@{/(page=${broadcastResponseDtoPage.number + 1})}">Next</a>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        document.querySelectorAll('.view-details-button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const broadcastId = button.getAttribute('data-broadcast-id');
+                window.location.href = '/broadcasts/' + broadcastId;
+            });
+        });
+
+        document.querySelectorAll('.broadcast-start-button').forEach(function (button) {
+            const isAuthenticated = checkCookieExistence('refresh_token');
+
+            button.addEventListener('click', function () {
+                if (!isAuthenticated) {
+                    alert('로그인 후에 방송할 수 있습니다.');
+                    window.location.href = '/api/user/login-page';
+                }
+                if(isAuthenticated){
+                    window.location.href = '/broadcasts/start';
+                }
+
+            });
+        });
+
+        function checkCookieExistence(cookieName) {
+            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
+        }
+    </script>
+    <script type="text/javascript">
+        function checkCookieExistence(cookieName) {
+            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const isAuthenticated = checkCookieExistence('refresh_token');
+
+            const navbar = document.querySelector('.navbar');
+            navbar.innerHTML = '';
+
+            const homeLink = document.createElement('a');
+            homeLink.href = '/';
+            homeLink.textContent = 'Home';
+            navbar.appendChild(homeLink);
+
+            if (isAuthenticated) {
+                const myPageLink = document.createElement('a');
+                myPageLink.href = '/my-page';
+                myPageLink.textContent = 'MyPage';
+                navbar.appendChild(myPageLink);
+
+                const logoutLink = document.createElement('a');
+                logoutLink.textContent = 'Logout';
+                logoutLink.addEventListener('click', function () {
+                    deleteCookie('access_token');
+                    deleteCookie('refresh_token');
+                });
+                logoutLink.href = '/';
+                navbar.appendChild(logoutLink);
+            } else {
+                const loginLink = document.createElement('a');
+                loginLink.href = '/api/user/login-page';
+                loginLink.textContent = 'Login';
+                navbar.appendChild(loginLink);
+            }
+        });
+
+        function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+    </script>
+</body>
+</html>
+
