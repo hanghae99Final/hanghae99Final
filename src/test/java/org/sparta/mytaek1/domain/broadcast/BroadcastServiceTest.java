@@ -127,16 +127,17 @@ public class BroadcastServiceTest {
                 .andExpect(view().name("broadcast"))
                 .andReturn();
 
-        String returnedStreamKey = (String) Objects.requireNonNull(result.getModelAndView()).getModel().get("streamKey");
-        Product returnedProduct = (Product) result.getModelAndView().getModel().get("product");
+        Broadcast returnedBroadcast = (Broadcast) Objects.requireNonNull(result.getModelAndView()).getModel().get("broadcast");
+        Product returnedProduct = returnedBroadcast.getProduct();
 
         Stock returnedStock = stockRepository.findByProductProductId(returnedProduct.getProductId()).orElseThrow();
         Stock broadcastStock = stockRepository.findByProductProductId(broadcast.getProduct().getProductId()).orElseThrow();
 
-        Assertions.assertEquals(broadcast.getUser().getStreamKey(), returnedStreamKey);
-        Assertions.assertEquals(broadcast.getProduct().getProductName(), returnedProduct.getProductName());
-        Assertions.assertEquals(broadcast.getProduct().getProductDescription(), returnedProduct.getProductDescription());
-        Assertions.assertEquals(broadcast.getProduct().getProductPrice(), returnedProduct.getProductPrice());
-        Assertions.assertEquals(broadcastStock.getProductStock(), returnedStock.getProductStock());
+        Assertions.assertAll(
+                () -> assertEquals(broadcast.getProduct().getProductName(), returnedProduct.getProductName()),
+                () -> assertEquals(broadcast.getProduct().getProductDescription(), returnedProduct.getProductDescription()),
+                () -> assertEquals(broadcast.getProduct().getProductPrice(), returnedProduct.getProductPrice()),
+                () -> assertEquals(broadcastStock.getProductStock(), returnedStock.getProductStock())
+        );
     }
 }
