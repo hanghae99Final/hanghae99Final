@@ -234,17 +234,10 @@
                 }
 
                 const responseData = await response.json();
-                alert("빌링키 발급 성공");
 
-                if (responseData.code === 0) {
-                    $.ajax({
-                        type: 'PATCH',
-                        url: `/api/orders/${orderId}/paymentStatus`
-                    })
+                if (responseData != null) {
                     alert("결제 요청이 완료되었습니다.");
                     window.location.href="/my-page";
-                } else {
-                    alert("결제 실패: " + requestBody);
                 }
 
             } else {
