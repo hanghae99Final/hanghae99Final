@@ -15,6 +15,7 @@ import org.sparta.mytaek1.domain.order.entity.Orders;
 import org.sparta.mytaek1.domain.order.service.OrderService;
 import org.sparta.mytaek1.domain.payment.dto.CancelPayment;
 import org.sparta.mytaek1.domain.payment.dto.PaymentOnetimeDto;
+import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class PaymentService {
     public void processAsync(PaymentOnetimeDto paymentOnetimeDto) throws IamportResponseException, IOException {
         IamportResponse<Payment> payment = getPaymentOnetime(paymentOnetimeDto);
         orderService.updateMerchant(paymentOnetimeDto.getBuyer_orderId(), paymentOnetimeDto.getMerchant_uid());
+        checkFailedPayment(payment);
         if (payment.getCode() == 0) {
             updatePaymentStatus(paymentOnetimeDto.getBuyer_orderId());
         }
@@ -88,5 +90,11 @@ public class PaymentService {
     public IamportResponse<Payment> cancelPayment(CancelPayment cancelPayment) throws IamportResponseException, IOException {
         CancelData data = new CancelData(cancelPayment.getMerchant_uid(),false);
         return iamportClient.cancelPaymentByImpUid(data);
+    }
+
+    private void checkFailedPayment(IamportResponse<Payment> payment) {
+        if (payment.getCode() != 0) {
+            throw new IllegalArgumentException(ErrorMessage.FAILED_PAYMENT_ERROR_MESSAGE.getErrorMessage());
+        }
     }
 }

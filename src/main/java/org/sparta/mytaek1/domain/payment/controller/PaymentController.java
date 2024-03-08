@@ -65,14 +65,12 @@ public class PaymentController {
 //    }
 
     @PostMapping("/subscribe/payments/onetime")
-    public ResponseEntity<HttpStatus> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto)
-            throws IamportResponseException, IOException {
+    public ResponseEntity<HttpStatus> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto) {
         CompletableFuture.runAsync(() -> {
             try {
                 paymentService.processAsync(paymentOnetimeDto);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                log.info(e.getMessage());
             }
         });
 
