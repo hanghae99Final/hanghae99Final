@@ -94,7 +94,7 @@ public class PaymentService {
 
     private void checkFailedPayment(IamportResponse<Payment> payment) {
         if (payment.getCode() != 0) {
-            throw new IllegalArgumentException(ErrorMessage.FAILED_PAYMENT_ERROR_MESSAGE.getErrorMessage());
+            throw new IllegalArgumentException(payment.getMessage());
         }
     }
 }
