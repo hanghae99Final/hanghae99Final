@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -54,15 +53,18 @@ public class PaymentService {
 
     @Async
     public CompletableFuture<IamportResponse<Payment>> getPaymentOnetime(PaymentOnetimeDto paymentOnetimeDto) throws IOException, IamportResponseException {
-        String merchant_uid = paymentOnetimeDto.getMerchant_uid();
-        BigDecimal amount = paymentOnetimeDto.getAmount();
-        String cardNumber = paymentOnetimeDto.getCard_number();
-        String expiry = paymentOnetimeDto.getExpiry();
-        String birth = paymentOnetimeDto.getBirth();
-        String pwd2Digit = paymentOnetimeDto.getPwd_2digit();
-        CardInfo card =new CardInfo(cardNumber,expiry,birth,pwd2Digit);
+        CardInfo card =new CardInfo(
+                paymentOnetimeDto.getCard_number(),
+                paymentOnetimeDto.getExpiry(),
+                paymentOnetimeDto.getBirth(),
+                paymentOnetimeDto.getPwd_2digit()
+        );
+        OnetimePaymentData data = new OnetimePaymentData(
+                paymentOnetimeDto.getMerchant_uid(),
+                paymentOnetimeDto.getAmount(),
+                card
+        );
 
-        OnetimePaymentData data = new OnetimePaymentData(merchant_uid,amount, card);
         data.setCustomer_uid(paymentOnetimeDto.getCustomer_uid());
         data.setPg(paymentOnetimeDto.getPg());
         data.setBuyerName(paymentOnetimeDto.getBuyer_name());

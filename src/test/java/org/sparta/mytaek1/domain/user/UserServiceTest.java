@@ -52,21 +52,4 @@ class UserServiceTest {
         assertEquals("Paju, Korea", savedUser.getUserAddress());
         assertEquals("10003", savedUser.getPostcode());
     }
-
-//    @Test
-//    @DisplayName("비밀번호 유효성 검사 예외 확인")
-//    void testPasswordPattern() {
-//        UserService userService = new UserService(userRepository, passwordEncoder);
-//        UserRequestDto requestDto = new UserRequestDto(
-//                "dabomi",
-//                "dabomi@email.com",
-//                "1234",
-//                "000-0000-0000",
-//                "Paju, Korea",
-//                "10003"
-//        );
-//
-//        assertThatThrownBy(() -> userService.createUser(requestDto))
-//                .isInstanceOf(MethodArgumentNotValidException.class);
-//    }
 }

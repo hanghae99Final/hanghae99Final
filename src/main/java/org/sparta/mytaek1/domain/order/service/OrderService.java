@@ -19,7 +19,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -66,14 +65,6 @@ public class OrderService {
         return new OrderResponseDto(order);
     }
 
-    public Orders findOrderById(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
-    }
-
-    public Page<Orders> findOrderListByUserId(Long userId, Pageable pageable) {
-        return orderRepository.findAllByUserUserId(userId,pageable);
-    }
-
     @DistributedLock(key = "#productId")
     private void deleteOrder(Long productId, Orders order, Stock stock) {
         stock.cancelStock(order.getQuantity());
@@ -85,10 +76,19 @@ public class OrderService {
         Orders orders = findOrderById(orderId);
         orders.updateMerchant(merchantUid);
     }
+
     @Transactional
     public void cancelPaymentStatus(Long orderId) {
         Orders order = findOrderById(orderId);
         order.cancel();
+    }
+
+    public Orders findOrderById(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
+    }
+
+    public Page<Orders> findOrderListByUserId(Long userId, Pageable pageable) {
+        return orderRepository.findAllByUserUserId(userId,pageable);
     }
 }
 

@@ -8,7 +8,7 @@ import jakarta.annotation.PostConstruct;
 import org.sparta.mytaek1.domain.order.dto.OrderResponseDto;
 import org.sparta.mytaek1.domain.order.service.OrderService;
 import org.sparta.mytaek1.domain.payment.dto.CancelPayment;
-import org.sparta.mytaek1.domain.payment.dto.ImpUidupdateDto;
+import org.sparta.mytaek1.domain.payment.dto.ImpUidUpdateDto;
 import org.sparta.mytaek1.domain.payment.dto.PaymentOnetimeDto;
 import org.sparta.mytaek1.domain.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,6 @@ public class PaymentController {
     private final PaymentService paymentService;
     @Value("${iamport.api.key}")
     private String apiKey;
-
     @Value("${iamport.api.secret.key}")
     private String apiSecretKey;
     private IamportClient iamportClient;
@@ -34,6 +33,7 @@ public class PaymentController {
         this.orderService = orderService;
         this.paymentService = paymentService;
     }
+
     @PostConstruct
     public void init() {
         this.iamportClient = new IamportClient(apiKey, apiSecretKey);
@@ -41,7 +41,7 @@ public class PaymentController {
 
     @ResponseBody
     @PostMapping("/verify/{imp_uid}")
-    public IamportResponse<Payment> paymentByImpUid(@PathVariable("imp_uid") String imp_uid,@RequestBody ImpUidupdateDto impUidupdateDto)
+    public IamportResponse<Payment> paymentByImpUid(@PathVariable("imp_uid") String imp_uid,@RequestBody ImpUidUpdateDto impUidupdateDto)
             throws IamportResponseException, IOException {
         orderService.updateMerchant(impUidupdateDto.getOrderId(),impUidupdateDto.getMerchant_uid());
         return iamportClient.paymentByImpUid(imp_uid);
@@ -60,6 +60,7 @@ public class PaymentController {
         orderService.updateMerchant(paymentOnetimeDto.getBuyer_orderId(),paymentOnetimeDto.getMerchant_uid());
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/payments/cancel")
     public ResponseEntity<IamportResponse<Payment>> cancelPayment(@RequestBody CancelPayment cancelPayment) throws IamportResponseException, IOException {
         IamportResponse<Payment> response = paymentService.cancelPayment(cancelPayment);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MyTaek1 - Order</title>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <style>
@@ -39,16 +39,6 @@
             text-align: center;
         }
 
-        .order-container {
-            width: 50%;
-            margin: auto;
-            text-align: left;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
         .order-container label,
         .order-container input,
         .order-container button {
@@ -78,13 +68,13 @@
             margin: 20px auto;
         }
 
-        #cardNumber, #cardExpiry, #userBirth, #cardPassword{
+        #cardNumber, #cardExpiry, #userBirth, #cardPassword {
             width: 40%;
             margin-bottom: 5px;
             padding: 5px;
         }
 
-        #cardPassword{
+        #cardPassword {
             width: 35%;
             margin-bottom: 5px;
             padding: 5px;
@@ -120,14 +110,14 @@
         <p>수량: <span id="orderQuantity" th:text="${order.getQuantity()}"></span></p>
         <p>총 가격: <span id="orderTotalPrice" th:text="${order.getTotalPrice()}"></span></p>
     </div>
-    <label>카드번호: </label><input type="text" id="cardNumber" placeholder="0000-0000-0000-0000 형식에 맞춰서 입력해주세요." /><br />
-    <label>유효기간: </label><input type="text" id="cardExpiry" placeholder="YYYY-MM 형식에 맞춰서 입력해주세요." /><br />
-    <label>생년월일: </label><input type="text" id="userBirth" placeholder="yymmdd 형식에 맞춰서 입력해주세요." /><br />
-    <label>카드 비밀번호 앞 두자리: </label><input id="cardPassword" type="text" name="pwd_2digit" /><br />
+    <label>카드번호: </label><input type="text" id="cardNumber" placeholder="0000-0000-0000-0000 형식에 맞춰서 입력해주세요."/><br/>
+    <label>유효기간: </label><input type="text" id="cardExpiry" placeholder="YYYY-MM 형식에 맞춰서 입력해주세요."/><br/>
+    <label>생년월일: </label><input type="text" id="userBirth" placeholder="yymmdd 형식에 맞춰서 입력해주세요."/><br/>
+    <label>카드 비밀번호 앞 두자리: </label><input id="cardPassword" type="text" name="pwd_2digit"/><br/>
     <button type="button" onclick="requestNicePay()">모듈로 결제하기</button>
     <button type="button" onclick="requestCardPay()">카드정보로 결제하기</button>
-    <input type="hidden" id="buyerProductId" th:value="${product.getProductId()}" />
-    <input type="hidden" id="buyerUserId" th:value="${user != null ? user.getUserId() : ''}" />
+    <input type="hidden" id="buyerProductId" th:value="${product.getProductId()}"/>
+    <input type="hidden" id="buyerUserId" th:value="${user != null ? user.getUserId() : ''}"/>
 </div>
 <script type="text/javascript">
     const productName = document.getElementById("orderProductPrice").textContent;
@@ -150,7 +140,7 @@
     }
 
     function requestNicePay() {
-        const isAuthenticated = checkCookieExistence('Authorization');
+        const isAuthenticated = checkCookieExistence('refresh_token');
         const orderContainer = document.querySelector('.order_container');
         const orderId = orderContainer.getAttribute('data-order-id');
 
@@ -160,7 +150,7 @@
             const merchant_uid = generateMerchantUid();
 
             IMP.request_pay({
-                pg : 'kcp.AO09C',
+                pg: 'kcp.AO09C',
                 pay_method: "card",
                 merchant_uid: merchant_uid,
                 name: productName,
@@ -176,17 +166,17 @@
                     url: '/verify/' + rsp.imp_uid,
                     data: JSON.stringify({
                         merchant_uid: merchant_uid,
-                        orderId : orderId
+                        orderId: orderId
                     }),
                     contentType: 'application/json',
-                }).done(function(data) {
-                    if(data.response.status === "paid"){
+                }).done(function (data) {
+                    if (data.response.status === "paid") {
                         $.ajax({
                             type: 'PATCH',
                             url: `/api/orders/${orderId}/paymentStatus`
                         })
                         alert("결제 성공");
-                        window.location.href="/my-page";
+                        window.location.href = "/my-page";
                     } else {
                         alert("결제 실패");
                     }
@@ -199,7 +189,7 @@
     }
 
     async function requestCardPay() {
-        const isAuthenticated = checkCookieExistence('Authorization');
+        const isAuthenticated = checkCookieExistence('refresh_token');
         const orderContainer = document.querySelector('.order_container');
         const orderId = orderContainer.getAttribute('data-order-id');
 
@@ -213,10 +203,9 @@
             const birth = document.getElementById("userBirth").value;
             const customer_uid = card_number + expiry;
             const pg = "nice.iamport01m";
-
             const requestBody = JSON.stringify({
-                pg :pg,
-                merchant_uid:merchant_uid,
+                pg: pg,
+                merchant_uid: merchant_uid,
                 amount: totalPrice,
                 card_number: card_number,
                 expiry: expiry,
@@ -228,8 +217,9 @@
                 buyer_tel: buyerTel,
                 buyer_addr: buyerAddr,
                 buyer_postcode: buyerPostcode,
-                buyer_orderId : orderId
+                buyer_orderId: orderId
             });
+
             const response = await fetch("/subscribe/payments/onetime", {
                 method: "POST",
                 headers: {
@@ -244,7 +234,6 @@
             }
 
             const responseData = await response.json();
-            alert("빌링키 발급 성공");
 
             if (responseData.code === 0) {
                 $.ajax({
@@ -252,7 +241,7 @@
                     url: `/api/orders/${orderId}/paymentStatus`
                 })
                 alert("결제 요청이 완료되었습니다.");
-                window.location.href="/my-page";
+                window.location.href = "/my-page";
             } else {
                 alert("결제 실패: " + requestBody);
             }
@@ -266,24 +255,14 @@
     function checkCookieExistence(cookieName) {
         return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
     }
-
 </script>
 <script type="text/javascript">
-    function checkCookie(name) {
-        const cookies = document.cookie.split(';');
-
-        for (const cookie of cookies) {
-            const [cookieName, cookieValue] = cookie.trim().split('=');
-            if (cookieName === name) {
-                return true;
-            }
-        }
-
-        return false;
+    function checkCookieExistence(cookieName) {
+        return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-        const isAuthenticated = checkCookie('Authorization');
+        const isAuthenticated = checkCookieExistence('refresh_token');
 
         const navbar = document.querySelector('.navbar');
         navbar.innerHTML = '';
@@ -302,7 +281,8 @@
             const logoutLink = document.createElement('a');
             logoutLink.textContent = 'Logout';
             logoutLink.addEventListener('click', function () {
-                deleteCookie('Authorization');
+                deleteCookie('access_token');
+                deleteCookie('refresh_token');
             });
 
             logoutLink.href = '/';
@@ -315,7 +295,9 @@
         }
     });
 
-    function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+    function deleteCookie(name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
+    }
 </script>
 </body>
 </html>

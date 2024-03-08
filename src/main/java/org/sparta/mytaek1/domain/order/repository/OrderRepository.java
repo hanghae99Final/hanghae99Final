@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
+
     List<Orders> findAllByProductProductId(Long productId);
 
     List<Orders> findByPaymentStatusAndCreatedAtBefore(OrderState orderState, LocalDateTime tenMinutesAgo);

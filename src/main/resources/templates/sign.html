@@ -202,7 +202,6 @@
             box-shadow: inset 1px 1px 2px #babebc, inset -1px -1px 2px #fff;
         }
 
-
         .navbar {
             background-color: #333;
             overflow: hidden;
@@ -225,175 +224,176 @@
     </style>
 </head>
 <body>
-<nav class="navbar"></nav>
-<div class="wrapper">
-    <div class="container">
-        <div class="sign-up-container">
-            <form>
-                <input type="text" id="name" placeholder="Name">
-                <input type="email" id="signupEmail" placeholder="Email">
-                <input type="password" id="signupPassword" placeholder="Password">
-                <input type="text" id="userPhone" placeholder="Phone">
-                <input type="text" id="userAddress" placeholder="Address">
-                <input type="text" id="postcode" placeholder="Postcode">
-                <button class="form_btn" type="button" id="signUpBtn">Sign Up</button>
-            </form>
-        </div>
-        <div class="sign-in-container">
-            <form>
-                <h1>Sign In</h1>
-                <input type="email" name="email" id="email" placeholder="Email">
-                <input type="password" name="password" id="password" placeholder="Password">
-                <button class="form_btn" type="button" id="signInBtn">Sign In</button>
-            </form>
-        </div>
-        <div class="overlay-container">
-            <div class="overlay-left">
-                <h1>Welcome Back</h1>
-                <p>To keep connected with us please login with your personal info</p>
-                <button id="signIn" class="overlay_btn">Sign In</button>
+    <nav class="navbar"></nav>
+    <div class="wrapper">
+        <div class="container">
+            <div class="sign-up-container">
+                <form>
+                    <input type="text" id="name" placeholder="Name">
+                    <input type="email" id="signupEmail" placeholder="Email">
+                    <input type="password" id="signupPassword" placeholder="Password">
+                    <input type="text" id="userPhone" placeholder="Phone">
+                    <input type="text" id="userAddress" placeholder="Address">
+                    <input type="text" id="postcode" placeholder="Postcode">
+                    <button class="form_btn" type="button" id="signUpBtn">Sign Up</button>
+                </form>
             </div>
-            <div class="overlay-right">
-                <h1>Hello, Friend</h1>
-                <p>Enter your personal details and start journey with us</p>
-                <button id="signUp" class="overlay_btn">Sign Up</button>
+            <div class="sign-in-container">
+                <form>
+                    <h1>Sign In</h1>
+                    <input type="email" name="email" id="email" placeholder="Email">
+                    <input type="password" name="password" id="password" placeholder="Password">
+                    <button class="form_btn" type="button" id="signInBtn">Sign In</button>
+                </form>
+            </div>
+            <div class="overlay-container">
+                <div class="overlay-left">
+                    <h1>Welcome Back</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button id="signIn" class="overlay_btn">Sign In</button>
+                </div>
+                <div class="overlay-right">
+                    <h1>Hello, Friend</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button id="signUp" class="overlay_btn">Sign Up</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<script type="text/javascript">
-    $(document).ready(function () {
-        Cookies.remove('Authorization', {path: '/'});
-    });
-
-    const host = 'http://' + window.location.host;
-
-    const href = location.href;
-    const queryString = href.substring(href.indexOf("?")+1)
-
-    if (queryString === 'error') {
-        const errorDiv = document.getElementById('login-failed');
-        errorDiv.style.display = 'block';
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const signUpBtn = document.getElementById("signUp");
-        const signIn = document.getElementById("signIn");
-        const signInBtn = document.getElementById("signInBtn");
-        const container = document.querySelector(".container");
-
-        signUpBtn.addEventListener("click", function() {
-            container.classList.add("right-panel-active");
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Cookies.remove('refresh_token', {path: '/'});
         });
 
-        signIn.addEventListener("click", function() {
-            container.classList.remove("right-panel-active");
-        });
+        const host = 'http://' + window.location.host;
 
-        signInBtn.addEventListener("click", function() {
-            let email = $('#email').val();
-            let password = $('#password').val();
+        const href = location.href;
+        const queryString = href.substring(href.indexOf("?")+1)
 
-            $.ajax({
-                type: "POST",
-                url: `/api/user/login`,
-                contentType: "application/json",
-                data: JSON.stringify({username: email, password: password}),
-            })
-                .done(function (res, status, xhr) {
-                    window.location.href = host;
-                })
-                .fail(function (xhr, textStatus, errorThrown) {
-                    console.log('statusCode: ' + xhr.status);
-                    alert("로그인에 실패했습니다. 회원 정보를 확인해 주세요.");
-                });
-        });
-
-        $('#signUpBtn').click(function () {
-            const name = $('#name').val();
-            const email = $('#signupEmail').val();
-            const password = $('#signupPassword').val();
-            const userPhone = $('#userPhone').val();
-            const userAddress = $('#userAddress').val();
-            const postcode = $('#postcode').val();
-
-            if (!name || !email || !password) {
-                alert("모든 정보를 입력해주세요.");
-                return;
-            }
-
-            $.ajax({
-                type: "POST",
-                url: '/api/join',
-                contentType: "application/json",
-                data: JSON.stringify({
-                    userName: name,
-                    userEmail: email,
-                    password: password,
-                    userPhone: userPhone,
-                    userAddress: userAddress,
-                    postcode: postcode,
-                    auth: 'USER'
-                }),
-            })
-                .done(function (res, status, xhr) {
-                    alert("회원가입이 완료되었습니다!");
-                    console.log('Signup successful');
-                })
-                .fail(function (xhr, textStatus, errorThrown) {
-                    console.log('Signup failed');
-                });
-        });
-    });
-</script>
-<script>
-    function checkCookie(name) {
-        const cookies = document.cookie.split(';');
-
-        for (const cookie of cookies) {
-            const [cookieName, cookieValue] = cookie.trim().split('=');
-            if (cookieName === name) {
-                return true;
-            }
+        if (queryString === 'error') {
+            const errorDiv = document.getElementById('login-failed');
+            errorDiv.style.display = 'block';
         }
 
-        return false;
-    }
+        document.addEventListener("DOMContentLoaded", function() {
+            const signUpBtn = document.getElementById("signUp");
+            const signIn = document.getElementById("signIn");
+            const signInBtn = document.getElementById("signInBtn");
+            const container = document.querySelector(".container");
 
-    window.addEventListener("DOMContentLoaded", () => {
-        const isAuthenticated = checkCookie('Authorization');
-
-        const navbar = document.querySelector('.navbar');
-        navbar.innerHTML = '';
-
-        const homeLink = document.createElement('a');
-        homeLink.href = '/';
-        homeLink.textContent = 'Home';
-        navbar.appendChild(homeLink);
-
-        if (isAuthenticated) {
-            const myPageLink = document.createElement('a');
-            myPageLink.href = '/my-page';
-            myPageLink.textContent = 'MyPage';
-            navbar.appendChild(myPageLink);
-
-            const logoutLink = document.createElement('a');
-            logoutLink.textContent = 'Logout';
-            logoutLink.addEventListener('click', function () {
-                deleteCookie('Authorization');
+            signUpBtn.addEventListener("click", function() {
+                container.classList.add("right-panel-active");
             });
 
-            logoutLink.href = '/';
-            navbar.appendChild(logoutLink);
-        } else {
-            const loginLink = document.createElement('a');
-            loginLink.href = '/api/user/login-page';
-            loginLink.textContent = 'Login';
-            navbar.appendChild(loginLink);
-        }
-    });
+            signIn.addEventListener("click", function() {
+                container.classList.remove("right-panel-active");
+            });
 
-    function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
-</script>
+            signInBtn.addEventListener("click", function() {
+                let email = $('#email').val();
+                let password = $('#password').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: `/login`,
+                    contentType: "application/json",
+                    data: JSON.stringify({username: email, password: password}),
+                })
+                    .done(function (res, status, xhr) {
+                        window.location.href = host;
+                    })
+                    .fail(function (xhr, textStatus, errorThrown) {
+                        console.log('statusCode: ' + xhr.status);
+                        alert("로그인에 실패했습니다. 회원 정보를 확인해 주세요.");
+                    });
+            });
+
+            $('#signUpBtn').click(function () {
+                const name = $('#name').val();
+                const email = $('#signupEmail').val();
+                const password = $('#signupPassword').val();
+                const userPhone = $('#userPhone').val();
+                const userAddress = $('#userAddress').val();
+                const postcode = $('#postcode').val();
+
+                if (!name || !email || !password) {
+                    alert("모든 정보를 입력해주세요.");
+                    return;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/join',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        userName: name,
+                        userEmail: email,
+                        password: password,
+                        userPhone: userPhone,
+                        userAddress: userAddress,
+                        postcode: postcode,
+                        auth: 'USER'
+                    }),
+                })
+                    .done(function (res, status, xhr) {
+                        alert("회원가입이 완료되었습니다!");
+                        console.log('Signup successful');
+                    })
+                    .fail(function (xhr, textStatus, errorThrown) {
+                        console.log('Signup failed');
+                    });
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function checkCookie(name) {
+            const cookies = document.cookie.split(';');
+
+            for (const cookie of cookies) {
+                const [cookieName, cookieValue] = cookie.trim().split('=');
+                if (cookieName === name) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const isAuthenticated = checkCookie('refresh_token');
+
+            const navbar = document.querySelector('.navbar');
+            navbar.innerHTML = '';
+
+            const homeLink = document.createElement('a');
+            homeLink.href = '/';
+            homeLink.textContent = 'Home';
+            navbar.appendChild(homeLink);
+
+            if (isAuthenticated) {
+                const myPageLink = document.createElement('a');
+                myPageLink.href = '/my-page';
+                myPageLink.textContent = 'MyPage';
+                navbar.appendChild(myPageLink);
+
+                const logoutLink = document.createElement('a');
+                logoutLink.textContent = 'Logout';
+                logoutLink.addEventListener('click', function () {
+                    deleteCookie('access_token');
+                    deleteCookie('refresh_token');
+                });
+
+                logoutLink.href = '/';
+                navbar.appendChild(logoutLink);
+            } else {
+                const loginLink = document.createElement('a');
+                loginLink.href = '/api/user/login-page';
+                loginLink.textContent = 'Login';
+                navbar.appendChild(loginLink);
+            }
+        });
+
+        function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
+    </script>
 </body>
 </html>

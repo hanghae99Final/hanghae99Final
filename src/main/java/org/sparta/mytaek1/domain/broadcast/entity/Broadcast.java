@@ -18,7 +18,9 @@ public class Broadcast extends Auditable {
     private Long broadcastId;
 
     private String broadcastTitle;
+
     private String broadcastDescription;
+
     private boolean onAir;
 
     @ManyToOne(fetch = FetchType.LAZY)

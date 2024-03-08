@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
+
     Optional<Stock> findByProductProductId(Long productId);
 
     @Query("SELECT s FROM Stock s JOIN FETCH s.product WHERE s.stockId = :stockId")

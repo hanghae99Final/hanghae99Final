@@ -37,9 +37,4 @@ public class ProductService {
 
         return product;
     }
-
-    @Transactional(readOnly = true)
-    public Product findProduct(Long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_PRODUCT_ERROR_MESSAGE.getErrorMessage()));
-    }
 }

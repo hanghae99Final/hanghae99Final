@@ -37,13 +37,6 @@
             border-radius: 5px;
         }
 
-        .broadcast-start-button {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 20px;
-        }
-
         .navbar {
             background-color: #333;
             overflow: hidden;
@@ -64,6 +57,7 @@
             background-color: #ddd;
             color: black;
         }
+
         .pagination {
             list-style: none;
             padding: 0;
@@ -95,12 +89,16 @@
             background-color: #ccc;
             color: #666;
         }
-
     </style>
 </head>
 <body>
-    <nav class="navbar"></nav>
+<nav class="navbar"></nav>
+<div style="display: flex; justify-content: center; align-items: center;">
     <h2>Broadcast List</h2>
+</div>
+<div style="display: flex; width: 90%; justify-content: right; align-items: flex-end;">
+    <button class="broadcast-start-button">방송 시작하기</button>
+</div>
     <table border="1">
         <thead>
             <tr>
@@ -119,7 +117,6 @@
                 <td th:text="${broadcastResponseDto.userName}"></td>
                 <td th:text="${broadcastResponseDto.productName}"></td>
                 <td>
-<!--                    <img th:src="${broadcastResponseDto.imageUrl}" style="max-width: 100px; max-height: 100px;">-->
                     <img th:src="'https://seungbae-lee.s3.ap-northeast-2.amazonaws.com/' + ${broadcastResponseDto.imageUrl.substring(broadcastResponseDto.imageUrl.lastIndexOf('/') + 1)}" style="max-width: 100px; max-height: 100px;">
                 </td>
                 <td>
@@ -144,7 +141,6 @@
             </li>
         </ul>
     </div>
-    <button class="broadcast-start-button">방송 시작하기</button>
     <script type="text/javascript">
         document.querySelectorAll('.view-details-button').forEach(function (button) {
             button.addEventListener('click', function () {
@@ -154,15 +150,17 @@
         });
 
         document.querySelectorAll('.broadcast-start-button').forEach(function (button) {
-            const isAuthenticated = checkCookieExistence('Authorization');
+            const isAuthenticated = checkCookieExistence('refresh_token');
 
             button.addEventListener('click', function () {
                 if (!isAuthenticated) {
                     alert('로그인 후에 방송할 수 있습니다.');
                     window.location.href = '/api/user/login-page';
                 }
+                if(isAuthenticated){
+                    window.location.href = '/broadcasts/start';
+                }
 
-                window.location.href = '/broadcasts/start';
             });
         });
 
@@ -171,21 +169,12 @@
         }
     </script>
     <script type="text/javascript">
-        function checkCookie(name) {
-            const cookies = document.cookie.split(';');
-
-            for (const cookie of cookies) {
-                const [cookieName, cookieValue] = cookie.trim().split('=');
-                if (cookieName === name) {
-                    return true;
-                }
-            }
-
-            return false;
+        function checkCookieExistence(cookieName) {
+            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
         }
 
         window.addEventListener("DOMContentLoaded", () => {
-            const isAuthenticated = checkCookie('Authorization');
+            const isAuthenticated = checkCookieExistence('refresh_token');
 
             const navbar = document.querySelector('.navbar');
             navbar.innerHTML = '';
@@ -204,9 +193,9 @@
                 const logoutLink = document.createElement('a');
                 logoutLink.textContent = 'Logout';
                 logoutLink.addEventListener('click', function () {
-                    deleteCookie('Authorization');
+                    deleteCookie('access_token');
+                    deleteCookie('refresh_token');
                 });
-
                 logoutLink.href = '/';
                 navbar.appendChild(logoutLink);
             } else {
@@ -221,3 +210,4 @@
     </script>
 </body>
 </html>
+

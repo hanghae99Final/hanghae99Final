@@ -20,8 +20,8 @@ public class Product extends Auditable {
     private String productName;
     private String productDescription;
     private int productPrice;
-
     private String imageUrl;
+
     public Product(String productName, String productDescription, int productPrice, String imageUrl) {
         this.productName = productName;
         this.productDescription = productDescription;

@@ -19,6 +19,7 @@ public class Orders extends Auditable {
     private Long orderId;
 
     private Integer quantity;
+
     private Integer totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)

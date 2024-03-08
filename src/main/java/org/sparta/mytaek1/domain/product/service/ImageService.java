@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import org.sparta.mytaek1.global.message.ErrorMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,8 +30,6 @@ public class ImageService {
     private final AmazonS3 amazonS3;
 
     public String uploadImage(MultipartFile file) {
-        String fileUrl;
-
         String fileName = createFileName(file.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
@@ -44,14 +41,8 @@ public class ImageService {
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-//        fileUrl = new StringBuilder("https://seungbaeimage.s3.ap-northeast-2.amazonaws.com/").append(fileName).toString();
-        fileUrl = new StringBuilder(bucketAddress).append(fileName).toString();
 
-        return fileUrl;
-    }
-
-    public void deleteImage(String fileName) {
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
+        return new StringBuilder(bucketAddress).append(fileName).toString();
     }
 
     private String createFileName(String fileName) {
@@ -62,8 +53,7 @@ public class ImageService {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일 (" + fileName + ") 입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_FILE_FORMAT_FILE_TYPE_ERROR_MESSAGE.getErrorMessage() + " (" + fileName + ")" );
         }
-
     }
 }
