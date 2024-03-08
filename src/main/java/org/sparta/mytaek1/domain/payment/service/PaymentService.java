@@ -51,6 +51,7 @@ public class PaymentService {
         IamportResponse<Payment> payment = getPaymentOnetime(paymentOnetimeDto);
         orderService.updateMerchant(paymentOnetimeDto.getBuyer_orderId(), paymentOnetimeDto.getMerchant_uid());
         checkFailedPayment(payment);
+
         if (payment.getCode() == 0) {
             updatePaymentStatus(paymentOnetimeDto.getBuyer_orderId());
         }
@@ -88,8 +89,7 @@ public class PaymentService {
     }
 
     public IamportResponse<Payment> cancelPayment(CancelPayment cancelPayment) throws IamportResponseException, IOException {
-        CancelData data = new CancelData(cancelPayment.getMerchant_uid(),false);
-        return iamportClient.cancelPaymentByImpUid(data);
+        return iamportClient.cancelPaymentByImpUid(new CancelData(cancelPayment.getMerchant_uid(), false));
     }
 
     private void checkFailedPayment(IamportResponse<Payment> payment) {

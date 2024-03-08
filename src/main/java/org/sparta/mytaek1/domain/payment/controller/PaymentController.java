@@ -44,16 +44,15 @@ public class PaymentController {
 
     @ResponseBody
     @PostMapping("/verify/{imp_uid}")
-    public IamportResponse<Payment> paymentByImpUid(@PathVariable("imp_uid") String imp_uid,@RequestBody ImpUidUpdateDto impUidupdateDto)
+    public IamportResponse<Payment> paymentByImpUid(@PathVariable("imp_uid") String imp_uid, @RequestBody ImpUidUpdateDto impUidupdateDto)
             throws IamportResponseException, IOException {
-        orderService.updateMerchant(impUidupdateDto.getOrderId(),impUidupdateDto.getMerchant_uid());
+        orderService.updateMerchant(impUidupdateDto.getOrderId(), impUidupdateDto.getMerchant_uid());
         return iamportClient.paymentByImpUid(imp_uid);
     }
 
     @PatchMapping("/api/orders/{orderId}/paymentStatus")
     public ResponseEntity<OrderResponseDto> updatePayment(@PathVariable Long orderId) {
-        OrderResponseDto orderResponseDto = paymentService.updatePaymentStatus(orderId);
-        return ResponseEntity.ok(orderResponseDto);
+        return ResponseEntity.ok(paymentService.updatePaymentStatus(orderId));
     }
 
 //    @PostMapping("/subscribe/payments/onetime")

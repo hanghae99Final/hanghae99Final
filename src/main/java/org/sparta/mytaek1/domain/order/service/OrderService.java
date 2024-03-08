@@ -68,7 +68,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateMerchant(Long orderId,String merchantUid) {
+    public void updateMerchant(Long orderId, String merchantUid) {
         Orders orders = findOrderById(orderId);
         orders.updateMerchant(merchantUid);
     }

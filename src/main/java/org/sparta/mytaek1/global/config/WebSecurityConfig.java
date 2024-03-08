@@ -84,7 +84,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests)->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/api/join", "/login","/api/user/streamkeys/**").permitAll()
+                        .requestMatchers("/", "/api/join", "/login","/api/user/stream-keys/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/broadcasts/start").authenticated()
                         .requestMatchers(HttpMethod.GET, "/my-page").authenticated()

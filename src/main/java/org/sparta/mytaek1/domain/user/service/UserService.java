@@ -38,7 +38,7 @@ public class UserService {
 
     public void checkStreamKey(String streamKey) {
         if (!userRepository.existsByStreamKey(streamKey)) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_STREAMKEY_ERROR_MESSAGE.getErrorMessage());
+            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_STREAM_KEY_ERROR_MESSAGE.getErrorMessage());
         }
     }
 
