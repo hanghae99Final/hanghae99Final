@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MyTaek1 - Order</title>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <style>
@@ -68,13 +68,13 @@
             margin: 20px auto;
         }
 
-        #cardNumber, #cardExpiry, #userBirth, #cardPassword{
+        #cardNumber, #cardExpiry, #userBirth, #cardPassword {
             width: 40%;
             margin-bottom: 5px;
             padding: 5px;
         }
 
-        #cardPassword{
+        #cardPassword {
             width: 35%;
             margin-bottom: 5px;
             padding: 5px;
@@ -97,206 +97,207 @@
 </head>
 <body>
 <nav class="navbar"></nav>
-    <div class="order_container" th:data-order-id="${orderId}">
-        <h2>주문 정보 확인</h2>
-        <div class="order_info">
-            <p>상품명: <span id="orderProductName" th:text="${product.getProductName()}"></span></p>
-            <p>상품 가격: <span id="orderProductPrice" th:text="${product.getProductPrice()}"></span></p>
-            <p>Email: <span id="orderEmail" th:if="${user != null}" th:text="${user.getUserEmail()}"></span></p>
-            <p>Name: <span id="orderName" th:if="${user != null}" th:text="${user.getUserName()}"></span></p>
-            <p>Phone: <span id="orderPhone" th:if="${user != null}" th:text="${user.getUserPhone()}"></span></p>
-            <p>Address: <span id="orderAddress" th:if="${user != null}" th:text="${user.getUserAddress()}"></span></p>
-            <p>Postcode: <span id="orderPostcode" th:if="${user != null}" th:text="${user.getPostcode()}"></span></p>
-            <p>수량: <span id="orderQuantity" th:text="${order.getQuantity()}"></span></p>
-            <p>총 가격: <span id="orderTotalPrice" th:text="${order.getTotalPrice()}"></span></p>
-        </div>
-        <label>카드번호: </label><input type="text" id="cardNumber" placeholder="0000-0000-0000-0000 형식에 맞춰서 입력해주세요." /><br />
-        <label>유효기간: </label><input type="text" id="cardExpiry" placeholder="YYYY-MM 형식에 맞춰서 입력해주세요." /><br />
-        <label>생년월일: </label><input type="text" id="userBirth" placeholder="yymmdd 형식에 맞춰서 입력해주세요." /><br />
-        <label>카드 비밀번호 앞 두자리: </label><input id="cardPassword" type="text" name="pwd_2digit" /><br />
-        <button type="button" onclick="requestNicePay()">모듈로 결제하기</button>
-        <button type="button" onclick="requestCardPay()">카드정보로 결제하기</button>
-        <input type="hidden" id="buyerProductId" th:value="${product.getProductId()}" />
-        <input type="hidden" id="buyerUserId" th:value="${user != null ? user.getUserId() : ''}" />
+<div class="order_container" th:data-order-id="${orderId}">
+    <h2>주문 정보 확인</h2>
+    <div class="order_info">
+        <p>상품명: <span id="orderProductName" th:text="${product.getProductName()}"></span></p>
+        <p>상품 가격: <span id="orderProductPrice" th:text="${product.getProductPrice()}"></span></p>
+        <p>Email: <span id="orderEmail" th:if="${user != null}" th:text="${user.getUserEmail()}"></span></p>
+        <p>Name: <span id="orderName" th:if="${user != null}" th:text="${user.getUserName()}"></span></p>
+        <p>Phone: <span id="orderPhone" th:if="${user != null}" th:text="${user.getUserPhone()}"></span></p>
+        <p>Address: <span id="orderAddress" th:if="${user != null}" th:text="${user.getUserAddress()}"></span></p>
+        <p>Postcode: <span id="orderPostcode" th:if="${user != null}" th:text="${user.getPostcode()}"></span></p>
+        <p>수량: <span id="orderQuantity" th:text="${order.getQuantity()}"></span></p>
+        <p>총 가격: <span id="orderTotalPrice" th:text="${order.getTotalPrice()}"></span></p>
     </div>
-    <script type="text/javascript">
-        const productName = document.getElementById("orderProductPrice").textContent;
-        const productPrice = document.getElementById("orderProductPrice").textContent;
-        const buyerEmail = document.getElementById("orderEmail").textContent;
-        const buyerName = document.getElementById("orderName").textContent;
-        const buyerTel = document.getElementById("orderPhone").textContent;
-        const buyerAddr = document.getElementById("orderAddress").textContent;
-        const buyerPostcode = document.getElementById("orderPostcode").textContent;
-        const buyerProductId = document.getElementById("buyerProductId").value;
-        const buyerUserId = document.getElementById("buyerUserId").value;
+    <label>카드번호: </label><input type="text" id="cardNumber" placeholder="0000-0000-0000-0000 형식에 맞춰서 입력해주세요."/><br/>
+    <label>유효기간: </label><input type="text" id="cardExpiry" placeholder="YYYY-MM 형식에 맞춰서 입력해주세요."/><br/>
+    <label>생년월일: </label><input type="text" id="userBirth" placeholder="yymmdd 형식에 맞춰서 입력해주세요."/><br/>
+    <label>카드 비밀번호 앞 두자리: </label><input id="cardPassword" type="text" name="pwd_2digit"/><br/>
+    <button type="button" onclick="requestNicePay()">모듈로 결제하기</button>
+    <button type="button" onclick="requestCardPay()">카드정보로 결제하기</button>
+    <input type="hidden" id="buyerProductId" th:value="${product.getProductId()}"/>
+    <input type="hidden" id="buyerUserId" th:value="${user != null ? user.getUserId() : ''}"/>
+</div>
+<script type="text/javascript">
+    const productName = document.getElementById("orderProductPrice").textContent;
+    const productPrice = document.getElementById("orderProductPrice").textContent;
+    const buyerEmail = document.getElementById("orderEmail").textContent;
+    const buyerName = document.getElementById("orderName").textContent;
+    const buyerTel = document.getElementById("orderPhone").textContent;
+    const buyerAddr = document.getElementById("orderAddress").textContent;
+    const buyerPostcode = document.getElementById("orderPostcode").textContent;
+    const buyerProductId = document.getElementById("buyerProductId").value;
+    const buyerUserId = document.getElementById("buyerUserId").value;
 
-        const IMP = window.IMP;
-        IMP.init("imp66770306");
+    const IMP = window.IMP;
+    IMP.init("imp66770306");
 
-        function generateMerchantUid() {
-            const now = new Date();
-            const timestamp = now.getTime();
-            return "ORD" + timestamp + "-" + buyerProductId.toString().padStart(4, '0') + buyerUserId.toString().padStart(4, '0');
-        }
+    function generateMerchantUid() {
+        const now = new Date();
+        const timestamp = now.getTime();
+        return "ORD" + timestamp + "-" + buyerProductId.toString().padStart(4, '0') + buyerUserId.toString().padStart(4, '0');
+    }
 
-        function requestNicePay() {
-            const isAuthenticated = checkCookieExistence('refresh_token');
-            const orderContainer = document.querySelector('.order_container');
-            const orderId = orderContainer.getAttribute('data-order-id');
+    function requestNicePay() {
+        const isAuthenticated = checkCookieExistence('refresh_token');
+        const orderContainer = document.querySelector('.order_container');
+        const orderId = orderContainer.getAttribute('data-order-id');
 
-            if (isAuthenticated) {
-                const quantity = parseInt(document.getElementById("orderQuantity").textContent);
-                const totalPrice = parseInt(productPrice) * quantity;
-                const merchant_uid = generateMerchantUid();
+        if (isAuthenticated) {
+            const quantity = parseInt(document.getElementById("orderQuantity").textContent);
+            const totalPrice = parseInt(productPrice) * quantity;
+            const merchant_uid = generateMerchantUid();
 
-                IMP.request_pay({
-                    pg : 'kcp.AO09C',
-                    pay_method: "card",
-                    merchant_uid: merchant_uid,
-                    name: productName,
-                    amount: totalPrice,
-                    buyer_email: buyerEmail,
-                    buyer_name: buyerName,
-                    buyer_tel: buyerTel,
-                    buyer_addr: buyerAddr,
-                    buyer_postcode: buyerPostcode
-                }, function (rsp) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/verify/' + rsp.imp_uid,
-                        data: JSON.stringify({
-                            merchant_uid: merchant_uid,
-                            orderId : orderId
-                        }),
-                        contentType: 'application/json',
-                    }).done(function(data) {
-                        if(data.response.status === "paid"){
-                            $.ajax({
-                                type: 'PATCH',
-                                url: `/api/orders/${orderId}/paymentStatus`
-                            })
-                            alert("결제 성공");
-                            window.location.href="/my-page";
-                        } else {
-                            alert("결제 실패");
-                        }
-                    });
+            IMP.request_pay({
+                pg: 'kcp.AO09C',
+                pay_method: "card",
+                merchant_uid: merchant_uid,
+                name: productName,
+                amount: totalPrice,
+                buyer_email: buyerEmail,
+                buyer_name: buyerName,
+                buyer_tel: buyerTel,
+                buyer_addr: buyerAddr,
+                buyer_postcode: buyerPostcode
+            }, function (rsp) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/verify/' + rsp.imp_uid,
+                    data: JSON.stringify({
+                        merchant_uid: merchant_uid,
+                        orderId: orderId
+                    }),
+                    contentType: 'application/json',
+                }).done(function (data) {
+                    if (data.response.status === "paid") {
+                        $.ajax({
+                            type: 'PATCH',
+                            url: `/api/orders/${orderId}/paymentStatus`
+                        })
+                        alert("결제 성공");
+                        window.location.href = "/my-page";
+                    } else {
+                        alert("결제 실패");
+                    }
                 });
-            } else {
-                alert('로그인 후에 결제할 수 있습니다.');
-                window.location.href = '/api/user/login-page';
+            });
+        } else {
+            alert('로그인 후에 결제할 수 있습니다.');
+            window.location.href = '/api/user/login-page';
+        }
+    }
+
+    async function requestCardPay() {
+        const isAuthenticated = checkCookieExistence('refresh_token');
+        const orderContainer = document.querySelector('.order_container');
+        const orderId = orderContainer.getAttribute('data-order-id');
+
+        if (isAuthenticated) {
+            const quantity = parseInt(document.getElementById("orderQuantity").textContent);
+            const totalPrice = parseInt(productPrice) * quantity;
+            const merchant_uid = generateMerchantUid();
+            const card_number = document.getElementById("cardNumber").value;
+            const expiry = document.getElementById("cardExpiry").value;
+            const pwd_2digit = document.getElementById("cardPassword").value;
+            const birth = document.getElementById("userBirth").value;
+            const customer_uid = card_number + expiry;
+            const pg = "nice.iamport01m";
+            const requestBody = JSON.stringify({
+                pg: pg,
+                merchant_uid: merchant_uid,
+                amount: totalPrice,
+                card_number: card_number,
+                expiry: expiry,
+                birth: birth,
+                pwd_2digit: pwd_2digit,
+                customer_uid: customer_uid,
+                buyer_email: buyerEmail,
+                buyer_name: buyerName,
+                buyer_tel: buyerTel,
+                buyer_addr: buyerAddr,
+                buyer_postcode: buyerPostcode,
+                buyer_orderId: orderId
+            });
+
+            const response = await fetch("/subscribe/payments/onetime", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: requestBody
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Failed to issue billing key: ${errorMessage}`);
             }
-        }
 
-        async function requestCardPay() {
-            const isAuthenticated = checkCookieExistence('refresh_token');
-            const orderContainer = document.querySelector('.order_container');
-            const orderId = orderContainer.getAttribute('data-order-id');
+            const responseData = await response.json();
 
-            if (isAuthenticated) {
-                const quantity = parseInt(document.getElementById("orderQuantity").textContent);
-                const totalPrice = parseInt(productPrice) * quantity;
-                const merchant_uid = generateMerchantUid();
-                const card_number = document.getElementById("cardNumber").value;
-                const expiry = document.getElementById("cardExpiry").value;
-                const pwd_2digit = document.getElementById("cardPassword").value;
-                const birth = document.getElementById("userBirth").value;
-                const customer_uid = card_number + expiry;
-                const pg = "nice.iamport01m";
-                const requestBody = JSON.stringify({
-                    pg :pg,
-                    merchant_uid:merchant_uid,
-                    amount: totalPrice,
-                    card_number: card_number,
-                    expiry: expiry,
-                    birth: birth,
-                    pwd_2digit: pwd_2digit,
-                    customer_uid: customer_uid,
-                    buyer_email: buyerEmail,
-                    buyer_name: buyerName,
-                    buyer_tel: buyerTel,
-                    buyer_addr: buyerAddr,
-                    buyer_postcode: buyerPostcode,
-                    buyer_orderId : orderId
-                });
-
-                const response = await fetch("/subscribe/payments/onetime", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: requestBody
-                });
-
-                if (!response.ok) {
-                    const errorMessage = await response.text();
-                    throw new Error(`Failed to issue billing key: ${errorMessage}`);
-                }
-
-                const responseData = await response.json();
-                alert("빌링키 발급 성공");
-
-                if (responseData.code === 0) {
-                    $.ajax({
-                        type: 'PATCH',
-                        url: `/api/orders/${orderId}/paymentStatus`
-                    })
-                    alert("결제 요청이 완료되었습니다.");
-                    window.location.href="/my-page";
-                } else {
-                    alert("결제 실패: " + requestBody);
-                }
-
+            if (responseData.code === 0) {
+                $.ajax({
+                    type: 'PATCH',
+                    url: `/api/orders/${orderId}/paymentStatus`
+                })
+                alert("결제 요청이 완료되었습니다.");
+                window.location.href = "/my-page";
             } else {
-                alert('로그인 후에 결제할 수 있습니다.');
-                window.location.href = '/api/user/login-page';
+                alert("결제 실패: " + requestBody);
             }
+
+        } else {
+            alert('로그인 후에 결제할 수 있습니다.');
+            window.location.href = '/api/user/login-page';
         }
+    }
 
-        function checkCookieExistence(cookieName) {
-            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
+    function checkCookieExistence(cookieName) {
+        return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
+    }
+</script>
+<script type="text/javascript">
+    function checkCookieExistence(cookieName) {
+        return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const isAuthenticated = checkCookieExistence('refresh_token');
+
+        const navbar = document.querySelector('.navbar');
+        navbar.innerHTML = '';
+
+        const homeLink = document.createElement('a');
+        homeLink.href = '/';
+        homeLink.textContent = 'Home';
+        navbar.appendChild(homeLink);
+
+        if (isAuthenticated) {
+            const myPageLink = document.createElement('a');
+            myPageLink.href = '/my-page';
+            myPageLink.textContent = 'MyPage';
+            navbar.appendChild(myPageLink);
+
+            const logoutLink = document.createElement('a');
+            logoutLink.textContent = 'Logout';
+            logoutLink.addEventListener('click', function () {
+                deleteCookie('access_token');
+                deleteCookie('refresh_token');
+            });
+
+            logoutLink.href = '/';
+            navbar.appendChild(logoutLink);
+        } else {
+            const loginLink = document.createElement('a');
+            loginLink.href = '/api/user/login-page';
+            loginLink.textContent = 'Login';
+            navbar.appendChild(loginLink);
         }
-    </script>
-    <script type="text/javascript">
-        function checkCookieExistence(cookieName) {
-            return document.cookie.split(';').some((item) => item.trim().startsWith(cookieName + '='));
-        }
+    });
 
-        window.addEventListener("DOMContentLoaded", () => {
-            const isAuthenticated = checkCookieExistence('refresh_token');
-
-            const navbar = document.querySelector('.navbar');
-            navbar.innerHTML = '';
-
-            const homeLink = document.createElement('a');
-            homeLink.href = '/';
-            homeLink.textContent = 'Home';
-            navbar.appendChild(homeLink);
-
-            if (isAuthenticated) {
-                const myPageLink = document.createElement('a');
-                myPageLink.href = '/my-page';
-                myPageLink.textContent = 'MyPage';
-                navbar.appendChild(myPageLink);
-
-                const logoutLink = document.createElement('a');
-                logoutLink.textContent = 'Logout';
-                logoutLink.addEventListener('click', function () {
-                    deleteCookie('access_token');
-                    deleteCookie('refresh_token');
-                });
-
-                logoutLink.href = '/';
-                navbar.appendChild(logoutLink);
-            } else {
-                const loginLink = document.createElement('a');
-                loginLink.href = '/api/user/login-page';
-                loginLink.textContent = 'Login';
-                navbar.appendChild(loginLink);
-            }
-        });
-
-        function deleteCookie(name) { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;'; }
-    </script>
+    function deleteCookie(name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
+    }
+</script>
 </body>
 </html>
