@@ -36,7 +36,8 @@
 
 
 ### 📐Architecture
-![image](https://github.com/hanghae99Final/mytaek1-service/assets/115725752/ef6c2378-1257-487b-84a5-f7eb55a3221e)
+![image](https://github.com/hanghae99Final/mytaek1-service/assets/115725752/d9f8df8c-08f0-4ccd-a628-810bed7d88e4)
+
 
 
 ### 💻기술스택
