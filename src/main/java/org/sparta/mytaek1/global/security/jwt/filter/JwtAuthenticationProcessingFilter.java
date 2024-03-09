@@ -24,11 +24,14 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
-    private static final String CHECK_ACCESS_LOG_MESSAGE = "checkAccessTokenAndAuthentication() 호출";
     private static final String NO_CHECK_URL = "/login";
+    private static final String FIND_ACCESS_TOKEN = "AccessToken 발견";
+    private static final String NONE_ACCESS_TOKEN = "AccessToken 없음";
+    private static final String TOKEN_HEADER = "Bearer##";
+    private static final String ACCESS_TOKEN_NAME = "access_token";
+
     private final JwtService jwtService;
     private final UserRepository userRepository;
-
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
@@ -53,16 +56,16 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         if (accessToken != null) {
             checkAccessTokenAndAuthentication(request, response, filterChain);
-            log.info("AccessToken 발견");
+            log.info(FIND_ACCESS_TOKEN);
         }
         if (accessToken == null) {
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken, request,filterChain);
-            log.info("AccessToken 없음");
+            log.info(NONE_ACCESS_TOKEN);
         }
     }
     public void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken, HttpServletRequest request, FilterChain filterChain) throws ServletException, IOException{
 
-        User user = userRepository.findByRefreshToken("Bearer##" + refreshToken).orElseThrow();
+        User user = userRepository.findByRefreshToken(TOKEN_HEADER + refreshToken).orElseThrow();
         String newAccessToken = jwtService.createAccessToken(user.getUserEmail());
         jwtService.sendAccessToken(response, newAccessToken);
 
@@ -83,7 +86,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         String accessToken = null;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("access_token".equals(cookie.getName())) {
+                if (ACCESS_TOKEN_NAME.equals(cookie.getName())) {
                     accessToken = cookie.getValue();
                     break;
                 }

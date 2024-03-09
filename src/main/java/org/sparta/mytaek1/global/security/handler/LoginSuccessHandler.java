@@ -22,6 +22,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private static final String LOGIN_SUCCESS_EMAIL_LOG = "로그인에 성공하였습니다. 이메일 : {}";
     private static final String LOGIN_SUCCESS_ACCESS_TOKEN_LOG = "로그인에 성공하였습니다. AccessToken : {}";
     private static final String LOGIN_SUCCESS_TOKEN_EXPIRED_LOG = "발급된 AccessToken 만료 기간 : {}";
+
     private final JwtService jwtService;
     private final UserRepository userRepository;
 

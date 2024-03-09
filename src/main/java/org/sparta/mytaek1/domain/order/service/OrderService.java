@@ -59,6 +59,20 @@ public class OrderService {
         }
     }
 
+    @Transactional
+    public void cancelPaymentStatus(Long orderId) {
+        Orders order = findOrderById(orderId);
+        order.cancel();
+        Stock stock = stockService.findStockByProduct(order.getProduct().getProductId());
+        deleteOrder(order.getProduct().getProductId(),order,stock);
+    }
+
+    @Transactional
+    public void updateMerchant(Long orderId, String merchantUid) {
+        Orders orders = findOrderById(orderId);
+        orders.updateMerchant(merchantUid);
+    }
+
     @Transactional(readOnly = true)
     public OrderResponseDto getOrder(Long orderId) {
         Orders order = orderRepository.findOrderWithUserById(orderId).orElseThrow(()-> new NullPointerException(ErrorMessage.NOT_EXIST_ORDER_ERROR_MESSAGE.getErrorMessage()));
@@ -69,18 +83,6 @@ public class OrderService {
     private void deleteOrder(Long productId, Orders order, Stock stock) {
         stock.cancelStock(order.getQuantity());
         orderRepository.delete(order);
-    }
-
-    @Transactional
-    public void updateMerchant(Long orderId,String merchantUid) {
-        Orders orders = findOrderById(orderId);
-        orders.updateMerchant(merchantUid);
-    }
-
-    @Transactional
-    public void cancelPaymentStatus(Long orderId) {
-        Orders order = findOrderById(orderId);
-        order.cancel();
     }
 
     public Orders findOrderById(Long orderId) {

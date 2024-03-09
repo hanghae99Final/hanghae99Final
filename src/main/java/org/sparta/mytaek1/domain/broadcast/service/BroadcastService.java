@@ -45,7 +45,7 @@ public class BroadcastService {
         User user = userService.findByUserEmail(auth.getUsername());
 
         if (checkUserOnAir(user.getUserId())) {
-            throw new IllegalArgumentException(ErrorMessage.EXIST_ONAIR_BROADCAST_ERROR_MESSAGE.getErrorMessage());
+            throw new IllegalArgumentException(ErrorMessage.EXIST_ON_AIR_BROADCAST_ERROR_MESSAGE.getErrorMessage());
         }
 
         Product product = productService.createProduct(requestDto, imageFile);
@@ -68,7 +68,7 @@ public class BroadcastService {
         return broadcastRepository.existsByUserIdAndOnAir(userId, true);
     }
 
-    public Page<Broadcast> findBroadcastListByUserId(Long userId,Pageable pageable) {
+    public Page<Broadcast> findBroadcastListByUserId(Long userId, Pageable pageable) {
         return broadcastRepository.findAllByUserUserId(userId,pageable);
     }
 }

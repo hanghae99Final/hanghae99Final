@@ -38,7 +38,7 @@ public class BroadcastPageController {
     }
 
     @GetMapping
-    public String getBroadcastsOnAir(Model model,@PageableDefault(page = 0 ,size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+    public String getBroadcastsOnAir(Model model, @PageableDefault(page = 0 ,size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
         Page<BroadcastResponseDto> broadcastResponseDtoPage = broadcastService.getAllBroadCast(pageable);
         model.addAttribute("broadcastResponseDtoPage", broadcastResponseDtoPage);
         return "broadcastList";

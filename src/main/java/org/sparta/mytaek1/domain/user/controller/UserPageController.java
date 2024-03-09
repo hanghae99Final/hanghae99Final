@@ -31,9 +31,8 @@ public class UserPageController {
     private final UserService userService;
 
     @GetMapping("/my-page")
-    public String myPage(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam(name = "broadcastPage", defaultValue = "0",required = false) Integer  broadcastPageParam,
-                         @RequestParam(name = "orderPage", defaultValue = "0",required = false) Integer  orderPageParam,
-                         HttpSession session) {
+    public String myPage(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam(name = "broadcastPage", defaultValue = "0",required = false) Integer broadcastPageParam,
+                         @RequestParam(name = "orderPage", defaultValue = "0",required = false) Integer orderPageParam, HttpSession session) {
         Integer broadcastPage = (broadcastPageParam != null) ? broadcastPageParam : (Integer) session.getAttribute("broadcastPage");
         Integer orderPage = (orderPageParam != null) ? orderPageParam : (Integer) session.getAttribute("orderPage");
 
