@@ -1,6 +1,7 @@
 # MyTaek1 - 라이브 커머스 서비스
 
-![image](https://github.com/hanghae99Final/mytaek1-service/assets/115725752/b5dc4a4d-01aa-4dac-aba5-ad2a67a46d76)
+<img src="https://github.com/hanghae99Final/mytaek1-service/assets/115725752/b5dc4a4d-01aa-4dac-aba5-ad2a67a46d76" style="width: 100%;">
+
 <aside>
 🎬 방송 송출 기술과 실시간 재고 관리, 효율적인 결제 시스템을 결합한 다중 서비스 플랫폼
 
@@ -9,18 +10,19 @@
 </aside>
 
 ### 👨‍👩‍👦‍👦 팀원 소개
-<table>
+<div style="width:100%;">
+<table style="width:100%;">
   <tr>
     <td align="center"><b><a href="https://github.com/KimDabomi">🦙김다보미</a></b></td>
     <td align="center"><b><a href="https://github.com/tls3254">김대일</a></b></td>
     <td align="center"><b><a href="https://github.com/Crescent0kt">오경택</a></b></td>
     <td align="center"><b><a href="https://github.com/SeungbaeLee">이승배</a></b></td>
   </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/KimDabomi"><img src="https://github.com/hanghae99Final/mytaek1-service/assets/115725752/706dcc7a-2997-4533-9db3-77ac67cd74c2" width="100px" /></a></td>
-    <td align="center"><a href="https://github.com/tls325"><img src="https://github.com/hanghae99Final/mytaek1-service/assets/115725752/62c1a1a8-0802-4770-a61d-f0f3ba01d233" width="100px" /></a></td>
-    <td align="center"><a href="https://github.com/Crescent0kt"><img src="https://github.com/hanghae99Final/mytaek1-service/assets/115725752/76819fad-5343-48c3-97e2-49841540b6f1" width="100px" /></a></td>
-    <td align="center"><a href="https://github.com/SeungbaeLee"><img src="https://github.com/hanghae99Final/mytaek1-service/assets/115725752/8d8bdc79-c1ee-4043-a157-f5a63efcf46f" width="100px" /></a></td>
+  <tr style="height: 200px;">
+    <td align="center"><a href="https://github.com/KimDabomi"><img src="https://github.com/hanghae99Final/mytaek1-service/assets/115725752/706dcc7a-2997-4533-9db3-77ac67cd74c2" style="width: 100%;" /></a></td>
+    <td align="center"><a href="https://github.com/tls325"><img src="https://github.com/hanghae99Final/mytaek1-service/assets/115725752/62c1a1a8-0802-4770-a61d-f0f3ba01d233" style="width: 100%;" /></a></td>
+    <td align="center"><a href="https://github.com/Crescent0kt"><img src="https://github.com/hanghae99Final/mytaek1-service/assets/115725752/76819fad-5343-48c3-97e2-49841540b6f1" style="width: 100%;" /></a></td>
+    <td align="center"><a href="https://github.com/SeungbaeLee"><img src="https://github.com/hanghae99Final/mytaek1-service/assets/115725752/8d8bdc79-c1ee-4043-a157-f5a63efcf46f" style="width: 100%;" /></a></td>
   </tr>
   <tr>
     <td align="center"><b>🌱 Spring</b></td>
@@ -29,6 +31,7 @@
     <td align="center"><b>🌱 Spring</b></td>
   </tr>
 </table>
+</div>
 
 ### 🔗 URL
 [마이택일](https://mytaek1.store)
@@ -36,7 +39,7 @@
 
 
 ### 📐Architecture
-![image](https://github.com/hanghae99Final/mytaek1-service/assets/115725752/d9f8df8c-08f0-4ccd-a628-810bed7d88e4)
+<img src="https://github.com/hanghae99Final/mytaek1-service/assets/110092175/bfe315e6-f8cd-478b-a3ea-89d134b8dac2" style="width: 100%;">
 
 
 
