@@ -197,16 +197,15 @@
 <div markdown="1">
 
 ```
-• Amazon Route 53 + ELB
+• Elastic Load Balancer
 - 트래픽을 분산하고 고가용성을 제공
 - 도메인 관리 및 DNS 서비스로서, 로드 밸런서의 도메인을 관리
 - 외부 도메인과 연결, ssl 설정이 용이함
-• Auto Scaling Group + ELB
+• Auto Scaling Group
 - 트래픽 증가에 따라 자동으로 리소스를 조절해줘서 편리함
 
 → 오토스케일링을 통해서 인스턴스를 추가 생성 후 + 요청을 분산 
 → 다른 포트로 들어오는 요청 8080 포트로 실행
-→ 호스트 헤더 + 네임서버 설정
 ```
 
 </div>
