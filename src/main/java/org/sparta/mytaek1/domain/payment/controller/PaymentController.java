@@ -55,14 +55,6 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.updatePaymentStatus(orderId));
     }
 
-//    @PostMapping("/subscribe/payments/onetime")
-//    public ResponseEntity<CompletableFuture<IamportResponse<Payment>>> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto)
-//            throws IamportResponseException, IOException {
-//        CompletableFuture<IamportResponse<Payment>> response = paymentService.getPaymentOnetime(paymentOnetimeDto);
-//        orderService.updateMerchant(paymentOnetimeDto.getBuyer_orderId(),paymentOnetimeDto.getMerchant_uid());
-//        return ResponseEntity.ok(response);
-//    }
-
     @PostMapping("/subscribe/payments/onetime")
     public ResponseEntity<HttpStatus> paymentOnetime(@RequestBody PaymentOnetimeDto paymentOnetimeDto) {
         CompletableFuture.runAsync(() -> {
