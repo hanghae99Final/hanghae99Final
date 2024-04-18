@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class BroadcastService {
 
     private final BroadcastRepository broadcastRepository;
@@ -40,7 +39,8 @@ public class BroadcastService {
                 broadcast.getProduct().getImageUrl()
         ));
     }
-  
+
+    @Transactional
     public void createBroadcast(UserDetails auth, BroadcastRequestDto requestDto, MultipartFile imageFile) {
         User user = userService.findByUserEmail(auth.getUsername());
 
@@ -53,6 +53,7 @@ public class BroadcastService {
         broadcastRepository.save(broadcast);
     }
 
+    @Transactional
     public void endBroadcast(long broadcastId) {
         Broadcast broadCast = getBroadcastByBroadcastId(broadcastId);
         broadCast.endBroadcast();
